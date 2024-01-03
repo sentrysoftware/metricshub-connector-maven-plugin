@@ -22,7 +22,6 @@ assert htmlText.indexOf("LinuxIPNetwork") > -1 : "metricshub-connector-reference
 assert htmlText.indexOf("lmsensors") > -1 : "metricshub-connector-reference: lmsensors must be listed"
 assert htmlText.indexOf("MIB2") > -1 : "metricshub-connector-reference: MIB2 must be listed"
 assert htmlText.indexOf("MIB2Linux") > -1 : "metricshub-connector-reference: MIB2Linux must be listed"
-assert htmlText.indexOf("MIB2Solaris") > -1 : "metricshub-connector-reference: MIB2Solaris must be listed"
 assert htmlText.indexOf("MIB2NT") > -1 : "metricshub-connector-reference: MIB2NT must be listed"
 assert htmlText.indexOf("NvidiaSmi") > -1 : "metricshub-connector-reference: NvidiaSmi must be listed"
 assert htmlText.indexOf("VMwareESXiDisksIPMI") > -1 : "metricshub-connector-reference: VMwareESXiDisksIPMI must be listed"
@@ -57,7 +56,6 @@ String [] fileNamesToCheck = [
 	'mib2.html',
 	'mib2linux.html',
 	'mib2nt.html',
-	'mib2solaris.html',
 	'mib2switch.html',
 	'nvidiasmi.html',
 	'virsh.html',
@@ -108,7 +106,6 @@ assert htmlText.indexOf("MIB-2 Standard SNMP Agent - Network Interfaces - Window
 assert htmlText.indexOf("Libre Hardware Monitor") > -1 : "platform-requirements: 'Libre Hardware Monitor' must be listed"
 assert htmlText.indexOf("Ethernet Switch with Sensors (SNMP)") > -1 : "platform-requirements: 'Ethernet Switch with Sensors (SNMP)' must be listed"
 assert htmlText.indexOf("Generic Ethernet Switch") > -1 : "platform-requirements: 'Generic Ethernet Switch' must be listed"
-assert htmlText.indexOf("MIB-2 Standard SNMP Agent - Network Interfaces - Solaris") > -1 : "platform-requirements: 'MIB-2 Standard SNMP Agent - Network Interfaces - Solaris' must be listed"
 assert htmlText.indexOf("Generic UPS") > -1 : "platform-requirements: 'Generic UPS' must be listed"
 assert htmlText.indexOf("VMware ESXi 5 LUN (esxcli)") > -1 : "platform-requirements: 'VMware ESXi 5 LUN (esxcli)' must be listed"
 assert htmlText.indexOf("VMware ESXi 5 LUN (SSH)") > -1 : "platform-requirements: 'VMware ESXi 5 LUN (SSH)' must be listed"
