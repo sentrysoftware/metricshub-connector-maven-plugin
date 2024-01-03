@@ -37,14 +37,14 @@ public abstract class AbstractNodeProcessor {
 	protected AbstractNodeProcessor next;
 
 	/**
-	 * Process the provided JsonNode and return the resulting {@link JsonNode}.
+	 * Process the provided {@link JsonNode} with the remaining chain of processors.
 	 *
 	 * @param node The JsonNode to be processed.
 	 * @return An instance of {@link JsonNode} representing the result of the processing.
 	 * @throws IOException If an I/O error occurs during the processing.
 	 */
 	public JsonNode process(final JsonNode node) throws IOException {
-		final JsonNode processedNode = doProcessing(node);
+		final JsonNode processedNode = processNode(node);
 
 		if (next != null) {
 			return next.process(processedNode);
@@ -54,11 +54,11 @@ public abstract class AbstractNodeProcessor {
 	}
 
 	/**
-	 * Perform processing on the provided JsonNode and return the resulting {@link JsonNode}.
+	 * Process one {@link JsonNode}.
 	 *
 	 * @param node The JsonNode to be processed.
 	 * @return An instance of {@link JsonNode} representing the result of the processing.
 	 * @throws IOException If an I/O error occurs during the processing.
 	 */
-	protected abstract JsonNode doProcessing(JsonNode node) throws IOException;
+	protected abstract JsonNode processNode(JsonNode node) throws IOException;
 }

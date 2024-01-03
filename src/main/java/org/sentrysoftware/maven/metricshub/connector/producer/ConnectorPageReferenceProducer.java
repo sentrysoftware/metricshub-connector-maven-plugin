@@ -49,7 +49,6 @@ import org.sentrysoftware.maven.metricshub.connector.producer.model.criteria.Cri
 @Builder(setterPrefix = "with")
 public class ConnectorPageReferenceProducer {
 
-	private static final String BOOTSTRAP_MEDIUM_4_CLASS = "col-md-4";
 	private static final String WMI_SECTION = "          wmi:\n";
 	private static final String PROTOCOLS_SECTION = "        protocols:\n";
 
@@ -282,15 +281,15 @@ public class ConnectorPageReferenceProducer {
 		sink.table();
 		sink.tableRow();
 
-		sink.tableHeaderCell(SinkHelper.setClass(BOOTSTRAP_MEDIUM_4_CLASS));
+		sink.tableHeaderCell(SinkHelper.setClass("col-md-2"));
 		sink.text("Type");
 		sink.tableHeaderCell_();
 
-		sink.tableHeaderCell(SinkHelper.setClass(BOOTSTRAP_MEDIUM_4_CLASS));
+		sink.tableHeaderCell(SinkHelper.setClass("col-md-6"));
 		sink.text("Collected Metrics");
 		sink.tableHeaderCell_();
 
-		sink.tableHeaderCell(SinkHelper.setClass(BOOTSTRAP_MEDIUM_4_CLASS));
+		sink.tableHeaderCell(SinkHelper.setClass("col-md-4"));
 		sink.text("Specific Attributes");
 		sink.tableHeaderCell_();
 

@@ -41,9 +41,4 @@ public class Constants {
 	 * Name of the subdirectory that will contain the pages for each connector
 	 */
 	public static final String CONNECTOR_SUBDIRECTORY_NAME = "connectors";
-
-	/**
-	 * Empty string
-	 */
-	public static final String EMPTY = "";
 }

@@ -58,7 +58,7 @@ public class MainPageReferenceProducer {
 
 		mainSink.head();
 		mainSink.title();
-		mainSink.text("Connector Library");
+		mainSink.text("Connector Directory");
 		mainSink.title_();
 		mainSink.head_();
 
@@ -67,13 +67,13 @@ public class MainPageReferenceProducer {
 		// Title
 		mainSink.section1();
 		mainSink.sectionTitle1();
-		mainSink.text("Connector Library");
+		mainSink.text("Connector Directory");
 		mainSink.sectionTitle1_();
 
 		// Intro
 		mainSink.paragraph();
 		mainSink.text(
-			"This page lists the Connectors of ${project.name} ${project.version}." +
+			"This directory lists the Connectors of ${project.name} ${project.version}." +
 			" Each page provides you with the details on each Connector, the targeted platform," +
 			" the protocol used, the discovered components and monitored attributes."
 		);

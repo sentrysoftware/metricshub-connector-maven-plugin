@@ -37,7 +37,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.AllArgsConstructor;
-import org.sentrysoftware.maven.metricshub.connector.Constants;
 import org.sentrysoftware.maven.metricshub.connector.producer.model.common.TechnologyType;
 
 /**
@@ -85,7 +84,7 @@ public class ConnectorJsonNodeReader {
 			.map(node -> node.get("displayName"))
 			.filter(JsonNodeHelper::nonNull)
 			.map(JsonNode::asText)
-			.orElse(Constants.EMPTY);
+			.orElse("");
 	}
 
 	/**

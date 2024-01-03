@@ -54,7 +54,7 @@ public class ExtendsProcessor extends AbstractNodeProcessor {
 	}
 
 	@Override
-	public JsonNode doProcessing(JsonNode node) throws IOException {
+	public JsonNode processNode(JsonNode node) throws IOException {
 		return doMerge(node);
 	}
 

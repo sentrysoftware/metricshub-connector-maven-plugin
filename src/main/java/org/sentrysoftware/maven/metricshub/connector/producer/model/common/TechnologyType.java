@@ -56,9 +56,9 @@ public enum TechnologyType {
 	WBEM("WBEM"),
 
 	/**
-	 * Windows Management Instrumentation (WMI)
+	 * Windows Management Instrumentation (WMI) / Windows Remote Management (WinRM)
 	 */
-	WMI("WMI");
+	WMI("WMI/WinRM");
 
 	@Getter
 	private String displayName;

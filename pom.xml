@@ -208,6 +208,12 @@
 					</configuration>
 				</plugin>
 
+				<!--  maven-invoker-plugin -->
+				<plugin>
+					<artifactId>maven-invoker-plugin</artifactId>
+					<version>3.6.0</version>
+				</plugin>
+
 			</plugins>
 		</pluginManagement>
 
@@ -361,7 +367,6 @@
 			<!--  maven-invoker-plugin -->
 			<plugin>
 				<artifactId>maven-invoker-plugin</artifactId>
-				<version>3.6.0</version>
 				<configuration>
 					<debug>true</debug>
 					<cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
@@ -406,6 +411,10 @@
 					<sourceEncoding>${project.build.sourceEncoding}</sourceEncoding>
 					<linkXref>true</linkXref>
 					<configLocation>checkstyle.xml</configLocation>
+					<sourceDirectories>
+						<sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
+						<sourceDirectory>${project.build.testSourceDirectory}</sourceDirectory> 
+					</sourceDirectories>
 				</configuration>
 			</plugin>
 
@@ -421,6 +430,9 @@
 					<rulesets>
 						<ruleset>pmd.xml</ruleset>
 					</rulesets>
+					<excludeRoots>
+						<excludeRoot>${project.build.directory}/generated-sources/plugin</excludeRoot>
+					</excludeRoots>
 				</configuration>
 			</plugin>
 
@@ -459,8 +471,28 @@
 			<plugin>
 				<artifactId>maven-project-info-reports-plugin</artifactId>
 				<version>3.5.0</version>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>ci-management</report>
+							<report>dependencies</report>
+							<report>dependency-info</report>
+							<report>distribution-management</report>
+							<report>issue-management</report>
+							<report>licenses</report>
+							<report>plugins</report>
+							<report>scm</report>
+							<report>summary</report>
+							<report>team</report>
+						</reports>
+					</reportSet>
+				</reportSets>
 			</plugin>
 
+			<!--  maven-invoker-plugin -->
+			<plugin>
+				<artifactId>maven-invoker-plugin</artifactId>
+			</plugin>
 		</plugins>
 	</reporting>
 

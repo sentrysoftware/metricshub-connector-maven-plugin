@@ -43,7 +43,7 @@ public class ConstantsProcessor extends AbstractNodeProcessor {
 	}
 
 	@Override
-	public JsonNode doProcessing(final JsonNode node) {
+	public JsonNode processNode(final JsonNode node) {
 		final JsonNode constantsNode = node.get("constants");
 
 		if (constantsNode != null && constantsNode.isObject()) {
