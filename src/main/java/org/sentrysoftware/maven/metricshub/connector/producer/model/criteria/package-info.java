@@ -1,10 +1,15 @@
-package org.sentrysoftware.example;
-
+/**
+ * The part of library defining detection criteria and visitor patterns for criterion types.<br>
+ *
+ * See {@link org.sentrysoftware.maven.metricshub.connector.producer.model.criteria.AbstractCriterion}.<br>
+ * See {@link org.sentrysoftware.maven.metricshub.connector.producer.model.criteria.ICriterionVisitor}.
+ */
+package org.sentrysoftware.maven.metricshub.connector.producer.model.criteria;
 /*-
  * ╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲
- * MY PROJECT
+ * MetricsHub Connector Maven Plugin
  * ჻჻჻჻჻჻
- * Copyright 2023 Sentry Software
+ * Copyright (C) 2023 Sentry Software
  * ჻჻჻჻჻჻
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,16 +24,3 @@ package org.sentrysoftware.example;
  * limitations under the License.
  * ╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱
  */
-
-/**
- * An Example class
- */
-public class Example {
-
-	/**
-	 * The main function
-	 */
-	public static void main() {
-		System.out.println("Hello Open-source World!");
-	}
-}
