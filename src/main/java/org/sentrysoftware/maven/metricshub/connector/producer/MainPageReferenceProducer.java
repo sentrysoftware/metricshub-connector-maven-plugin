@@ -58,7 +58,7 @@ public class MainPageReferenceProducer {
 
 		mainSink.head();
 		mainSink.title();
-		mainSink.text("Connector Directory");
+		mainSink.text("Connectors Directory");
 		mainSink.title_();
 		mainSink.head_();
 
@@ -67,7 +67,7 @@ public class MainPageReferenceProducer {
 		// Title
 		mainSink.section1();
 		mainSink.sectionTitle1();
-		mainSink.text("Connector Directory");
+		mainSink.text("Connectors Directory");
 		mainSink.sectionTitle1_();
 
 		// Intro
