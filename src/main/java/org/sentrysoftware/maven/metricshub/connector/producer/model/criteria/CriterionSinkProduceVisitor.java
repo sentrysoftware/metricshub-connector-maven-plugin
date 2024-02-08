@@ -70,11 +70,31 @@ public class CriterionSinkProduceVisitor implements ICriterionVisitor {
 		sink.text(" below to the managed host succeeds:");
 		sink.list();
 		sink.listItem();
+		// Retrieve URL and Path Fields values
+		String urlField = httpCriterion.getUrl();
+		String pathField = httpCriterion.getPath();
+		// Initialize the final URL value
+		String url = "";
+		// If both URL and Path fields aren't null, concatenate them
+		if(urlField != null && pathField != null) {
+			String.format(
+				"%s%s%s",
+				urlField,
+				urlField.endsWith("/") || pathField.startsWith("/") ? "" : "/",
+				urlField.endsWith("/") && pathField.startsWith("/") ? pathField.substring(1) : pathField
+				);
+		// if Only URL field value is found, use it
+		} else if (urlField != null) {
+			url = urlField;
+		// if Only Path field value is found, use it
+		} else if (pathField != null) {
+			url = pathField;
+		}
 		sink.rawText(
 			String.format(
 				"<b>%s</b> <code>%s</code>",
 				httpCriterion.getMethodOrDefault("GET"),
-				SinkHelper.replaceWithHtmlCode(httpCriterion.getUrl())
+				SinkHelper.replaceWithHtmlCode(url)
 			)
 		);
 		sink.listItem_();
