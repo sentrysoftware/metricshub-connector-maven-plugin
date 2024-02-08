@@ -65,7 +65,7 @@ public class HttpCriterion extends AbstractCriterion {
 	public String getUrl() {
 		return nonNullTextOrDefault(criterion.get("url"), null);
 	}
-	
+
 	/**
 	 * Gets the Path from the criterion, or {@code null} if not present.
 	 *

@@ -76,17 +76,17 @@ public class CriterionSinkProduceVisitor implements ICriterionVisitor {
 		// Initialize the final URL value
 		String url = "";
 		// If both URL and Path fields aren't null, concatenate them
-		if(urlField != null && pathField != null) {
+		if (urlField != null && pathField != null) {
 			String.format(
 				"%s%s%s",
 				urlField,
 				urlField.endsWith("/") || pathField.startsWith("/") ? "" : "/",
 				urlField.endsWith("/") && pathField.startsWith("/") ? pathField.substring(1) : pathField
-				);
-		// if Only URL field value is found, use it
+			);
+			// if Only URL field value is found, use it
 		} else if (urlField != null) {
 			url = urlField;
-		// if Only Path field value is found, use it
+			// if Only Path field value is found, use it
 		} else if (pathField != null) {
 			url = pathField;
 		}
