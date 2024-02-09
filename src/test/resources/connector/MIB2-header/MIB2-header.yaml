@@ -13,7 +13,7 @@ connector:
     criteria:
     # Criteria(1): there must be something in the ifTable SNMP Table
     - type: snmpGetNext
-      oid: _OID
+      oid: ${constant::_OID}
 
 monitors:
   network:
@@ -23,7 +23,7 @@ monitors:
           # Source(1) = ifTable SNMP Table
           # PortID;Description;TypeCode;MacAddress;AdminStatus;
           type: snmpTable
-          oid: _OID
+          oid: ${constant::_OID}
           selectColumns: "ID,2,3,6,7"
           computes:
             # Keep only ports whose administrative status is 'up'
@@ -66,7 +66,7 @@ monitors:
           # Source(1) = ifTable SNMP Table
           # PortID;Description;Speed;OperationalStatus;ReceivedBytes;ReceivedUnicastPackets;ReceivedNonUnicastPackets;ReceivedErrors;TransmittedBytes;TransmittedUnicastPackets;TransmittedNonUnicastPackets;TransmittedErrors;
           type: snmpTable
-          oid: _OID
+          oid: ${constant::_OID}
           selectColumns: "ID,2,5,8,10,11,12,14,16,17,18,20"
           computes:
             # Duplicate Status twice

@@ -36,6 +36,11 @@ import java.util.function.UnaryOperator;
 public class ConstantsProcessor extends AbstractNodeProcessor {
 
 	/**
+	 * Constants Pattern
+	 */
+	private static final String CONSTANTS_REFERENCE_PATTERN = "${constant::%s}";
+
+	/**
 	 * Constructs a ConstantsProcessor without a next processor.
 	 */
 	public ConstantsProcessor() {
@@ -53,7 +58,7 @@ public class ConstantsProcessor extends AbstractNodeProcessor {
 			final Map<String, String> replacements = new HashMap<>();
 			for (String key : constantKeys) {
 				final JsonNode child = constantsNode.get(key);
-				replacements.put(key, child.asText());
+				replacements.put(String.format(CONSTANTS_REFERENCE_PATTERN, key), child.asText());
 			}
 
 			final UnaryOperator<String> updater = value -> performReplacements(replacements, value);
