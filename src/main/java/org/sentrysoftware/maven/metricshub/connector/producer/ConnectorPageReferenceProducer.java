@@ -389,7 +389,7 @@ public class ConnectorPageReferenceProducer {
 
 		// Build YAML config and CLI
 		final StringBuilder cli = new StringBuilder("metricshub HOSTNAME -t ").append(hostType);
-		cli.append(" -f ").append(connectorId);
+		cli.append(" -c +").append(connectorId);
 		final StringBuilder yamlBuilder = new StringBuilder(
 			"resourceGroups:\n  <RESOURCE_GROUP>:\n    resources:\n      <HOSTNAME-ID>:\n        attributes:\n"
 		);
