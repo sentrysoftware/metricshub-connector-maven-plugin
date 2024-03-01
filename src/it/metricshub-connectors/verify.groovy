@@ -118,7 +118,7 @@ assert htmlText.indexOf("VMware ESXi - Virtual Machines (SNMP)") > -1 : "platfor
 // IpmiTool
 htmlText = new File(basedir, "target/site/connectors/ipmitool.html").text
 assert htmlText.indexOf("ipmi:") > -1 && htmlText.indexOf("wmi:") > -1 && htmlText.indexOf("ssh:") > -1 : "IpmiTool: Examples must list ipmi, wmi and ssh"
-assert htmlText =~ /metricshub.*-t management.*-f IpmiTool.*--ipmi/ : "IpmiTool: CLI must specify -t management -f IpmiTool --ipmi"
+assert htmlText =~ /metricshub.*-t management.*-c \+IpmiTool.*--ipmi/ : "IpmiTool: CLI must specify -t management -c +IpmiTool --ipmi"
 
 // IpmiTool Enclosure
 assert htmlText.indexOf('enclosure') > -1 : 'IpmiTool: the enclosure monitor must be listed'
@@ -204,7 +204,7 @@ htmlText = new File(basedir, "target/site/connectors/wbemgennetwork.html").text
 assert htmlText.indexOf("This connector is superseded by") > - 1 : "WBEMGenNetwork: Page must indicate this connector is superseded by another one"
 assert htmlText.indexOf('href="mib2nt.html"') > -1 : "WBEMGenNetwork: Path to superseding connector page must be present"
 assert htmlText.indexOf("wmi:") > -1 : "WBEMGenNetwork: Example must list wmi"
-assert htmlText =~ /metricshub.*-f WBEMGenNetwork.*--wmi/ : "WBEMGetNetwork: CLI must specify WBEMGenNetwork and --wmi"
+assert htmlText =~ /metricshub.*-c \+WBEMGenNetwork.*--wmi/ : "WBEMGetNetwork: CLI must specify WBEMGenNetwork and --wmi"
 
 // lmsensors
 htmlText = new File(basedir, "target/site/connectors/lmsensors.html").text
@@ -231,7 +231,7 @@ assert htmlText.indexOf("Technology and protocols:") > - 1 : "MIB2 'Technology a
 assert htmlText.indexOf("SNMP") > - 1 : "MIB2 SNMP protocol must be present"
 assert htmlText.indexOf('<h3 id="examples">Examples</h3>') > - 1 : "MIB2: Page must indicate 'Examples' as HTML H3 element"
 assert htmlText.indexOf('<h4 id="cli">CLI</h4>') > - 1 : "MIB2: Page must indicate 'CLI' as HTML H4 element"
-assert htmlText.indexOf("metricshub HOSTNAME -t management -f MIB2 --snmp v2c --community public") > - 1 : "MIB2: Page must indicate the expected CLI example"
+assert htmlText.indexOf("metricshub HOSTNAME -t management -c +MIB2 --snmp v2c --community public") > - 1 : "MIB2: Page must indicate the expected CLI example"
 assert htmlText.indexOf('<h4 id="metricshub-yaml">metricshub.yaml</h4>') > - 1 : "MIB2: Page must indicate 'metricshub.yaml' as HTML H4 element"
 assert htmlText.indexOf("snmp:") > - 1 : "MIB2: 'snmp:' yaml section must be present"
 assert htmlText.indexOf("v2c") > - 1 : "MIB2: version 'v2c' must be present in the yaml configuration example"
