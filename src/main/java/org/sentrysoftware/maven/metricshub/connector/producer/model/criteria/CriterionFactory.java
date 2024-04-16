@@ -55,7 +55,8 @@ public class CriterionFactory {
 		map.put("devicetype", CriterionFactory::newDeviceTypeCriterion);
 		map.put("http", CriterionFactory::newHttpCriterion);
 		map.put("ipmi", CriterionFactory::newIpmiCriterion);
-		map.put("oscommand", CriterionFactory::newOsCommandCriterion);
+		map.put("oscommand", CriterionFactory::newCommandLineCriterion);
+		map.put("commandline", CriterionFactory::newCommandLineCriterion);
 		map.put("process", CriterionFactory::newProcessCriterion);
 		map.put("productrequirements", CriterionFactory::newProductRequirementsCriterion);
 		map.put("service", CriterionFactory::newServiceCriterion);
@@ -98,13 +99,13 @@ public class CriterionFactory {
 	}
 
 	/**
-	 * Creates a new {@link OsCommandCriterion} instance based on the provided {@link JsonNode}.
+	 * Creates a new {@link CommandLineCriterion} instance based on the provided {@link JsonNode}.
 	 *
 	 * @param node The {@link JsonNode} containing criterion configuration.
-	 * @return A new {@link OsCommandCriterion} instance.
+	 * @return A new {@link CommandLineCriterion} instance.
 	 */
-	private static AbstractCriterion newOsCommandCriterion(final JsonNode node) {
-		return new OsCommandCriterion(node);
+	private static CommandLineCriterion newCommandLineCriterion(final JsonNode node) {
+		return new CommandLineCriterion(node);
 	}
 
 	/**
@@ -143,7 +144,7 @@ public class CriterionFactory {
 	 * @param node The {@link JsonNode} containing criterion configuration.
 	 * @return A new {@link SnmpGetCriterion} instance.
 	 */
-	private static AbstractSnmpCriterion newSnmpGetCriterion(final JsonNode node) {
+	private static SnmpGetCriterion newSnmpGetCriterion(final JsonNode node) {
 		return new SnmpGetCriterion(node);
 	}
 
@@ -163,7 +164,7 @@ public class CriterionFactory {
 	 * @param node The {@link JsonNode} containing criterion configuration.
 	 * @return A new {@link WbemCriterion} instance.
 	 */
-	private static AbstractWqlCriterion newWbemCriterion(final JsonNode node) {
+	private static WbemCriterion newWbemCriterion(final JsonNode node) {
 		return new WbemCriterion(node);
 	}
 

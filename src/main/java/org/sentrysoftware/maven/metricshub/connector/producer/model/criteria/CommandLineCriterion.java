@@ -27,19 +27,19 @@ import com.fasterxml.jackson.databind.JsonNode;
 import lombok.Builder;
 
 /**
- * Represents a criterion for filtering based on an OS Command.
+ * Represents a criterion for filtering based on a command line.
  *
  * @see AbstractCriterion
  */
-public class OsCommandCriterion extends AbstractCriterion {
+public class CommandLineCriterion extends AbstractCriterion {
 
 	/**
-	 * Constructs OsCommandCriterion with the specified JSON criterion.
+	 * Constructs CommandLineCriterion with the specified JSON criterion.
 	 *
-	 * @param criterion The JSON criterion for OS Command.
+	 * @param criterion The JSON criterion for command line.
 	 */
 	@Builder
-	public OsCommandCriterion(final JsonNode criterion) {
+	public CommandLineCriterion(final JsonNode criterion) {
 		super(criterion);
 	}
 
