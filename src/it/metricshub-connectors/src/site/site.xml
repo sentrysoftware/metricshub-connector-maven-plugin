@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="${project.name}"
+	xmlns="http://maven.apache.org/DECORATION/1.8.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/DECORATION/1.8.0 http://maven.apache.org/xsd/decoration-1.8.0.xsd">
+
+	<skin>
+		<groupId>org.sentrysoftware.maven</groupId>
+		<artifactId>sentry-maven-skin</artifactId>
+		<version>6.2.00</version>
+	</skin>
+
+	<custom>
+		<noDefaultLinks>true</noDefaultLinks>
+		<keywords>metricshub, connector, hardware, system</keywords>
+		<bodyClass>custom-class</bodyClass>
+	</custom>
+
+	<bannerLeft>
+		<src>images/sentry-logo-179x75px.png</src>
+		<href>https://metricshub.com</href>
+	</bannerLeft>
+
+	<body>
+	
+		<links>
+			<item name="Fork on GitHub" href="${project.scm.url}" />
+		</links>
+
+		<menu name="User Documentation">
+			<item name="Getting Started" href="index.html" />
+		</menu>
+
+		<menu name="MetricsHub Connectors">
+			<item name="Supported Platforms" href="platform-requirements.html " />
+		</menu>
+
+		<menu name="Reference">
+			<item name="Reference" href="metricshub-connector-reference.html"/>
+		</menu>
+
+		<menu ref="reports" />
+	</body>
+
+</project>

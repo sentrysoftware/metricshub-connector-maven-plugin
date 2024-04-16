@@ -1,19 +1,47 @@
-# oss-maven-template
+# MetricsHub Connector Maven Plugin
 
-![GitHub release (with filter)](https://img.shields.io/github/v/release/sentrysoftware/oss-maven-template)
-![Build](https://img.shields.io/github/actions/workflow/status/sentrysoftware/oss-maven-template/deploy.yml)
-![GitHub top language](https://img.shields.io/github/languages/top/sentrysoftware/oss-maven-template)
-![License](https://img.shields.io/github/license/sentrysoftware/oss-maven-template)
+This is a Maven Report plugin, which is invoked by Maven's site plugin in the `site` lifecycle.
 
-Repository template for all Sentry open-source Java projects, published on Maven Central.
+This plugin is designed to be used with the [MetricsHub Community Connectors](https://github.com/sentrysoftware/metricshub-community-connectors).
+
+It reads the connector files from a source directory (E.g. `./src/main/connector`), parses the `.yaml` files and produces the corresponding Reference Guide, as a set of HTML documents (through Doxia's Sink API), which is integrated into the project's documentation.
+
+See **[Project Documentation](https://sentrysoftware.github.io/metricshub-connector-maven-plugin)** for more information on how to use this plugin in your maven project.
 
 ## Build instructions
 
-This is a simple Maven project. Build with:
+This is a simple Maven Plugin project. Build with:
 
 ```bash
 mvn verify
 ```
+
+## Integration Tests
+
+While modifying the *MetricsHub Connector Maven Plugin*, you will want to see how your changes are reflected in a *test* documentation project.
+
+Conveniently, the project comes with integration tests, i.e. a documentation project that is automatically built with the skin as it is in the workspace.
+The integration test is run with the below command:
+
+```bash
+mvn verify
+```
+
+This command builds the skin and run it against a documentation project. The result can be seen in `./metricshub-connector-maven-plugin/target/it/metricshub-connectors/site/*.html`.
+
+We recommend running [http-server](https://github.com/http-party/http-server#readme) to browse the result. Install with:
+
+```bash
+npm install --global http-server
+```
+
+Launch a Web server with the generated test documentation with:
+
+```bash
+http-server metricshub-connector-maven-plugin/target/it/metricshub-connectors/target/site
+```
+
+In case of a build failure, the output of the build is stored in `./metricshub-connector-maven-plugin/target/it/metricshub-connectors/build.log`.
 
 ## Release instructions
 
