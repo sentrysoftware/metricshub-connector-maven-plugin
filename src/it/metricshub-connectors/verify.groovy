@@ -114,6 +114,7 @@ assert htmlText.indexOf("VMware ESXi - Disks (VMware)") > -1 : "platform-require
 assert htmlText.indexOf("VMware ESXi 4.x") > -1 : "platform-requirements: 'VMware ESXi 4.x' must be listed"
 assert htmlText.indexOf("VMware ESXi - Disks (IPMI)") > -1 : "platform-requirements: 'VMware ESXi - Disks (IPMI)' must be listed"
 assert htmlText.indexOf("VMware ESXi - Virtual Machines (SNMP)") > -1 : "platform-requirements: 'VMware ESXi - Virtual Machines (SNMP)' must be listed"
+assert htmlText.indexOf("Command Lines") > -1 : "platform-requirements: 'Command Lines' technology must be listed"
 
 // IpmiTool
 htmlText = new File(basedir, "target/site/connectors/ipmitool.html").text
@@ -257,3 +258,11 @@ assert htmlText.indexOf('id') > -1 : "MIB2: the 'id' attribute must be listed fo
 assert htmlText.indexOf('name') > -1 : "MIB2: the 'name' attribute must be listed for the Network monitor"
 assert htmlText.indexOf('physical_address') > -1 : "MIB2: the 'physical_address' attribute must be listed for the Network monitor"
 assert htmlText.indexOf('physical_address_type') > -1 : "MIB2: the 'physical_address_type' attribute must be listed for the Network monitor"
+
+// Nvidia-Smi
+htmlText = new File(basedir, "target/site/connectors/nvidiasmi.html").text
+assert htmlText.indexOf("Any system with Nvidia GPUs") > -1 : "NvidiaSmi: Unexpected Typical platform"
+assert htmlText.indexOf("Microsoft Windows, Linux") > -1 : "NvidiaSmi: Unexpected Operating Systems"
+assert htmlText.indexOf("NVIDIA drivers with NVIDIA-SMI support") > -1 : "NvidiaSmi: Unexpected Leverages"
+assert htmlText.indexOf("Command Lines") > -1 : "NvidiaSmi: Unexpected Technology and protocols"
+assert htmlText.indexOf("<code>nvidia-smi</code>") > -1 : "NvidiaSmi: Unexpected criterion command line"
