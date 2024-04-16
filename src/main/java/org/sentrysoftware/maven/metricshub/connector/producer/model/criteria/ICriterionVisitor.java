@@ -50,11 +50,11 @@ public interface ICriterionVisitor {
 	void visit(IpmiCriterion ipmiCriterion);
 
 	/**
-	 * Visits the specified OS Command criterion.
+	 * Visits the specified Command Line criterion.
 	 *
-	 * @param osCommandCriterion The OS Command criterion to visit.
+	 * @param commandLineCriterion The Command Line criterion to visit.
 	 */
-	void visit(OsCommandCriterion osCommandCriterion);
+	void visit(CommandLineCriterion commandLineCriterion);
 
 	/**
 	 * Visits the specified Process criterion.

@@ -77,12 +77,13 @@ public class CriterionSinkProduceVisitor implements ICriterionVisitor {
 		String url = "";
 		// If both URL and Path fields aren't null, concatenate them
 		if (urlField != null && pathField != null) {
-			String.format(
-				"%s%s%s",
-				urlField,
-				urlField.endsWith("/") || pathField.startsWith("/") ? "" : "/",
-				urlField.endsWith("/") && pathField.startsWith("/") ? pathField.substring(1) : pathField
-			);
+			url =
+				String.format(
+					"%s%s%s",
+					urlField,
+					urlField.endsWith("/") || pathField.startsWith("/") ? "" : "/",
+					urlField.endsWith("/") && pathField.startsWith("/") ? pathField.substring(1) : pathField
+				);
 			// if Only URL field value is found, use it
 		} else if (urlField != null) {
 			url = urlField;
@@ -159,16 +160,16 @@ public class CriterionSinkProduceVisitor implements ICriterionVisitor {
 	}
 
 	@Override
-	public void visit(OsCommandCriterion osCommandCriterion) {
+	public void visit(CommandLineCriterion commandLineCriterion) {
 		// Command Line
-		String commandLine = osCommandCriterion.getCommandLineOrDefault("N/A");
+		String commandLine = commandLineCriterion.getCommandLineOrDefault("N/A");
 
 		// Remove mentions to sudo
 		commandLine = commandLine.replaceAll("%\\{SUDO:[a-zA-Z\\d/\\-_]+\\}", "");
 
 		sink.listItem();
 		sink.text("The command below succeeds on the ");
-		if (osCommandCriterion.isExecuteLocallyOrDefault(false)) {
+		if (commandLineCriterion.isExecuteLocallyOrDefault(false)) {
 			sink.bold();
 			sink.text("agent host");
 			sink.bold_();
@@ -179,7 +180,7 @@ public class CriterionSinkProduceVisitor implements ICriterionVisitor {
 		sink.listItem();
 		sink.rawText(String.format("Command: <code>%s</code>", SinkHelper.replaceWithHtmlCode(commandLine)));
 		sink.listItem_();
-		final String expectedResult = osCommandCriterion.getExpectedResult();
+		final String expectedResult = commandLineCriterion.getExpectedResult();
 		if (expectedResult != null) {
 			sink.listItem();
 			sink.rawText(

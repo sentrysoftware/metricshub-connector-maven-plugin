@@ -26,7 +26,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * Enumeration representing different technology types such as HTTP, IPMI, SNMP, WMI, WBEM, System Commands, etc.
+ * Enumeration representing different technology types such as HTTP, IPMI, SNMP, WMI, WBEM, Command Lines, etc.
  */
 @AllArgsConstructor
 public enum TechnologyType {
@@ -41,9 +41,9 @@ public enum TechnologyType {
 	IPMI("IPMI"),
 
 	/**
-	 * System Commands
+	 * Command Lines
 	 */
-	OS_COMMAND("System Commands"),
+	COMMAND_LINES("Command Lines"),
 
 	/**
 	 * Simple Network Management Protocol (SNMP)
@@ -75,7 +75,8 @@ public enum TechnologyType {
 	private static final Map<String, TechnologyType> TECHNOLOGY_TYPE_MAP = Map.of(
 		"http", HTTP,
 		"ipmi", IPMI,
-		"oscommand", OS_COMMAND,
+		"oscommand", COMMAND_LINES,
+		"commandline", COMMAND_LINES,
 		"snmptable", SNMP,
 		"snmpget", SNMP,
 		"wbem", WBEM,
