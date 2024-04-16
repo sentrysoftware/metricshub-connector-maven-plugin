@@ -437,7 +437,7 @@ public class ConnectorPageReferenceProducer {
 			yamlBuilder.append("            community: public # or probably something more secure");
 		}
 
-		if (technologies.contains(TechnologyType.OS_COMMAND)) {
+		if (technologies.contains(TechnologyType.COMMAND_LINES)) {
 			if (OsType.WINDOWS.getPossibleHostType().equals(hostType)) {
 				cli.append(" --wmi -u USER");
 				yamlBuilder.append(WMI_SECTION);
