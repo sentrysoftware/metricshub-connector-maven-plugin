@@ -1,12 +1,10 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.sentrysoftware.maven</groupId>
 	<artifactId>metricshub-connector-maven-plugin</artifactId>
 	<name>MetricsHub Connector Maven Plugin</name>
-	<version>1.0.00-SNAPSHOT</version>
+	<version>1.0.01-SNAPSHOT</version>
 	<description>
 		The MetricsHub Connector Maven Plugin is a Maven report plugin that
 		helps generate documentation for MetricsHub connectors.
@@ -84,7 +82,7 @@
 
 		<!-- Reproducible Build -->
 		<!-- See https://maven.apache.org/guides/mini/guide-reproducible-builds.html -->
-		<project.build.outputTimestamp>2023-10-25T22:28:48Z</project.build.outputTimestamp>
+		<project.build.outputTimestamp>2024-03-19T12:41:07Z</project.build.outputTimestamp>
 	</properties>
 
 	<dependencyManagement>
