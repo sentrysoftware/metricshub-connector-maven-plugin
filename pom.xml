@@ -4,7 +4,7 @@
 	<groupId>org.sentrysoftware.maven</groupId>
 	<artifactId>metricshub-connector-maven-plugin</artifactId>
 	<name>MetricsHub Connector Maven Plugin</name>
-	<version>1.0.01-SNAPSHOT</version>
+	<version>1.0.01</version>
 	<description>
 		The MetricsHub Connector Maven Plugin is a Maven report plugin that
 		helps generate documentation for MetricsHub connectors.
@@ -51,7 +51,7 @@
 	<scm>
 		<connection>scm:git:https://github.com/sentrysoftware/metricshub-connector-maven-plugin.git</connection>
 		<url>https://github.com/sentrysoftware/metricshub-connector-maven-plugin</url>
-		<tag>HEAD</tag>
+		<tag>v1.0.01</tag>
 	</scm>
 
 	<developers>
@@ -82,7 +82,7 @@
 
 		<!-- Reproducible Build -->
 		<!-- See https://maven.apache.org/guides/mini/guide-reproducible-builds.html -->
-		<project.build.outputTimestamp>2024-03-19T12:41:07Z</project.build.outputTimestamp>
+		<project.build.outputTimestamp>2024-05-21T12:34:24Z</project.build.outputTimestamp>
 	</properties>
 
 	<dependencyManagement>
