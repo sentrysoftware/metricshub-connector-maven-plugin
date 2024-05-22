@@ -182,7 +182,7 @@ assert htmlText.indexOf("Metrics") > -1 : "MIB2NT: The Metrics section must be l
 // WBEMGenNetwork
 htmlText = new File(basedir, "target/site/connectors/wbemgennetwork.html").text
 assert htmlText.indexOf("This connector is superseded by") > - 1 : "WBEMGenNetwork: Page must indicate this connector is superseded by another one"
-assert htmlText.indexOf('href="mib2nt.html"') > -1 : "WBEMGenNetwork: Path to superseding connector page must be present" 
+assert htmlText.indexOf('href="mib2nt.html"') > -1 : "WBEMGenNetwork: Path to superseding connector page must be present"
 assert htmlText.indexOf("wmi:") > -1 : "WBEMGenNetwork: Example must list wmi"
 assert htmlText =~ /metricshub.*-c \+WBEMGenNetwork.*--wmi/ : "WBEMGetNetwork: CLI must specify WBEMGenNetwork and --wmi"
 
