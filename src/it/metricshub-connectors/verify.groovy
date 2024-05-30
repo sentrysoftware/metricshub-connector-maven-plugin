@@ -24,13 +24,6 @@ assert htmlText.indexOf("MIB2") > -1 : "metricshub-connector-reference: MIB2 mus
 assert htmlText.indexOf("MIB2Linux") > -1 : "metricshub-connector-reference: MIB2Linux must be listed"
 assert htmlText.indexOf("MIB2NT") > -1 : "metricshub-connector-reference: MIB2NT must be listed"
 assert htmlText.indexOf("NvidiaSmi") > -1 : "metricshub-connector-reference: NvidiaSmi must be listed"
-assert htmlText.indexOf("VMwareESXiDisksIPMI") > -1 : "metricshub-connector-reference: VMwareESXiDisksIPMI must be listed"
-assert htmlText.indexOf("VMwareESXiDisksStorage") > -1 : "metricshub-connector-reference: VMwareESXiDisksStorage must be listed"
-assert htmlText.indexOf("VMwareESXVMSNMP") > -1 : "metricshub-connector-reference: VMwareESXVMSNMP must be listed"
-assert htmlText.indexOf("VMwareESXi") > -1 : "metricshub-connector-reference: VMwareESXi must be listed"
-assert htmlText.indexOf("VMwareESX4i") > -1 : "metricshub-connector-reference: VMwareESX4i must be listed"
-assert htmlText.indexOf("VMwareESX5iLUNesxcli") > -1 : "metricshub-connector-reference: VMwareESX5iLUNesxcli must be listed"
-assert htmlText.indexOf("VMwareESX5iLUNSSH") > -1 : "metricshub-connector-reference: VMwareESX5iLUNSSH must be listed"
 assert htmlText.indexOf("DiskPart") > -1 : "metricshub-connector-reference: DiskPart must be listed"
 assert htmlText.indexOf("WinStorageSpaces") > -1 : "metricshub-connector-reference: WinStorageSpaces must be listed"
 assert htmlText.indexOf("GenBatteryNT") > -1 : "metricshub-connector-reference: GenBatteryNT must be listed"
@@ -59,13 +52,6 @@ String [] fileNamesToCheck = [
 	'mib2switch.html',
 	'nvidiasmi.html',
 	'virsh.html',
-	'vmwareesx4i.html',
-	'vmwareesx5ilunesxcli.html',
-	'vmwareesx5ilunssh.html',
-	'vmwareesxi.html',
-	'vmwareesxidisksipmi.html',
-	'vmwareesxidisksstorage.html',
-	'vmwareesxvmsnmp.html',
 	'wbemgendisknt.html',
 	'wbemgenhba.html',
 	'wbemgenlun.html',
@@ -107,13 +93,6 @@ assert htmlText.indexOf("Libre Hardware Monitor") > -1 : "platform-requirements:
 assert htmlText.indexOf("Ethernet Switch with Sensors (SNMP)") > -1 : "platform-requirements: 'Ethernet Switch with Sensors (SNMP)' must be listed"
 assert htmlText.indexOf("Generic Ethernet Switch") > -1 : "platform-requirements: 'Generic Ethernet Switch' must be listed"
 assert htmlText.indexOf("Generic UPS") > -1 : "platform-requirements: 'Generic UPS' must be listed"
-assert htmlText.indexOf("VMware ESXi 5 LUN (esxcli)") > -1 : "platform-requirements: 'VMware ESXi 5 LUN (esxcli)' must be listed"
-assert htmlText.indexOf("VMware ESXi 5 LUN (SSH)") > -1 : "platform-requirements: 'VMware ESXi 5 LUN (SSH)' must be listed"
-assert htmlText.indexOf("VMware ESXi 3.x") > -1 : "platform-requirements: 'VMware ESXi 3.x' must be listed"
-assert htmlText.indexOf("VMware ESXi - Disks (VMware)") > -1 : "platform-requirements: 'VMware ESXi - Disks (VMware)' must be listed"
-assert htmlText.indexOf("VMware ESXi 4.x") > -1 : "platform-requirements: 'VMware ESXi 4.x' must be listed"
-assert htmlText.indexOf("VMware ESXi - Disks (IPMI)") > -1 : "platform-requirements: 'VMware ESXi - Disks (IPMI)' must be listed"
-assert htmlText.indexOf("VMware ESXi - Virtual Machines (SNMP)") > -1 : "platform-requirements: 'VMware ESXi - Virtual Machines (SNMP)' must be listed"
 assert htmlText.indexOf("Command Lines") > -1 : "platform-requirements: 'Command Lines' technology must be listed"
 
 // IpmiTool
