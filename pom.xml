@@ -9,7 +9,7 @@
 
 	<groupId>org.sentrysoftware.maven</groupId>
 	<artifactId>metricshub-connector-maven-plugin</artifactId>
-	<version>1.0.02-SNAPSHOT</version>
+	<version>1.0.03-SNAPSHOT</version>
 
 	<packaging>maven-plugin</packaging>
 
