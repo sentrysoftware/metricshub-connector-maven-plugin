@@ -21,12 +21,17 @@ package org.sentrysoftware.maven.metricshub.connector.producer;
  */
 
 import com.fasterxml.jackson.databind.JsonNode;
+import java.io.File;
+import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import lombok.AllArgsConstructor;
 import org.apache.maven.doxia.sink.Sink;
+import org.apache.maven.doxia.sink.SinkEventAttributes;
+import org.apache.maven.doxia.sink.impl.SinkEventAttributeSet;
 import org.apache.maven.plugin.logging.Log;
 import org.sentrysoftware.maven.metricshub.connector.ReferenceReport;
 import org.sentrysoftware.maven.metricshub.connector.producer.model.common.OsType;
@@ -45,10 +50,15 @@ public class MainPageReferenceProducer {
 	/**
 	 * Produces the main page reference that lists all the connectors.
 	 *
-	 * @param mainSink     The main sink used for generating content.
-	 * @param connectors   The map of connector identifiers to their corresponding JsonNodes.
+	 * @param mainSink               The main sink used for generating content.
+	 * @param connectors             The map of connector identifiers to their corresponding JsonNodes.
+	 * @param enterpriseConnectorIds The enterprise connector identifiers.
 	 */
-	public void produce(final Sink mainSink, final Map<String, JsonNode> connectors) {
+	public void produce(
+		final Sink mainSink,
+		final Map<String, JsonNode> connectors,
+		final List<String> enterpriseConnectorIds
+	) {
 		Objects.requireNonNull(connectorSubdirectoryName, () -> "connectorSubdirectoryName cannot be null.");
 		Objects.requireNonNull(mainSink, () -> "mainSink cannot be null.");
 		Objects.requireNonNull(logger, () -> "logger cannot be null.");
@@ -93,6 +103,9 @@ public class MainPageReferenceProducer {
 		mainSink.tableHeaderCell_();
 		mainSink.tableHeaderCell(SinkHelper.setClass(BOOTSTRAP_MEDIUM_3_CLASS));
 		mainSink.text("Operating Systems");
+		mainSink.tableHeaderCell_();
+		mainSink.tableHeaderCell(SinkHelper.setClass(BOOTSTRAP_MEDIUM_3_CLASS));
+		mainSink.text("Enterprise");
 		mainSink.tableHeaderCell_();
 		mainSink.tableRow_();
 
@@ -141,6 +154,11 @@ public class MainPageReferenceProducer {
 
 				mainSink.tableCell();
 				mainSink.text(String.join(", ", OsType.mapToDisplayNames(connectorJsonNodeReader.getAppliesTo())));
+				mainSink.tableCell_();
+
+				SinkEventAttributes attributes = new SinkEventAttributeSet(SinkEventAttributes.ALIGN, "center");
+				mainSink.tableCell(attributes);
+				mainSink.text(enterpriseConnectorIds.contains(connectorId) ? "\u2713" : "");
 				mainSink.tableCell_();
 
 				mainSink.tableRow_();

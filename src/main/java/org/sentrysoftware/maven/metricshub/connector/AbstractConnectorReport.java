@@ -23,8 +23,17 @@ package org.sentrysoftware.maven.metricshub.connector;
 import com.fasterxml.jackson.databind.JsonNode;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.stream.Collectors;
+import lombok.Getter;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -46,6 +55,8 @@ public abstract class AbstractConnectorReport extends AbstractMavenReport {
 	protected Log logger;
 
 	protected Map<String, JsonNode> connectors;
+
+	protected List<String> enterpriseConnectorIds = new ArrayList<>();
 
 	@Override
 	protected void executeReport(Locale locale) throws MavenReportException {
@@ -75,8 +86,57 @@ public abstract class AbstractConnectorReport extends AbstractMavenReport {
 		// Parse the connector library
 		connectors = parseConnectors();
 
+		// Retrieve the enterprise connector identifiers from the manifest file.
+		try {
+			enterpriseConnectorIds = detectEnterpriseConnectors();
+		} catch (IOException e) {
+			final String message = "Could not read the eneterprise connectors manifest: enterprise-connectors-manifest.txt";
+			logger.error(message);
+			throw new MavenReportException(message);
+		}
+
 		// Produce the report
 		doReport();
+	}
+
+	/**
+	 * Detect the enterprise connector identifiers.
+	 *
+	 * @return List of string values containing the connector identifiers.
+	 * @throws IOException If any I/O error occurs.
+	 */
+	private List<String> detectEnterpriseConnectors() throws IOException {
+		final EnterpriseManifestVisitor fileVisitor = new EnterpriseManifestVisitor();
+
+		Files.walkFileTree(sourceDirectory.toPath(), fileVisitor);
+
+		return fileVisitor.getConnectorEnterpriseList();
+	}
+
+	/**
+	 * This inner class allows to visit the files in order to extract the enterprise manifest file content
+	 */
+	private static class EnterpriseManifestVisitor extends SimpleFileVisitor<Path> {
+
+		@Getter
+		private List<String> connectorEnterpriseList = new ArrayList<>();
+
+		@Override
+		public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+			// Skip this path if it is a directory or not a YAML file
+			if (!Files.isDirectory(file) && "enterprise-connectors-manifest.txt".equals(file.toFile().getName())) {
+				connectorEnterpriseList =
+					Files
+						.readAllLines(file)
+						.stream()
+						.map(filename -> filename.substring(0, filename.lastIndexOf('.')))
+						.collect(Collectors.toCollection(ArrayList::new));
+
+				return FileVisitResult.TERMINATE;
+			}
+
+			return FileVisitResult.CONTINUE;
+		}
 	}
 
 	/**

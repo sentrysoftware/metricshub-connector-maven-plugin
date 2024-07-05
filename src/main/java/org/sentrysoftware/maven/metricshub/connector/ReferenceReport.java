@@ -85,20 +85,19 @@ public class ReferenceReport extends AbstractConnectorReport {
 		}
 
 		// Main page
-		produceMainPage(connectors);
+		produceMainPage();
 
 		// Connector pages
-		produceConnectorPages(connectors, connectorSubdirectory, buildSupersededMap(connectors));
+		produceConnectorPages(connectorSubdirectory, buildSupersededMap());
 	}
 
 	/**
 	 * Builds a map representing the superseded relationships between connectors.
 	 *
-	 * @param connectors A map of connector IDs to JsonNode objects representing connectors.
 	 * @return A map where each key is a connector ID that is superseded by one or more connectors,
 	 *         and the associated value is a list of connectors that supersede it.
 	 */
-	private Map<String, List<String>> buildSupersededMap(final Map<String, JsonNode> connectors) {
+	private Map<String, List<String>> buildSupersededMap() {
 		final Map<String, List<String>> supersededMap = new HashMap<>();
 
 		connectors.forEach((connectorId, connector) ->
@@ -115,16 +114,12 @@ public class ReferenceReport extends AbstractConnectorReport {
 	/**
 	 * Produces individual connector pages for the Maven report
 	 *
-	 * @param connectors            A map of connector IDs to their corresponding JSON nodes.
 	 * @param connectorSubdirectory The subdirectory where individual connector pages are located.
 	 * @param supersededMap         A map representing the superseded relationships among connectors.
 	 * @throws MavenReportException If an error occurs while producing the connector pages.
 	 */
-	private void produceConnectorPages(
-		final Map<String, JsonNode> connectors,
-		final File connectorSubdirectory,
-		final Map<String, List<String>> supersededMap
-	) throws MavenReportException {
+	private void produceConnectorPages(final File connectorSubdirectory, final Map<String, List<String>> supersededMap)
+		throws MavenReportException {
 		for (Entry<String, JsonNode> connectorEntry : connectors.entrySet()) {
 			final String connectorId = connectorEntry.getKey();
 			// Create a new sink!
@@ -149,13 +144,12 @@ public class ReferenceReport extends AbstractConnectorReport {
 
 	/**
 	 * Produces the main page for the Maven report
-	 *
-	 * @param connectors            A map of connector IDs to their corresponding JSON nodes.
 	 */
-	private void produceMainPage(final Map<String, JsonNode> connectors) throws MavenReportException {
+	private void produceMainPage() throws MavenReportException {
 		final Sink mainSink = getMainSink();
 
-		new MainPageReferenceProducer(CONNECTOR_SUBDIRECTORY_NAME, logger).produce(mainSink, connectors);
+		new MainPageReferenceProducer(CONNECTOR_SUBDIRECTORY_NAME, logger)
+			.produce(mainSink, connectors, enterpriseConnectorIds);
 	}
 
 	@Override
