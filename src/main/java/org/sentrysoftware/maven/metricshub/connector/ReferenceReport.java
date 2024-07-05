@@ -138,7 +138,7 @@ public class ReferenceReport extends AbstractConnectorReport {
 				.withConnector(connectorEntry.getValue())
 				.withLogger(logger)
 				.build()
-				.produce(sink, supersededMap);
+				.produce(sink, supersededMap, enterpriseConnectorIds);
 		}
 	}
 

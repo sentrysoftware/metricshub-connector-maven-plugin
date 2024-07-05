@@ -127,8 +127,13 @@ public class SinkHelper {
 	 * @param content text of the badge.
 	 * @return the HTML code for this badge.
 	 */
-	public static String bootstrapBadge(@NonNull final String content) {
-		return String.format("<span class=\"badge badge-secondary\">%s</span>", content);
+	public static String bootstrapLabel(@NonNull final String content, String customClassname) {
+		if (customClassname == null) {
+			customClassname = "";
+		} else {
+			customClassname = customClassname.trim() + " ";
+		}
+		return String.format(" <span class=\"%slabel label-default\">%s</span>", customClassname, content);
 	}
 
 	/**

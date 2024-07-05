@@ -62,7 +62,7 @@ public class ConnectorPageReferenceProducer {
 	 * @param sink          The sink used for generating content.
 	 * @param supersededMap Map of superseded connectors.
 	 */
-	public void produce(final Sink sink, final Map<String, List<String>> supersededMap) {
+	public void produce(final Sink sink, final Map<String, List<String>> supersededMap, final List<String> enterpriseConnectorIds) {
 		Objects.requireNonNull(connectorId, () -> "connectorId cannot be null.");
 		Objects.requireNonNull(connector, () -> "connector cannot be null.");
 		Objects.requireNonNull(supersededMap, () -> "supersededMap cannot be null.");
@@ -95,6 +95,10 @@ public class ConnectorPageReferenceProducer {
 		sink.section1();
 		sink.sectionTitle1();
 		sink.text(displayName);
+		// If the connector is Enterprise
+		if (enterpriseConnectorIds.contains(connectorId)) {
+			sink.rawText(SinkHelper.bootstrapLabel("Enterprise", "metricshub-enterprise-label"));
+		}
 		sink.sectionTitle1_();
 
 		// Description
