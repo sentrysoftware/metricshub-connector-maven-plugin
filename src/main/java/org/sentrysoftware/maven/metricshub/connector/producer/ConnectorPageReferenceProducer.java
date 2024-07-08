@@ -59,8 +59,11 @@ public class ConnectorPageReferenceProducer {
 	/**
 	 * Produces a page reference for the current connector and generates the corresponding sink for documentation output.
 	 *
-	 * @param sink          The sink used for generating content.
-	 * @param supersededMap Map of superseded connectors.
+	 * This method generates a table with connector information, adding a new column to indicate if a connector is an enterprise connector.
+	 *
+	 * @param sink                   The sink used for generating content.
+	 * @param supersededMap          Map of superseded connectors.
+	 * @param enterpriseConnectorIds List of IDs for enterprise connectors.
 	 */
 	public void produce(final Sink sink, final Map<String, List<String>> supersededMap, final List<String> enterpriseConnectorIds) {
 		Objects.requireNonNull(connectorId, () -> "connectorId cannot be null.");
