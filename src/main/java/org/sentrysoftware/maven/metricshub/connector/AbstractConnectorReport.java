@@ -129,6 +129,8 @@ public abstract class AbstractConnectorReport extends AbstractMavenReport {
 					Files
 						.readAllLines(file)
 						.stream()
+						.map(String::trim)
+						.filter(line -> !line.isEmpty())
 						.map(filename -> filename.substring(0, filename.lastIndexOf('.')))
 						.collect(Collectors.toCollection(ArrayList::new));
 
