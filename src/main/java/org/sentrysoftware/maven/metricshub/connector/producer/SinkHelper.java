@@ -24,6 +24,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.doxia.sink.SinkEventAttributes;
 import org.apache.maven.doxia.sink.impl.SinkEventAttributeSet;
@@ -118,6 +119,21 @@ public class SinkHelper {
 			glyphIconName = iconName;
 		}
 		return String.format("<i class=\"glyphicon glyphicon-%s\" aria-hidden=\"true\"></i>", glyphIconName);
+	}
+
+	/**
+	 * Create a bootstrap badge with the following content.
+	 *
+	 * @param content text of the badge.
+	 * @return the HTML code for this badge.
+	 */
+	public static String bootstrapLabel(@NonNull final String content, String customClassname) {
+		if (customClassname == null) {
+			customClassname = "";
+		} else {
+			customClassname = customClassname.trim() + " ";
+		}
+		return String.format(" <span class=\"%slabel label-default\">%s</span>", customClassname, content);
 	}
 
 	/**

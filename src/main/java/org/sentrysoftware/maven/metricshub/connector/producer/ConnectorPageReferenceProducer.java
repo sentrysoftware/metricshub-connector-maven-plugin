@@ -59,10 +59,13 @@ public class ConnectorPageReferenceProducer {
 	/**
 	 * Produces a page reference for the current connector and generates the corresponding sink for documentation output.
 	 *
-	 * @param sink          The sink used for generating content.
-	 * @param supersededMap Map of superseded connectors.
+	 * This method generates a table with connector information, adding a new column to indicate if a connector is an enterprise connector.
+	 *
+	 * @param sink                   The sink used for generating content.
+	 * @param supersededMap          Map of superseded connectors.
+	 * @param enterpriseConnectorIds List of IDs for enterprise connectors.
 	 */
-	public void produce(final Sink sink, final Map<String, List<String>> supersededMap) {
+	public void produce(final Sink sink, final Map<String, List<String>> supersededMap, final List<String> enterpriseConnectorIds) {
 		Objects.requireNonNull(connectorId, () -> "connectorId cannot be null.");
 		Objects.requireNonNull(connector, () -> "connector cannot be null.");
 		Objects.requireNonNull(supersededMap, () -> "supersededMap cannot be null.");
@@ -95,6 +98,10 @@ public class ConnectorPageReferenceProducer {
 		sink.section1();
 		sink.sectionTitle1();
 		sink.text(displayName);
+		// If the connector is Enterprise
+		if (enterpriseConnectorIds.contains(connectorId)) {
+			sink.rawText(SinkHelper.bootstrapLabel("Enterprise", "metricshub-enterprise-label"));
+		}
 		sink.sectionTitle1_();
 
 		// Description
