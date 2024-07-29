@@ -169,4 +169,11 @@ public class SinkHelper {
 	public static String replaceWithHtmlCode(final String value) {
 		return value.replace("$", "&#36;");
 	}
+
+	/**
+	 * Creates an HTML hyperlink reference with the given content
+	 */
+	public static String hyperlinkRef(final String link, final String content) {
+		return String.format("<a href=\"%s\">%s</a>", link, content);
+	}
 }

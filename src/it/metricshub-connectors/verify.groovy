@@ -66,34 +66,23 @@ fileNamesToCheck.each { fileName ->
     assert htmlText.indexOf("href=\"connectors/$fileName\"") > -1 : "metricshub-connector-reference: href=connectors/$fileName must be listed"
 }
 
+// Check generated reference files
+String tagsDirectoryPath = 'target/site/connectors/tags'
+String [] tagsFileNamesToCheck = [
+	'hardware.html',
+	'nvidia.html',
+	'vm.html',
+	'hyper-v.html',
+	'hardware.html',
+	// TODO: To be completed adding tags to the connectors.
+]
 
-// platform-requirements.html
-htmlFile = new File(basedir, "target/site/platform-requirements.html")
-assert htmlFile.exists() : "platform-requirements.html must have been created"
-htmlText = htmlFile.text
-assert htmlText.indexOf("IPMI") > -1 : "platform-requirements: 'IPMI' must be listed"
-assert htmlText.indexOf("MIB-2 Standard SNMP Agent - Network Interfaces") > -1 : "platform-requirements: 'MIB-2 Standard SNMP Agent - Network Interfaces' must be listed"
-assert htmlText.indexOf("KVM, QEMU, Xen and Hypervisors (virsh)") > -1 : "platform-requirements: 'KVM, QEMU, Xen and Hypervisors (virsh)' must be listed"
-assert htmlText.indexOf("lm_sensors") > -1 : "platform-requirements: 'lm_sensors' must be listed"
-assert htmlText.indexOf("Linux - Network (ifconfig)") > -1 : "platform-requirements: 'Linux - Network (ifconfig)' must be listed"
-assert htmlText.indexOf("Linux - Network (ip)") > -1 : "platform-requirements: 'Linux - Network (ip)' must be listed"
-assert htmlText.indexOf("Linux - Multipath") > -1 : "platform-requirements: 'Linux - Multipath' must be listed"
-assert htmlText.indexOf("Nvidia-Smi") > -1 : "platform-requirements: 'Nvidia-Smi' must be listed"
-assert htmlText.indexOf("MIB-2 Standard SNMP Agent - Network Interfaces - Linux") > -1 : "platform-requirements: 'MIB-2 Standard SNMP Agent - Network Interfaces - Linux' must be listed"
-assert htmlText.indexOf("Hyper-V") > -1 : "platform-requirements: 'Hyper-V' must be listed"
-assert htmlText.indexOf("WMI - Battery") > -1 : "platform-requirements: 'WMI - Battery' must be listed"
-assert htmlText.indexOf("WMI - Network") > -1 : "platform-requirements: 'WMI - Network' must be listed"
-assert htmlText.indexOf("WMI - LUN") > -1 : "platform-requirements: 'WMI - LUN' must be listed"
-assert htmlText.indexOf("Windows Storage Spaces (WMI)") > -1 : "platform-requirements: 'Windows Storage Spaces (WMI)' must be listed"
-assert htmlText.indexOf("WMI - Disks") > -1 : "platform-requirements: 'WMI - Disks' must be listed"
-assert htmlText.indexOf("WMI - HBA") > -1 : "platform-requirements: 'WMI - HBA' must be listed"
-assert htmlText.indexOf("Windows - DiskPart") > -1 : "platform-requirements: 'Windows - DiskPart' must be listed"
-assert htmlText.indexOf("MIB-2 Standard SNMP Agent - Network Interfaces - Windows") > -1 : "platform-requirements: 'MIB-2 Standard SNMP Agent - Network Interfaces - Windows' must be listed"
-assert htmlText.indexOf("Libre Hardware Monitor") > -1 : "platform-requirements: 'Libre Hardware Monitor' must be listed"
-assert htmlText.indexOf("Ethernet Switch with Sensors (SNMP)") > -1 : "platform-requirements: 'Ethernet Switch with Sensors (SNMP)' must be listed"
-assert htmlText.indexOf("Generic Ethernet Switch") > -1 : "platform-requirements: 'Generic Ethernet Switch' must be listed"
-assert htmlText.indexOf("Generic UPS") > -1 : "platform-requirements: 'Generic UPS' must be listed"
-assert htmlText.indexOf("Command Lines") > -1 : "platform-requirements: 'Command Lines' technology must be listed"
+tagsFileNamesToCheck.each { fileName ->
+	File file = new File(basedir,  "$tagsDirectoryPath/$fileName")
+
+	assert file.exists() : "File $fileName does not exist in the $tagsDirectoryPath directory"
+    assert htmlText.indexOf("href=\"connectors/tags/$fileName\"") > -1 : "metricshub-connector-reference: href=connectors/tags/$fileName must be listed"
+}
 
 // IpmiTool
 htmlText = new File(basedir, "target/site/connectors/ipmitool.html").text

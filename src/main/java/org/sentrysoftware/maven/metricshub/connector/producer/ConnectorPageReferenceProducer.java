@@ -65,7 +65,11 @@ public class ConnectorPageReferenceProducer {
 	 * @param supersededMap          Map of superseded connectors.
 	 * @param enterpriseConnectorIds List of IDs for enterprise connectors.
 	 */
-	public void produce(final Sink sink, final Map<String, List<String>> supersededMap, final List<String> enterpriseConnectorIds) {
+	public void produce(
+		final Sink sink,
+		final Map<String, List<String>> supersededMap,
+		final List<String> enterpriseConnectorIds
+	) {
 		Objects.requireNonNull(connectorId, () -> "connectorId cannot be null.");
 		Objects.requireNonNull(connector, () -> "connector cannot be null.");
 		Objects.requireNonNull(supersededMap, () -> "supersededMap cannot be null.");

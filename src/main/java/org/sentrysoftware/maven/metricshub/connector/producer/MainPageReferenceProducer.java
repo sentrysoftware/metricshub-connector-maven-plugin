@@ -20,12 +20,17 @@ package org.sentrysoftware.maven.metricshub.connector.producer;
  * ╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱
  */
 
+import static org.sentrysoftware.maven.metricshub.connector.Constants.BOOTSTRAP_MEDIUM_3_CLASS;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import java.util.Comparator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.doxia.sink.SinkEventAttributes;
@@ -40,9 +45,8 @@ import org.sentrysoftware.maven.metricshub.connector.producer.model.common.OsTyp
 @AllArgsConstructor
 public class MainPageReferenceProducer {
 
-	private static final String BOOTSTRAP_MEDIUM_3_CLASS = "col-md-3";
-
 	private final String connectorSubdirectoryName;
+	private final String tagSubdirectoryName;
 	private final Log logger;
 
 	/**
@@ -55,12 +59,15 @@ public class MainPageReferenceProducer {
 	public void produce(
 		final Sink mainSink,
 		final Map<String, JsonNode> connectors,
-		final List<String> enterpriseConnectorIds
+		final List<String> enterpriseConnectorIds,
+		final Set<String> connectorTags
 	) {
 		Objects.requireNonNull(connectorSubdirectoryName, () -> "connectorSubdirectoryName cannot be null.");
+		Objects.requireNonNull(tagSubdirectoryName, () -> "tagSubdirectoryName cannot be null.");
 		Objects.requireNonNull(mainSink, () -> "mainSink cannot be null.");
 		Objects.requireNonNull(logger, () -> "logger cannot be null.");
 		Objects.requireNonNull(connectors, () -> "connectors cannot be null.");
+		Objects.requireNonNull(connectorTags, () -> "connectorTags cannot be null.");
 
 		logger.debug(String.format("Generating the main page %s.html", ReferenceReport.CONNECTOR_REFERENCE_OUTPUT_NAME));
 
@@ -86,6 +93,38 @@ public class MainPageReferenceProducer {
 			" the protocol used, the discovered components and monitored attributes."
 		);
 		mainSink.paragraph_();
+
+		mainSink.sectionTitle2();
+		mainSink.text("Connector Tags");
+		mainSink.sectionTitle2_();
+
+		// Sort the entries in tagsSet
+		final Set<String> tagsSet = connectorTags
+			.stream()
+			.sorted(String.CASE_INSENSITIVE_ORDER)
+			.collect(Collectors.toCollection(LinkedHashSet::new));
+
+		// Tags Labels
+		for (String tag : tagsSet) {
+			mainSink.rawText(
+				SinkHelper.bootstrapLabel(
+					SinkHelper.hyperlinkRef(
+						String.format(
+							"%s/%s/%s.html",
+							connectorSubdirectoryName,
+							tagSubdirectoryName,
+							tag.toLowerCase().replace(" ", "-")
+						),
+						tag
+					),
+					"label label-default"
+				)
+			);
+		}
+
+		mainSink.sectionTitle2();
+		mainSink.text("Full Listing");
+		mainSink.sectionTitle2_();
 
 		// Table header
 		mainSink.table();
