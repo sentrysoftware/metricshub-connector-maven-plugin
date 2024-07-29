@@ -39,17 +39,17 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.reporting.MavenReportException;
 import org.sentrysoftware.maven.metricshub.connector.producer.ConnectorJsonNodeReader;
-import org.sentrysoftware.maven.metricshub.connector.producer.ConnectorPageReferenceProducer;
-import org.sentrysoftware.maven.metricshub.connector.producer.MainPageReferenceProducer;
+import org.sentrysoftware.maven.metricshub.connector.producer.ConnectorPageProducer;
+import org.sentrysoftware.maven.metricshub.connector.producer.MainPageProducer;
 import org.sentrysoftware.maven.metricshub.connector.producer.SinkHelper;
-import org.sentrysoftware.maven.metricshub.connector.producer.TagPageReferenceProducer;
+import org.sentrysoftware.maven.metricshub.connector.producer.TagPageProducer;
 
 /**
- * This Maven report goal builds a Reference Guide for the Connector Library.
+ * This Maven report goal builds an HTML Page for the Connectors Directory.
  *
  * It is invoked during the Maven site generation process.<br>
  *
- * It takes the source code of the connectors as input then generates a reference guide that describes the
+ * It takes the source code of the connectors as input then generates a report that describes the
  * connectors in detail.
  * <p>
  * This plugin goal is a report goal that works in the <em>site</em> build lifecycle. It
@@ -62,7 +62,7 @@ import org.sentrysoftware.maven.metricshub.connector.producer.TagPageReferencePr
  * </p>
  */
 @Mojo(
-	name = "metricshub-connector-reference",
+	name = "connectors-directory-report",
 	aggregator = false,
 	defaultPhase = LifecyclePhase.SITE,
 	requiresDependencyResolution = ResolutionScope.RUNTIME,
@@ -70,12 +70,12 @@ import org.sentrysoftware.maven.metricshub.connector.producer.TagPageReferencePr
 	requiresProject = true,
 	threadSafe = true
 )
-public class ReferenceReport extends AbstractConnectorReport {
+public class ConnectorsDirectoryReport extends AbstractConnectorReport {
 
 	/**
-	 * Connector reference output name
+	 * Connector directory output name
 	 */
-	public static final String CONNECTOR_REFERENCE_OUTPUT_NAME = "metricshub-connector-reference";
+	public static final String CONNECTORS_DIRECTORY_OUTPUT_NAME = "metricshub-connectors-directory";
 
 	@Override
 	protected void doReport() throws MavenReportException {
@@ -152,7 +152,7 @@ public class ReferenceReport extends AbstractConnectorReport {
 				throw new MavenReportException(message, e);
 			}
 
-			ConnectorPageReferenceProducer
+			ConnectorPageProducer
 				.builder()
 				.withConnectorId(connectorId)
 				.withConnector(connectorEntry.getValue())
@@ -171,7 +171,10 @@ public class ReferenceReport extends AbstractConnectorReport {
 	 */
 	private void produceTagPages(final File tagSubdirectory, final Map<String, Map<String, JsonNode>> tags)
 		throws MavenReportException {
-		for (String tag : tags.keySet()) {
+		for (Entry<String, Map<String, JsonNode>> tagEntry : tags.entrySet()) {
+			final String tag = tagEntry.getKey();
+			final Map<String, JsonNode> connectors = tagEntry.getValue();
+
 			// Create a new sink!
 			final Sink sink;
 			try {
@@ -184,12 +187,7 @@ public class ReferenceReport extends AbstractConnectorReport {
 				throw new MavenReportException(message, e);
 			}
 
-			TagPageReferenceProducer
-				.builder()
-				.withTagName(tag)
-				.withLogger(logger)
-				.build()
-				.produce(sink, tags.get(tag), CONNECTOR_SUBDIRECTORY_NAME, enterpriseConnectorIds);
+			new TagPageProducer(logger, tag).produce(sink, connectors, CONNECTOR_SUBDIRECTORY_NAME, enterpriseConnectorIds);
 		}
 	}
 
@@ -199,7 +197,7 @@ public class ReferenceReport extends AbstractConnectorReport {
 	private void produceMainPage(final Set<String> tags) throws MavenReportException {
 		final Sink mainSink = getMainSink();
 
-		new MainPageReferenceProducer(CONNECTOR_SUBDIRECTORY_NAME, TAG_SUBDIRECTORY_NAME, logger)
+		new MainPageProducer(logger, CONNECTOR_SUBDIRECTORY_NAME, TAG_SUBDIRECTORY_NAME)
 			.produce(mainSink, connectors, enterpriseConnectorIds, tags);
 	}
 
@@ -215,7 +213,7 @@ public class ReferenceReport extends AbstractConnectorReport {
 
 	@Override
 	public String getOutputName() {
-		return CONNECTOR_REFERENCE_OUTPUT_NAME;
+		return CONNECTORS_DIRECTORY_OUTPUT_NAME;
 	}
 
 	/**

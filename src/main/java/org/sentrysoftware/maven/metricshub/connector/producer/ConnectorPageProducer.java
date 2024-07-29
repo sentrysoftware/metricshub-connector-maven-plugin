@@ -20,7 +20,7 @@ package org.sentrysoftware.maven.metricshub.connector.producer;
  * ╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱
  */
 
-import static org.sentrysoftware.maven.metricshub.connector.ReferenceReport.CONNECTOR_REFERENCE_OUTPUT_NAME;
+import static org.sentrysoftware.maven.metricshub.connector.ConnectorsDirectoryReport.CONNECTORS_DIRECTORY_OUTPUT_NAME;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import java.text.ChoiceFormat;
@@ -43,11 +43,11 @@ import org.sentrysoftware.maven.metricshub.connector.producer.model.criteria.Cri
 import org.sentrysoftware.maven.metricshub.connector.producer.model.criteria.CriterionSinkProduceVisitor;
 
 /**
- * Utility class for producing page references related to connectors.
+ * Utility class for producing the connector page.
  *
  */
 @Builder(setterPrefix = "with")
-public class ConnectorPageReferenceProducer {
+public class ConnectorPageProducer {
 
 	private static final String WMI_SECTION = "          wmi:\n";
 	private static final String PROTOCOLS_SECTION = "        protocols:\n";
@@ -93,7 +93,7 @@ public class ConnectorPageReferenceProducer {
 		// Back to the main page
 		sink.paragraph(SinkHelper.setClass("small"));
 		sink.rawText(SinkHelper.glyphIcon("arrow-left") + "&nbsp;");
-		sink.link(String.format("../%s.html", CONNECTOR_REFERENCE_OUTPUT_NAME));
+		sink.link(String.format("../%s.html", CONNECTORS_DIRECTORY_OUTPUT_NAME));
 		sink.text("Back to the list of connectors");
 		sink.link_();
 		sink.paragraph_();

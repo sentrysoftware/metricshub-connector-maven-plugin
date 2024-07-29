@@ -20,34 +20,37 @@ package org.sentrysoftware.maven.metricshub.connector.producer;
  * ╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱
  */
 
-import static org.sentrysoftware.maven.metricshub.connector.Constants.BOOTSTRAP_MEDIUM_3_CLASS;
-
 import com.fasterxml.jackson.databind.JsonNode;
-import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
-import lombok.AllArgsConstructor;
 import org.apache.maven.doxia.sink.Sink;
-import org.apache.maven.doxia.sink.SinkEventAttributes;
-import org.apache.maven.doxia.sink.impl.SinkEventAttributeSet;
 import org.apache.maven.plugin.logging.Log;
-import org.sentrysoftware.maven.metricshub.connector.ReferenceReport;
-import org.sentrysoftware.maven.metricshub.connector.producer.model.common.OsType;
+import org.sentrysoftware.maven.metricshub.connector.ConnectorsDirectoryReport;
 
 /**
- * Utility class for producing main page references.
+ * Utility class for producing main page of the connectors directory.
  */
-@AllArgsConstructor
-public class MainPageReferenceProducer {
+public class MainPageProducer extends AbstractPageProducer {
 
 	private final String connectorSubdirectoryName;
 	private final String tagSubdirectoryName;
-	private final Log logger;
+
+	/**
+	 * Constructor for the main page producer.
+	 *
+	 * @param logger                     The logger used for logging.
+	 * @param connectorSubdirectoryName  The connector subdirectory name.
+	 * @param tagSubdirectoryName        The tag subdirectory name.
+	 */
+	public MainPageProducer(Log logger, String connectorSubdirectoryName, String tagSubdirectoryName) {
+		super(logger);
+		this.connectorSubdirectoryName = connectorSubdirectoryName;
+		this.tagSubdirectoryName = tagSubdirectoryName;
+	}
 
 	/**
 	 * Produces the main page reference that lists all the connectors.
@@ -69,7 +72,9 @@ public class MainPageReferenceProducer {
 		Objects.requireNonNull(connectors, () -> "connectors cannot be null.");
 		Objects.requireNonNull(connectorTags, () -> "connectorTags cannot be null.");
 
-		logger.debug(String.format("Generating the main page %s.html", ReferenceReport.CONNECTOR_REFERENCE_OUTPUT_NAME));
+		logger.debug(
+			String.format("Generating the main page %s.html", ConnectorsDirectoryReport.CONNECTORS_DIRECTORY_OUTPUT_NAME)
+		);
 
 		mainSink.head();
 		mainSink.title();
@@ -98,6 +103,13 @@ public class MainPageReferenceProducer {
 		mainSink.text("Connector Tags");
 		mainSink.sectionTitle2_();
 
+		mainSink.paragraph();
+		mainSink.text(
+			"The connectors are organized with tags to help you quickly find connectors that" +
+			" meet specific category or vendor. Below is the list of available tags:"
+		);
+		mainSink.paragraph_();
+
 		// Sort the entries in tagsSet
 		final Set<String> tagsSet = connectorTags
 			.stream()
@@ -117,7 +129,7 @@ public class MainPageReferenceProducer {
 						),
 						tag
 					),
-					"label label-default"
+					"metricshub-tag"
 				)
 			);
 		}
@@ -126,83 +138,8 @@ public class MainPageReferenceProducer {
 		mainSink.text("Full Listing");
 		mainSink.sectionTitle2_();
 
-		// Table header
-		mainSink.table();
-		mainSink.tableRow();
-		mainSink.tableHeaderCell(SinkHelper.setClass(BOOTSTRAP_MEDIUM_3_CLASS));
-		mainSink.text("Name");
-		mainSink.tableHeaderCell_();
-		mainSink.tableHeaderCell(SinkHelper.setClass(BOOTSTRAP_MEDIUM_3_CLASS));
-		mainSink.text("Connector ID");
-		mainSink.tableHeaderCell_();
-		mainSink.tableHeaderCell(SinkHelper.setClass(BOOTSTRAP_MEDIUM_3_CLASS));
-		mainSink.text("Platform");
-		mainSink.tableHeaderCell_();
-		mainSink.tableHeaderCell(SinkHelper.setClass(BOOTSTRAP_MEDIUM_3_CLASS));
-		mainSink.text("Operating Systems");
-		mainSink.tableHeaderCell_();
-		mainSink.tableHeaderCell(SinkHelper.setClass(BOOTSTRAP_MEDIUM_3_CLASS));
-		mainSink.text("Enterprise");
-		mainSink.tableHeaderCell_();
-		mainSink.tableRow_();
-
-		// A comparison function which compare connectors by display name
-		final Comparator<Entry<String, JsonNode>> comparator = (e1, e2) ->
-			new ConnectorJsonNodeReader(e1.getValue())
-				.getDisplayName()
-				.toLowerCase()
-				.compareTo(new ConnectorJsonNodeReader(e2.getValue()).getDisplayName().toLowerCase());
-
-		connectors
-			.entrySet()
-			.stream()
-			.sorted(comparator)
-			.forEach(connectorEntry -> {
-				final JsonNode connector = connectorEntry.getValue();
-				final String connectorId = connectorEntry.getKey();
-
-				final ConnectorJsonNodeReader connectorJsonNodeReader = new ConnectorJsonNodeReader(connector);
-
-				// Builds the HTML page file name corresponding to the specified connector identifier
-				final String pageFilename = SinkHelper.buildPageFilename(connectorId);
-
-				// Builds the HTML page path name corresponding to the specified connector page filename
-				final String connectorPagePath = String.format("%s/%s", connectorSubdirectoryName, pageFilename);
-
-				// Add a row to the table in the main page
-				mainSink.tableRow();
-
-				mainSink.tableCell();
-
-				mainSink.link(connectorPagePath);
-				mainSink.text(connectorJsonNodeReader.getDisplayName());
-				mainSink.link_();
-				mainSink.tableCell_();
-
-				mainSink.tableCell();
-				mainSink.link(connectorPagePath);
-				mainSink.text(connectorId);
-				mainSink.link_();
-				mainSink.tableCell_();
-
-				mainSink.tableCell();
-				mainSink.text(SinkHelper.replaceCommaWithSpace(connectorJsonNodeReader.getPlatformsOrDefault("N/A")));
-				mainSink.tableCell_();
-
-				mainSink.tableCell();
-				mainSink.text(String.join(", ", OsType.mapToDisplayNames(connectorJsonNodeReader.getAppliesTo())));
-				mainSink.tableCell_();
-
-				SinkEventAttributes attributes = new SinkEventAttributeSet(SinkEventAttributes.ALIGN, "center");
-				mainSink.tableCell(attributes);
-				mainSink.text(enterpriseConnectorIds.contains(connectorId) ? "\u2713" : "");
-				mainSink.tableCell_();
-
-				mainSink.tableRow_();
-			});
-
-		// Close the main page
-		mainSink.table_();
+		// Create the table
+		buildConnectorsTable(mainSink, connectors, connectorSubdirectoryName, enterpriseConnectorIds, false);
 
 		mainSink.section1_();
 

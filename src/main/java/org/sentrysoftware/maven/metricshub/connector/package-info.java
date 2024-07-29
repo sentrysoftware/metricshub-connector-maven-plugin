@@ -1,7 +1,7 @@
 /**
  * Base package of the MetricsHub Connector Maven Plugin.<br>
  *
- * See {@link org.sentrysoftware.maven.metricshub.connector.ReferenceReport}
+ * See {@link org.sentrysoftware.maven.metricshub.connector.ConnectorsDirectoryReport}
  */
 package org.sentrysoftware.maven.metricshub.connector;
 /*-

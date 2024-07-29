@@ -21,16 +21,14 @@ package org.sentrysoftware.maven.metricshub.connector.producer;
  */
 
 import static org.sentrysoftware.maven.metricshub.connector.Constants.BOOTSTRAP_MEDIUM_3_CLASS;
-import static org.sentrysoftware.maven.metricshub.connector.ReferenceReport.CONNECTOR_REFERENCE_OUTPUT_NAME;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Objects;
 import java.util.Set;
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.doxia.sink.SinkEventAttributes;
 import org.apache.maven.doxia.sink.impl.SinkEventAttributeSet;
@@ -39,58 +37,19 @@ import org.sentrysoftware.maven.metricshub.connector.producer.model.common.OsTyp
 import org.sentrysoftware.maven.metricshub.connector.producer.model.common.TechnologyType;
 
 /**
- * Utility class for producing page references related to connectors.
- *
+ * Abstract class for producing pages.
  */
-@Builder(setterPrefix = "with")
-public class TagPageReferenceProducer {
+@AllArgsConstructor
+public abstract class AbstractPageProducer {
 
-	private final String tagName;
-	private final Log logger;
+	protected Log logger;
 
 	/**
+	 * Builds the table header row.
 	 *
-	 * @param sink
-	 * @param connectors
+	 * @param sink The sink used for generating content.
 	 */
-	public void produce(
-		final Sink sink,
-		final Map<String, JsonNode> connectors,
-		final String connectorSubdirectoryName,
-		final List<String> enterpriseConnectorIds
-	) {
-		Objects.requireNonNull(tagName, () -> "tagName cannot be null.");
-		Objects.requireNonNull(connectors, () -> "connectors cannot be null.");
-		Objects.requireNonNull(sink, () -> "sink cannot be null.");
-		Objects.requireNonNull(logger, () -> "logger cannot be null.");
-
-		logger.debug("Generating " + SinkHelper.buildPageFilename(tagName));
-
-		// Create the head element of the page
-		sink.head();
-		sink.title();
-		sink.text(tagName);
-		sink.title_();
-		sink.head_();
-
-		sink.body();
-
-		// Back to the main page
-		sink.paragraph(SinkHelper.setClass("small"));
-		sink.rawText(SinkHelper.glyphIcon("arrow-left") + "&nbsp;");
-		sink.link(String.format("../../%s.html", CONNECTOR_REFERENCE_OUTPUT_NAME));
-		sink.text("Back to the list of connectors");
-		sink.link_();
-		sink.paragraph_();
-
-		// Title
-		sink.section1();
-		sink.sectionTitle1();
-		sink.text(tagName);
-		sink.sectionTitle1_();
-
-		// Table header
-		sink.table();
+	private void buildTableHeaderRow(final Sink sink) {
 		sink.tableRow();
 		sink.tableHeaderCell(SinkHelper.setClass(BOOTSTRAP_MEDIUM_3_CLASS));
 		sink.text("Name");
@@ -104,15 +63,36 @@ public class TagPageReferenceProducer {
 		sink.tableHeaderCell(SinkHelper.setClass(BOOTSTRAP_MEDIUM_3_CLASS));
 		sink.text("Operating Systems");
 		sink.tableHeaderCell_();
-
 		sink.tableHeaderCell(SinkHelper.setClass(BOOTSTRAP_MEDIUM_3_CLASS));
 		sink.text("Technology/Protocols");
 		sink.tableHeaderCell_();
-
 		sink.tableHeaderCell(SinkHelper.setClass(BOOTSTRAP_MEDIUM_3_CLASS));
 		sink.text("Enterprise");
 		sink.tableHeaderCell_();
 		sink.tableRow_();
+	}
+
+	/**
+	 * Builds the table of connectors.
+	 *
+	 * @param sink                      The sink used for generating content.
+	 * @param connectors                The map of connector identifiers to their corresponding JsonNodes.
+	 * @param connectorSubdirectoryName The connector subdirectory name.
+	 * @param enterpriseConnectorIds    The enterprise connector identifiers.
+	 * @param isTagPage                 Whether the page is a tag page.
+	 */
+	protected void buildConnectorsTable(
+		final Sink sink,
+		final Map<String, JsonNode> connectors,
+		final String connectorSubdirectoryName,
+		final List<String> enterpriseConnectorIds,
+		final boolean isTagPage
+	) {
+		// Create the table
+		sink.table();
+
+		// Table header
+		buildTableHeaderRow(sink);
 
 		// A comparison function which compare connectors by display name
 		final Comparator<Entry<String, JsonNode>> comparator = (e1, e2) ->
@@ -135,7 +115,11 @@ public class TagPageReferenceProducer {
 				final String pageFilename = SinkHelper.buildPageFilename(connectorId);
 
 				// Builds the HTML page path name corresponding to the specified connector page filename
-				final String connectorPagePath = String.format("%s/%s", connectorSubdirectoryName, pageFilename);
+				final String connectorPagePath = String.format(
+					isTagPage ? "../../%s/%s" : "%s/%s",
+					connectorSubdirectoryName,
+					pageFilename
+				);
 
 				// Add a row to the table in the main page
 				sink.tableRow();
@@ -162,7 +146,7 @@ public class TagPageReferenceProducer {
 				sink.tableCell_();
 
 				sink.tableCell();
-				Set<TechnologyType> technologies = connectorJsonNodeReader.getTechnologies();
+				final Set<TechnologyType> technologies = connectorJsonNodeReader.getTechnologies();
 				for (final TechnologyType technology : technologies) {
 					sink.text(technology.toString());
 					sink.lineBreak();
@@ -179,9 +163,5 @@ public class TagPageReferenceProducer {
 			});
 
 		sink.table_();
-		// Close the page
-		sink.section1_();
-		sink.body_();
-		sink.close();
 	}
 }
