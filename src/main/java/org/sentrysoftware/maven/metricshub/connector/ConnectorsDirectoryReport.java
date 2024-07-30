@@ -64,7 +64,7 @@ import org.sentrysoftware.maven.metricshub.connector.producer.TagPageProducer;
  * </p>
  */
 @Mojo(
-	name = "connectors-directory-report",
+	name = "connectors-directory",
 	aggregator = false,
 	defaultPhase = LifecyclePhase.SITE,
 	requiresDependencyResolution = ResolutionScope.RUNTIME,
@@ -210,7 +210,7 @@ public class ConnectorsDirectoryReport extends AbstractConnectorReport {
 
 	@Override
 	public String getName(final Locale locale) {
-		return "Connectors Directory Report";
+		return "Connectors Directory";
 	}
 
 	@Override
