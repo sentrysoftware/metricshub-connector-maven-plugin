@@ -20,7 +20,7 @@ package org.sentrysoftware.maven.metricshub.connector.producer;
  * ╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱
  */
 
-import static org.sentrysoftware.maven.metricshub.connector.ReferenceReport.CONNECTOR_REFERENCE_OUTPUT_NAME;
+import static org.sentrysoftware.maven.metricshub.connector.ConnectorsDirectoryReport.CONNECTORS_DIRECTORY_OUTPUT_NAME;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import java.text.ChoiceFormat;
@@ -43,11 +43,11 @@ import org.sentrysoftware.maven.metricshub.connector.producer.model.criteria.Cri
 import org.sentrysoftware.maven.metricshub.connector.producer.model.criteria.CriterionSinkProduceVisitor;
 
 /**
- * Utility class for producing page references related to connectors.
+ * Utility class for producing the connector page.
  *
  */
 @Builder(setterPrefix = "with")
-public class ConnectorPageReferenceProducer {
+public class ConnectorPageProducer {
 
 	private static final String WMI_SECTION = "          wmi:\n";
 	private static final String PROTOCOLS_SECTION = "        protocols:\n";
@@ -57,7 +57,7 @@ public class ConnectorPageReferenceProducer {
 	private final Log logger;
 
 	/**
-	 * Produces a page reference for the current connector and generates the corresponding sink for documentation output.
+	 * Produces a report page for the current connector and generates the corresponding sink for documentation output.
 	 *
 	 * This method generates a table with connector information, adding a new column to indicate if a connector is an enterprise connector.
 	 *
@@ -65,7 +65,11 @@ public class ConnectorPageReferenceProducer {
 	 * @param supersededMap          Map of superseded connectors.
 	 * @param enterpriseConnectorIds List of IDs for enterprise connectors.
 	 */
-	public void produce(final Sink sink, final Map<String, List<String>> supersededMap, final List<String> enterpriseConnectorIds) {
+	public void produce(
+		final Sink sink,
+		final Map<String, List<String>> supersededMap,
+		final List<String> enterpriseConnectorIds
+	) {
 		Objects.requireNonNull(connectorId, () -> "connectorId cannot be null.");
 		Objects.requireNonNull(connector, () -> "connector cannot be null.");
 		Objects.requireNonNull(supersededMap, () -> "supersededMap cannot be null.");
@@ -89,7 +93,7 @@ public class ConnectorPageReferenceProducer {
 		// Back to the main page
 		sink.paragraph(SinkHelper.setClass("small"));
 		sink.rawText(SinkHelper.glyphIcon("arrow-left") + "&nbsp;");
-		sink.link(String.format("../%s.html", CONNECTOR_REFERENCE_OUTPUT_NAME));
+		sink.link(String.format("../%s.html", CONNECTORS_DIRECTORY_OUTPUT_NAME));
 		sink.text("Back to the list of connectors");
 		sink.link_();
 		sink.paragraph_();

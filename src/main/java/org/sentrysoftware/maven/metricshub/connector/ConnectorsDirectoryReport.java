@@ -21,32 +21,37 @@ package org.sentrysoftware.maven.metricshub.connector;
  */
 
 import static org.sentrysoftware.maven.metricshub.connector.Constants.CONNECTOR_SUBDIRECTORY_NAME;
+import static org.sentrysoftware.maven.metricshub.connector.Constants.TAG_SUBDIRECTORY_NAME;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import java.io.File;
 import java.io.IOException;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.reporting.MavenReportException;
 import org.sentrysoftware.maven.metricshub.connector.producer.ConnectorJsonNodeReader;
-import org.sentrysoftware.maven.metricshub.connector.producer.ConnectorPageReferenceProducer;
-import org.sentrysoftware.maven.metricshub.connector.producer.MainPageReferenceProducer;
+import org.sentrysoftware.maven.metricshub.connector.producer.ConnectorPageProducer;
+import org.sentrysoftware.maven.metricshub.connector.producer.MainPageProducer;
 import org.sentrysoftware.maven.metricshub.connector.producer.SinkHelper;
+import org.sentrysoftware.maven.metricshub.connector.producer.TagPageProducer;
 
 /**
- * This Maven report goal builds a Reference Guide for the Connector Library.
+ * This Maven report goal builds an HTML Page for the Connectors Directory.
  *
  * It is invoked during the Maven site generation process.<br>
  *
- * It takes the source code of the connectors as input then generates a reference guide that describes the
+ * It takes the source code of the connectors as input then generates a report that describes the
  * connectors in detail.
  * <p>
  * This plugin goal is a report goal that works in the <em>site</em> build lifecycle. It
@@ -59,7 +64,7 @@ import org.sentrysoftware.maven.metricshub.connector.producer.SinkHelper;
  * </p>
  */
 @Mojo(
-	name = "metricshub-connector-reference",
+	name = "connectors-directory",
 	aggregator = false,
 	defaultPhase = LifecyclePhase.SITE,
 	requiresDependencyResolution = ResolutionScope.RUNTIME,
@@ -67,16 +72,16 @@ import org.sentrysoftware.maven.metricshub.connector.producer.SinkHelper;
 	requiresProject = true,
 	threadSafe = true
 )
-public class ReferenceReport extends AbstractConnectorReport {
+public class ConnectorsDirectoryReport extends AbstractConnectorReport {
 
 	/**
-	 * Connector reference output name
+	 * Connector directory output name
 	 */
-	public static final String CONNECTOR_REFERENCE_OUTPUT_NAME = "metricshub-connector-reference";
+	public static final String CONNECTORS_DIRECTORY_OUTPUT_NAME = "metricshub-connectors-directory";
 
 	@Override
 	protected void doReport() throws MavenReportException {
-		// Subdirectory where we're going to store the pages for each connector
+		// Subdirectory where we're going to store the pages for each connector.
 		final File connectorSubdirectory = new File(outputDirectory, CONNECTOR_SUBDIRECTORY_NAME);
 		if (!connectorSubdirectory.exists() && !connectorSubdirectory.mkdirs()) {
 			final String message = "Could not create connectorSubdirectory: " + connectorSubdirectory.getAbsolutePath();
@@ -84,11 +89,28 @@ public class ReferenceReport extends AbstractConnectorReport {
 			throw new MavenReportException(message);
 		}
 
+		// Retrieve tags
+		final Map<String, Map<String, JsonNode>> tags = determineTags();
+
 		// Main page
-		produceMainPage();
+		produceMainPage(tags.keySet());
 
 		// Connector pages
 		produceConnectorPages(connectorSubdirectory, buildSupersededMap());
+
+		// Subdirectory whithin connector subdirectory where we store the pages for each tag.
+		final File tagSubdirectory = new File(
+			String.format("%s/%s", outputDirectory, connectorSubdirectory.getName()),
+			TAG_SUBDIRECTORY_NAME
+		);
+		if (!tagSubdirectory.exists() && !tagSubdirectory.mkdirs()) {
+			final String message = "Could not create tagSubdirectory: " + tagSubdirectory.getAbsolutePath();
+			logger.error(message);
+			throw new MavenReportException(message);
+		}
+
+		// Tag pages
+		produceTagPages(tagSubdirectory, tags);
 	}
 
 	/**
@@ -132,7 +154,7 @@ public class ReferenceReport extends AbstractConnectorReport {
 				throw new MavenReportException(message, e);
 			}
 
-			ConnectorPageReferenceProducer
+			ConnectorPageProducer
 				.builder()
 				.withConnectorId(connectorId)
 				.withConnector(connectorEntry.getValue())
@@ -143,13 +165,42 @@ public class ReferenceReport extends AbstractConnectorReport {
 	}
 
 	/**
+	 * Generates individual tag pages for the Maven report.
+	 *
+	 * @param tagSubdirectory The subdirectory where the individual tag pages will be created.
+	 * @param tags            A map with tags as keys and corresponding connector maps as values.
+	 * @throws MavenReportException If an error occurs during the creation of tag pages.
+	 */
+	private void produceTagPages(final File tagSubdirectory, final Map<String, Map<String, JsonNode>> tags)
+		throws MavenReportException {
+		for (Entry<String, Map<String, JsonNode>> tagEntry : tags.entrySet()) {
+			final String tag = tagEntry.getKey();
+			final Map<String, JsonNode> connectors = tagEntry.getValue();
+
+			// Create a new sink!
+			final Sink sink;
+			try {
+				sink =
+					getSinkFactory()
+						.createSink(tagSubdirectory, SinkHelper.buildPageFilename(tag.toLowerCase().replace(' ', '-')));
+			} catch (IOException e) {
+				final String message = String.format("Could not create sink for %s in %s", tag, tagSubdirectory);
+				logger.error(message, e);
+				throw new MavenReportException(message, e);
+			}
+
+			new TagPageProducer(logger, tag).produce(sink, connectors, CONNECTOR_SUBDIRECTORY_NAME, enterpriseConnectorIds);
+		}
+	}
+
+	/**
 	 * Produces the main page for the Maven report
 	 */
-	private void produceMainPage() throws MavenReportException {
+	private void produceMainPage(final Set<String> tags) throws MavenReportException {
 		final Sink mainSink = getMainSink();
 
-		new MainPageReferenceProducer(CONNECTOR_SUBDIRECTORY_NAME, logger)
-			.produce(mainSink, connectors, enterpriseConnectorIds);
+		new MainPageProducer(logger, CONNECTOR_SUBDIRECTORY_NAME, TAG_SUBDIRECTORY_NAME)
+			.produce(mainSink, connectors, enterpriseConnectorIds, tags);
 	}
 
 	@Override
@@ -159,11 +210,41 @@ public class ReferenceReport extends AbstractConnectorReport {
 
 	@Override
 	public String getName(final Locale locale) {
-		return "Connector Reference";
+		return "Connectors Directory";
 	}
 
 	@Override
 	public String getOutputName() {
-		return CONNECTOR_REFERENCE_OUTPUT_NAME;
+		return CONNECTORS_DIRECTORY_OUTPUT_NAME;
+	}
+
+	/**
+	 * Constructs a map where each key is a tag name and its corresponding value is another map.
+	 * The inner map contains connector IDs as keys and their associated JsonNode objects as values.
+	 * <p>
+	 * This method flattens the tags from the connectors map to make it easier to generate tag pages.
+	 * </p>
+	 *
+	 * @return a map where keys are tag names and values are maps of connector IDs to JsonNode objects.
+	 */
+	private Map<String, Map<String, JsonNode>> determineTags() {
+		return connectors
+			.entrySet()
+			.stream()
+			.flatMap(connectorEntry -> {
+				final JsonNode connector = connectorEntry.getValue();
+				final ConnectorJsonNodeReader reader = new ConnectorJsonNodeReader(connector);
+				return reader
+					.getTags()
+					.stream()
+					.filter(tag -> !tag.isBlank())
+					.map(tag -> new AbstractMap.SimpleEntry<>(tag, connectorEntry));
+			})
+			.collect(
+				Collectors.groupingBy(
+					Map.Entry::getKey,
+					Collectors.mapping(Map.Entry::getValue, Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+				)
+			);
 	}
 }

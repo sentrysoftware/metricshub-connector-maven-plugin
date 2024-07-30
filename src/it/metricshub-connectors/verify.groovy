@@ -5,32 +5,32 @@ assert new File(basedir, "target/site/index.html").isFile()
 // Site checks for the Otel version
 //
 
-// Main page: metricshub-connector-reference.html
-File htmlFile = new File(basedir, "target/site/metricshub-connector-reference.html")
-assert htmlFile.exists() : "Main metricshub-connector-reference.html page must be created"
+// Main page: metricshub-connectors-directory.html
+File htmlFile = new File(basedir, "target/site/metricshub-connectors-directory.html")
+assert htmlFile.exists() : "Main metricshub-connectors-directory.html page must be created"
 String htmlText = htmlFile.text
-assert htmlText.indexOf("MIB2Switch") > -1 : "metricshub-connector-reference: MIB2Switch must be listed"
-assert htmlText.indexOf("GenericSwitchEnclosure") > -1 : "metricshub-connector-reference: GenericSwitchEnclosure must be listed"
-assert htmlText.indexOf("GenericUPS") > -1 : "metricshub-connector-reference: GenericUPS must be listed"
-assert htmlText.indexOf("HyperV") > -1 : "metricshub-connector-reference: HyperV must be listed"
-assert htmlText.indexOf("IpmiTool") > -1 : "metricshub-connector-reference: IpmiTool must be listed"
-assert htmlText.indexOf("Virsh") > -1 : "metricshub-connector-reference: Virsh must be listed"
-assert htmlText.indexOf("LibreHardwareMonitor") > -1 : "metricshub-connector-reference: LibreHardwareMonitor must be listed"
-assert htmlText.indexOf("LinuxMultipath") > -1 : "metricshub-connector-reference: LinuxMultipath must be listed"
-assert htmlText.indexOf("LinuxIfConfigNetwork") > -1 : "metricshub-connector-reference: LinuxIfConfigNetwork must be listed"
-assert htmlText.indexOf("LinuxIPNetwork") > -1 : "metricshub-connector-reference: LinuxIPNetwork must be listed"
-assert htmlText.indexOf("lmsensors") > -1 : "metricshub-connector-reference: lmsensors must be listed"
-assert htmlText.indexOf("MIB2") > -1 : "metricshub-connector-reference: MIB2 must be listed"
-assert htmlText.indexOf("MIB2Linux") > -1 : "metricshub-connector-reference: MIB2Linux must be listed"
-assert htmlText.indexOf("MIB2NT") > -1 : "metricshub-connector-reference: MIB2NT must be listed"
-assert htmlText.indexOf("NvidiaSmi") > -1 : "metricshub-connector-reference: NvidiaSmi must be listed"
-assert htmlText.indexOf("DiskPart") > -1 : "metricshub-connector-reference: DiskPart must be listed"
-assert htmlText.indexOf("WinStorageSpaces") > -1 : "metricshub-connector-reference: WinStorageSpaces must be listed"
-assert htmlText.indexOf("GenBatteryNT") > -1 : "metricshub-connector-reference: GenBatteryNT must be listed"
-assert htmlText.indexOf("WBEMGenDiskNT") > -1 : "metricshub-connector-reference: WBEMGenDiskNT must be listed"
-assert htmlText.indexOf("WBEMGenHBA") > -1 : "metricshub-connector-reference: WBEMGenHBA must be listed"
-assert htmlText.indexOf("WBEMGenLUN") > -1 : "metricshub-connector-reference: WBEMGenLUN must be listed"
-assert htmlText.indexOf("WBEMGenNetwork") > -1 : "metricshub-connector-reference: WBEMGenNetwork must be listed"
+assert htmlText.indexOf("MIB2Switch") > -1 : "metricshub-connectors-directory: MIB2Switch must be listed"
+assert htmlText.indexOf("GenericSwitchEnclosure") > -1 : "metricshub-connectors-directory: GenericSwitchEnclosure must be listed"
+assert htmlText.indexOf("GenericUPS") > -1 : "metricshub-connectors-directory: GenericUPS must be listed"
+assert htmlText.indexOf("HyperV") > -1 : "metricshub-connectors-directory: HyperV must be listed"
+assert htmlText.indexOf("IpmiTool") > -1 : "metricshub-connectors-directory: IpmiTool must be listed"
+assert htmlText.indexOf("Virsh") > -1 : "metricshub-connectors-directory: Virsh must be listed"
+assert htmlText.indexOf("LibreHardwareMonitor") > -1 : "metricshub-connectors-directory: LibreHardwareMonitor must be listed"
+assert htmlText.indexOf("LinuxMultipath") > -1 : "metricshub-connectors-directory: LinuxMultipath must be listed"
+assert htmlText.indexOf("LinuxIfConfigNetwork") > -1 : "metricshub-connectors-directory: LinuxIfConfigNetwork must be listed"
+assert htmlText.indexOf("LinuxIPNetwork") > -1 : "metricshub-connectors-directory: LinuxIPNetwork must be listed"
+assert htmlText.indexOf("lmsensors") > -1 : "metricshub-connectors-directory: lmsensors must be listed"
+assert htmlText.indexOf("MIB2") > -1 : "metricshub-connectors-directory: MIB2 must be listed"
+assert htmlText.indexOf("MIB2Linux") > -1 : "metricshub-connectors-directory: MIB2Linux must be listed"
+assert htmlText.indexOf("MIB2NT") > -1 : "metricshub-connectors-directory: MIB2NT must be listed"
+assert htmlText.indexOf("NvidiaSmi") > -1 : "metricshub-connectors-directory: NvidiaSmi must be listed"
+assert htmlText.indexOf("DiskPart") > -1 : "metricshub-connectors-directory: DiskPart must be listed"
+assert htmlText.indexOf("WinStorageSpaces") > -1 : "metricshub-connectors-directory: WinStorageSpaces must be listed"
+assert htmlText.indexOf("GenBatteryNT") > -1 : "metricshub-connectors-directory: GenBatteryNT must be listed"
+assert htmlText.indexOf("WBEMGenDiskNT") > -1 : "metricshub-connectors-directory: WBEMGenDiskNT must be listed"
+assert htmlText.indexOf("WBEMGenHBA") > -1 : "metricshub-connectors-directory: WBEMGenHBA must be listed"
+assert htmlText.indexOf("WBEMGenLUN") > -1 : "metricshub-connectors-directory: WBEMGenLUN must be listed"
+assert htmlText.indexOf("WBEMGenNetwork") > -1 : "metricshub-connectors-directory: WBEMGenNetwork must be listed"
 
 // Check generated reference files
 String directoryPath = 'target/site/connectors'
@@ -63,37 +63,40 @@ fileNamesToCheck.each { fileName ->
 	File file = new File(basedir,  "$directoryPath/$fileName")
 
 	assert file.exists() : "File $fileName does not exist in the $directoryPath directory"
-    assert htmlText.indexOf("href=\"connectors/$fileName\"") > -1 : "metricshub-connector-reference: href=connectors/$fileName must be listed"
+	assert htmlText.indexOf("href=\"connectors/$fileName\"") > -1 : "metricshub-connectors-directory: href=connectors/$fileName must be listed"
 }
 
+// Check generated reference files
+String tagsDirectoryPath = 'target/site/connectors/tags'
+String [] tagsFileNamesToCheck = [
+	'hardware.html',
+	'nvidia.html',
+	'vm.html',
+	'hyper-v.html',
+	'hardware.html',
+]
 
-// platform-requirements.html
-htmlFile = new File(basedir, "target/site/platform-requirements.html")
-assert htmlFile.exists() : "platform-requirements.html must have been created"
-htmlText = htmlFile.text
-assert htmlText.indexOf("IPMI") > -1 : "platform-requirements: 'IPMI' must be listed"
-assert htmlText.indexOf("MIB-2 Standard SNMP Agent - Network Interfaces") > -1 : "platform-requirements: 'MIB-2 Standard SNMP Agent - Network Interfaces' must be listed"
-assert htmlText.indexOf("KVM, QEMU, Xen and Hypervisors (virsh)") > -1 : "platform-requirements: 'KVM, QEMU, Xen and Hypervisors (virsh)' must be listed"
-assert htmlText.indexOf("lm_sensors") > -1 : "platform-requirements: 'lm_sensors' must be listed"
-assert htmlText.indexOf("Linux - Network (ifconfig)") > -1 : "platform-requirements: 'Linux - Network (ifconfig)' must be listed"
-assert htmlText.indexOf("Linux - Network (ip)") > -1 : "platform-requirements: 'Linux - Network (ip)' must be listed"
-assert htmlText.indexOf("Linux - Multipath") > -1 : "platform-requirements: 'Linux - Multipath' must be listed"
-assert htmlText.indexOf("Nvidia-Smi") > -1 : "platform-requirements: 'Nvidia-Smi' must be listed"
-assert htmlText.indexOf("MIB-2 Standard SNMP Agent - Network Interfaces - Linux") > -1 : "platform-requirements: 'MIB-2 Standard SNMP Agent - Network Interfaces - Linux' must be listed"
-assert htmlText.indexOf("Hyper-V") > -1 : "platform-requirements: 'Hyper-V' must be listed"
-assert htmlText.indexOf("WMI - Battery") > -1 : "platform-requirements: 'WMI - Battery' must be listed"
-assert htmlText.indexOf("WMI - Network") > -1 : "platform-requirements: 'WMI - Network' must be listed"
-assert htmlText.indexOf("WMI - LUN") > -1 : "platform-requirements: 'WMI - LUN' must be listed"
-assert htmlText.indexOf("Windows Storage Spaces (WMI)") > -1 : "platform-requirements: 'Windows Storage Spaces (WMI)' must be listed"
-assert htmlText.indexOf("WMI - Disks") > -1 : "platform-requirements: 'WMI - Disks' must be listed"
-assert htmlText.indexOf("WMI - HBA") > -1 : "platform-requirements: 'WMI - HBA' must be listed"
-assert htmlText.indexOf("Windows - DiskPart") > -1 : "platform-requirements: 'Windows - DiskPart' must be listed"
-assert htmlText.indexOf("MIB-2 Standard SNMP Agent - Network Interfaces - Windows") > -1 : "platform-requirements: 'MIB-2 Standard SNMP Agent - Network Interfaces - Windows' must be listed"
-assert htmlText.indexOf("Libre Hardware Monitor") > -1 : "platform-requirements: 'Libre Hardware Monitor' must be listed"
-assert htmlText.indexOf("Ethernet Switch with Sensors (SNMP)") > -1 : "platform-requirements: 'Ethernet Switch with Sensors (SNMP)' must be listed"
-assert htmlText.indexOf("Generic Ethernet Switch") > -1 : "platform-requirements: 'Generic Ethernet Switch' must be listed"
-assert htmlText.indexOf("Generic UPS") > -1 : "platform-requirements: 'Generic UPS' must be listed"
-assert htmlText.indexOf("Command Lines") > -1 : "platform-requirements: 'Command Lines' technology must be listed"
+String [] hardwareConnectors = [
+	'HyperV',
+	'IpmiTool',
+	'LibreHardwareMonitor',
+	'NvidiaSmi',
+]
+
+tagsFileNamesToCheck.each { fileName ->
+	File file = new File(basedir,  "$tagsDirectoryPath/$fileName")
+
+	assert file.exists() : "File $fileName does not exist in the $tagsDirectoryPath directory"
+	assert htmlText.indexOf("href=\"connectors/tags/$fileName\"") > -1 : "metricshub connectors tag: href=connectors/tags/$fileName must be listed"
+
+	// Check the hardware connectors
+	if (fileName == 'hardware.html') {
+		hardwareConnectors.each { connectorId -> 
+			assert htmlText.indexOf("$connectorId") > -1 : "metricshub connectors tag: $connectorId must be listed"
+		}
+	}
+
+}
 
 // IpmiTool
 htmlText = new File(basedir, "target/site/connectors/ipmitool.html").text

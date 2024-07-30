@@ -41,4 +41,14 @@ public class Constants {
 	 * Name of the subdirectory that will contain the pages for each connector
 	 */
 	public static final String CONNECTOR_SUBDIRECTORY_NAME = "connectors";
+
+	/**
+	 * Name of the subdirectory that will contain the pages for each tag
+	 */
+	public static final String TAG_SUBDIRECTORY_NAME = "tags";
+
+	/**
+	 * CSS class for a medium-sized Bootstrap column with a width of 3.
+	 */
+	public static final String BOOTSTRAP_MEDIUM_3_CLASS = "col-md-3";
 }

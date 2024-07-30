@@ -591,4 +591,18 @@ public class ConnectorJsonNodeReader {
 	private JsonNode getMapping(final JsonNode job) {
 		return job.get("mapping");
 	}
+
+	/**
+	 * Retrieves a list of tags from the detection JSON node.
+	 *
+	 * @return a list of tags as strings, or an empty list if no tags are found.
+	 */
+	public List<String> getTags() {
+		JsonNode detection = getDetection();
+		if (nonNull(detection)) {
+			final JsonNode tagsNode = detection.get("tags");
+			return nodeToStringList(tagsNode);
+		}
+		return Collections.emptyList();
+	}
 }
