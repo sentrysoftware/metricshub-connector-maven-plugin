@@ -26,6 +26,7 @@ import static org.sentrysoftware.maven.metricshub.connector.Constants.TAG_SUBDIR
 import com.fasterxml.jackson.databind.JsonNode;
 import java.io.File;
 import java.io.IOException;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,6 +34,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.stream.Collectors;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -220,27 +222,29 @@ public class ConnectorsDirectoryReport extends AbstractConnectorReport {
 	 * Constructs a map where each key is a tag name and its corresponding value is another map.
 	 * The inner map contains connector IDs as keys and their associated JsonNode objects as values.
 	 * <p>
-	 * This method iterates over all connectors, retrieves their tags using the `ConnectorJsonNodeReader`,
-	 * and organizes the connectors by these tags. For each tag, it creates an entry in the outer map with
-	 * the tag as the key. The value is an inner map that maps connector IDs to their corresponding JsonNode objects.
+	 * This method flattens the tags from the connectors map to make it easier to generate tag pages.
+	 * </p>
 	 *
 	 * @return a map where keys are tag names and values are maps of connector IDs to JsonNode objects.
 	 */
 	private Map<String, Map<String, JsonNode>> determineTags() {
-		Map<String, Map<String, JsonNode>> connectorsTags = new HashMap<>();
-
-		for (Entry<String, JsonNode> connectorEntry : connectors.entrySet()) {
-			final String connectorId = connectorEntry.getKey();
-			final JsonNode connector = connectorEntry.getValue();
-
-			// Create a new reader to fetch connector information
-			final ConnectorJsonNodeReader connectorJsonNodeReader = new ConnectorJsonNodeReader(connector);
-
-			// Retrieve the tags of the current connector
-			List<String> tags = connectorJsonNodeReader.getTags();
-
-			tags.forEach(tag -> connectorsTags.computeIfAbsent(tag, k -> new HashMap<>()).put(connectorId, connector));
-		}
-		return connectorsTags;
+		return connectors
+			.entrySet()
+			.stream()
+			.flatMap(connectorEntry -> {
+				final JsonNode connector = connectorEntry.getValue();
+				final ConnectorJsonNodeReader reader = new ConnectorJsonNodeReader(connector);
+				return reader
+					.getTags()
+					.stream()
+					.filter(tag -> !tag.isBlank())
+					.map(tag -> new AbstractMap.SimpleEntry<>(tag, connectorEntry));
+			})
+			.collect(
+				Collectors.groupingBy(
+					Map.Entry::getKey,
+					Collectors.mapping(Map.Entry::getValue, Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+				)
+			);
 	}
 }

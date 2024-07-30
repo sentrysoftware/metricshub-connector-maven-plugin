@@ -111,28 +111,26 @@ public class MainPageProducer extends AbstractPageProducer {
 		mainSink.paragraph_();
 
 		// Sort the entries in tagsSet
-		final Set<String> tagsSet = connectorTags
+		connectorTags
 			.stream()
 			.sorted(String.CASE_INSENSITIVE_ORDER)
-			.collect(Collectors.toCollection(LinkedHashSet::new));
-
-		// Tags Labels
-		for (String tag : tagsSet) {
-			mainSink.rawText(
-				SinkHelper.bootstrapLabel(
-					SinkHelper.hyperlinkRef(
-						String.format(
-							"%s/%s/%s.html",
-							connectorSubdirectoryName,
-							tagSubdirectoryName,
-							tag.toLowerCase().replace(" ", "-")
+			.collect(Collectors.toCollection(LinkedHashSet::new))
+			.forEach(tag ->
+				mainSink.rawText(
+					SinkHelper.bootstrapLabel(
+						SinkHelper.hyperlinkRef(
+							String.format(
+								"%s/%s/%s.html",
+								connectorSubdirectoryName,
+								tagSubdirectoryName,
+								tag.toLowerCase().replace(" ", "-")
+							),
+							tag
 						),
-						tag
-					),
-					"metricshub-tag"
+						"metricshub-tag"
+					)
 				)
 			);
-		}
 
 		mainSink.sectionTitle2();
 		mainSink.text("Full Listing");
