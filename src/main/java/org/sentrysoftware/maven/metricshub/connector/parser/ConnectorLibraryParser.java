@@ -36,7 +36,7 @@ import lombok.NonNull;
 
 /**
  * This class parses the connectors that are located under the source directory then produces
- * a map of {@link JsonNode} instances that need to be used by the underlying reference guide producers.
+ * a map of {@link JsonNode} instances that need to be used by the underlying page producers.
  */
 public class ConnectorLibraryParser {
 

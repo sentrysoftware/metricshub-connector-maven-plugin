@@ -48,7 +48,7 @@ public class TagPageProducer extends AbstractPageProducer {
 	}
 
 	/**
-	 * Produces the tag page reference that lists all the connectors.
+	 * Produces the tag page report that lists all the connectors.
 	 * @param sink                      The sink used for generating content.
 	 * @param connectors                The map of connector identifiers to their corresponding JsonNodes.
 	 * @param connectorSubdirectoryName The connector subdirectory name.

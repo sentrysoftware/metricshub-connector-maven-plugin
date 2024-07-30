@@ -57,7 +57,7 @@ public class ConnectorPageProducer {
 	private final Log logger;
 
 	/**
-	 * Produces a page reference for the current connector and generates the corresponding sink for documentation output.
+	 * Produces a report page for the current connector and generates the corresponding sink for documentation output.
 	 *
 	 * This method generates a table with connector information, adding a new column to indicate if a connector is an enterprise connector.
 	 *

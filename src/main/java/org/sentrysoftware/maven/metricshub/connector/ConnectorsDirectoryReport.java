@@ -210,7 +210,7 @@ public class ConnectorsDirectoryReport extends AbstractConnectorReport {
 
 	@Override
 	public String getName(final Locale locale) {
-		return "Connector Reference";
+		return "Connectors Directory Report";
 	}
 
 	@Override

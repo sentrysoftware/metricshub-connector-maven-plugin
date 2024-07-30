@@ -53,7 +53,7 @@ public class MainPageProducer extends AbstractPageProducer {
 	}
 
 	/**
-	 * Produces the main page reference that lists all the connectors.
+	 * Produces the main page report that lists all the connectors.
 	 *
 	 * @param mainSink               The main sink used for generating content.
 	 * @param connectors             The map of connector identifiers to their corresponding JsonNodes.
