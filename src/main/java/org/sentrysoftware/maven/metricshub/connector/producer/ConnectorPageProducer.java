@@ -245,7 +245,7 @@ public class ConnectorPageProducer {
 		sink.section2_();
 
 		// MetricsHub Example
-		produceMetricsHubExamplesContent(sink, osList, technologies, sudoCommands, connectorVariables);
+		produceMetricsHubExamplesContent(sink, appliesTo, technologies, sudoCommands, connectorVariables);
 
 		// Detection criteria
 		sink.section2();
@@ -520,7 +520,7 @@ public class ConnectorPageProducer {
 		if (connectorVariables != null && !connectorVariables.isEmpty()) {
 			yamlBuilder.append("        variables:\n");
 			yamlBuilder.append(String.format("          %s: %s", connectorVariables.iterator().next(), "<VALUE>"));
-			yamlBuilder.append(" # Replace with desired value.");
+			yamlBuilder.append(" # Replace with desired value.\n");
 		}
 		// CLI
 		sink.section3();
