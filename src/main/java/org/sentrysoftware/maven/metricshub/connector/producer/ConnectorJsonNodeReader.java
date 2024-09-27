@@ -28,8 +28,10 @@ import static org.sentrysoftware.maven.metricshub.connector.producer.JsonNodeHel
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -37,6 +39,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.AllArgsConstructor;
+import org.sentrysoftware.maven.metricshub.connector.producer.model.common.ConnectorDefaultVariable;
 import org.sentrysoftware.maven.metricshub.connector.producer.model.common.TechnologyType;
 
 /**
@@ -604,5 +607,57 @@ public class ConnectorJsonNodeReader {
 			return nodeToStringList(tagsNode);
 		}
 		return Collections.emptyList();
+	}
+
+	/**
+	 * Retrieves all variable names from the connector template.
+	 * Variables are expected to be in the format: ${var::variableName}.
+	 *
+	 * @return a set of unique variable names found within the connector template.
+	 */
+	public Set<String> getVariablesNames() {
+		final String stringConnector = connector.toString();
+		final String variableRegex = "\\$\\{var::(.*?)\\}";
+		final Set<String> variables = new HashSet<>();
+
+		final Pattern pattern = Pattern.compile(variableRegex);
+		final Matcher matcher = pattern.matcher(stringConnector);
+
+		while (matcher.find()) {
+			variables.add(matcher.group(1));
+		}
+		return variables;
+	}
+
+	/**
+	 * Retrieves the default connector variables declared in the connector.
+	 * These variables include their descriptions and default values.
+	 *
+	 * @return a map of variable names to their corresponding {@link ConnectorDefaultVariable} objects,
+	 *         each containing a description and a default value. Returns an empty map if no variables are declared.
+	 */
+	public Map<String, ConnectorDefaultVariable> getDefaultVariables() {
+		final JsonNode variablesNode = getConnectorSection().map(node -> node.get("variables")).orElse(null);
+
+		final Map<String, ConnectorDefaultVariable> defaultVariables = new HashMap<>();
+		if (nonNull(variablesNode)) {
+			variablesNode
+				.fields()
+				.forEachRemaining(entry -> {
+					final String variableName = entry.getKey();
+					final JsonNode variableValue = entry.getValue();
+
+					final String description = variableValue.get("description").asText();
+					final String defaultValue = variableValue.get("defaultValue").asText();
+
+					// Create a ConnectorDefaultVariable object and put it into the map
+					final ConnectorDefaultVariable connectorDefaultVariable = new ConnectorDefaultVariable(
+						description,
+						defaultValue
+					);
+					defaultVariables.put(variableName, connectorDefaultVariable);
+				});
+		}
+		return defaultVariables;
 	}
 }

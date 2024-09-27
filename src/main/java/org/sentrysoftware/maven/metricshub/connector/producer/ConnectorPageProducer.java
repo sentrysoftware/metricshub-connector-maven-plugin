@@ -36,6 +36,7 @@ import java.util.stream.Collectors;
 import lombok.Builder;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.plugin.logging.Log;
+import org.sentrysoftware.maven.metricshub.connector.producer.model.common.ConnectorDefaultVariable;
 import org.sentrysoftware.maven.metricshub.connector.producer.model.common.OpenTelemetryHardwareType;
 import org.sentrysoftware.maven.metricshub.connector.producer.model.common.OsType;
 import org.sentrysoftware.maven.metricshub.connector.producer.model.common.TechnologyType;
@@ -186,6 +187,38 @@ public class ConnectorPageProducer {
 		sink.text(technologies.stream().map(TechnologyType::getDisplayName).collect(Collectors.joining(", ")));
 		sink.bold_();
 		sink.paragraph_();
+
+		// Displaying connector variables list
+		final Set<String> connectorVariables = connectorJsonNodeReader.getVariablesNames();
+		final Map<String, ConnectorDefaultVariable> connectorDefaultVariables =
+			connectorJsonNodeReader.getDefaultVariables();
+		if (!connectorVariables.isEmpty()) {
+			sink.paragraph();
+			sink.text("Variables:");
+			sink.list();
+			for (final String variable : connectorVariables) {
+				sink.listItem();
+				sink.rawText(String.format("<code>%s</code>", variable));
+				sink.list();
+				sink.listItem();
+				final ConnectorDefaultVariable defaultVariable = connectorDefaultVariables.getOrDefault(
+					variable,
+					new ConnectorDefaultVariable("", "No default value.")
+				);
+				sink.text("description: ");
+				sink.text(defaultVariable.getDescription());
+				sink.listItem_();
+
+				sink.listItem();
+				sink.text("default value: ");
+				sink.text(defaultVariable.getDefaultValue());
+				sink.listItem_();
+				sink.list_();
+				sink.listItem_();
+			}
+			sink.list_();
+			sink.paragraph_();
+		}
 
 		// Sudo Commands?
 		final List<String> sudoCommands = connectorJsonNodeReader.getSudoCommands();
