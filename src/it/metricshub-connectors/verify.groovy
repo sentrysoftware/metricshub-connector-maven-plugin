@@ -214,7 +214,7 @@ assert htmlText.indexOf("Technology and protocols:") > - 1 : "MIB2 'Technology a
 assert htmlText.indexOf("SNMP") > - 1 : "MIB2 SNMP protocol must be present"
 assert htmlText.indexOf('<h3 id="examples">Examples</h3>') > - 1 : "MIB2: Page must indicate 'Examples' as HTML H3 element"
 assert htmlText.indexOf('<h4 id="cli">CLI</h4>') > - 1 : "MIB2: Page must indicate 'CLI' as HTML H4 element"
-assert htmlText.indexOf("metricshub HOSTNAME -t management -c +MIB2 --snmp v2c --community public") > - 1 : "MIB2: Page must indicate the expected CLI example"
+assert htmlText.indexOf("metricshub HOSTNAME -t network -c +MIB2 --snmp v2c --community public") > - 1 : "MIB2: Page must indicate the expected CLI example"
 assert htmlText.indexOf('<h4 id="metricshub-yaml">metricshub.yaml</h4>') > - 1 : "MIB2: Page must indicate 'metricshub.yaml' as HTML H4 element"
 assert htmlText.indexOf("snmp:") > - 1 : "MIB2: 'snmp:' yaml section must be present"
 assert htmlText.indexOf("v2c") > - 1 : "MIB2: version 'v2c' must be present in the yaml configuration example"
@@ -248,3 +248,12 @@ assert htmlText.indexOf("Microsoft Windows, Linux") > -1 : "NvidiaSmi: Unexpecte
 assert htmlText.indexOf("NVIDIA drivers with NVIDIA-SMI support") > -1 : "NvidiaSmi: Unexpected Leverages"
 assert htmlText.indexOf("Command Lines") > -1 : "NvidiaSmi: Unexpected Technology and protocols"
 assert htmlText.indexOf("<code>nvidia-smi</code>") > -1 : "NvidiaSmi: Unexpected criterion command line"
+
+// WinStoreSpaces
+htmlText = new File(basedir, "target/site/connectors/winstoragespaces.html").text
+assert htmlText.indexOf("Any system") > -1 : "WinStoreSpaces: Unexpected Typical platform"
+assert htmlText.indexOf("Storage System, Microsoft Windows") > -1 : "WinStoreSpaces: Unexpected Operating Systems"
+assert htmlText.indexOf("Windows Storage Spaces") > -1 : "WinStoreSpaces: Unexpected Leverages"
+assert htmlText.indexOf("WMI/WinRM") > -1 : "WinStoreSpaces: Unexpected Technology and protocols"
+assert htmlText.indexOf("<code>root\\Microsoft\\Windows\\Storage</code>") > -1 : "WinStoreSpaces: Unexpected namespaces"
+assert htmlText.indexOf("metricshub HOSTNAME -t storage -c +WinStorageSpaces --wmi -u USER") > -1 : "WinStoreSpaces: Page must indicate the expected CLI example."
