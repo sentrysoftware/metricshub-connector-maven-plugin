@@ -245,7 +245,7 @@ public class ConnectorPageProducer {
 		sink.section2_();
 
 		// MetricsHub Example
-		produceMetricsHubExamplesContent(sink, osList, technologies, sudoCommands);
+		produceMetricsHubExamplesContent(sink, osList, technologies, sudoCommands, connectorVariables);
 
 		// Detection criteria
 		sink.section2();
@@ -421,7 +421,8 @@ public class ConnectorPageProducer {
 		final Sink sink,
 		final List<String> osTypes,
 		final Set<TechnologyType> technologies,
-		final List<String> sudoCommands
+		final List<String> sudoCommands,
+		final Set<String> connectorVariables
 	) {
 		sink.section2();
 		sink.sectionTitle2();
@@ -515,6 +516,12 @@ public class ConnectorPageProducer {
 			appendYamlUsernameAndPassword(yamlBuilder);
 		}
 
+		// Connector variable
+		if (connectorVariables != null && !connectorVariables.isEmpty()) {
+			yamlBuilder.append("        variables:\n");
+			yamlBuilder.append(String.format("          %s: %s", connectorVariables.iterator().next(), "<VALUE>"));
+			yamlBuilder.append(" # Replace with desired value.");
+		}
 		// CLI
 		sink.section3();
 		sink.sectionTitle3();
