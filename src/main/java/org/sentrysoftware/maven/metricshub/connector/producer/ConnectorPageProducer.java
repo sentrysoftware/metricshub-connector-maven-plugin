@@ -441,7 +441,7 @@ public class ConnectorPageProducer {
 		yamlBuilder.append("          host.name: <HOSTNAME> # Change with actual host name\n");
 		yamlBuilder.append("          host.type: ").append(hostType).append("\n");
 		yamlBuilder
-			.append("        selectConnectors: [ ")
+			.append("        connectors: [ +")
 			.append(connectorId)
 			.append(" ] # Optional, to load only this connector\n")
 			.append(PROTOCOLS_SECTION);
