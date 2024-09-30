@@ -36,6 +36,7 @@ import java.util.stream.Collectors;
 import lombok.Builder;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.plugin.logging.Log;
+import org.sentrysoftware.maven.metricshub.connector.producer.model.common.ConnectorDefaultVariable;
 import org.sentrysoftware.maven.metricshub.connector.producer.model.common.OpenTelemetryHardwareType;
 import org.sentrysoftware.maven.metricshub.connector.producer.model.common.OsType;
 import org.sentrysoftware.maven.metricshub.connector.producer.model.common.TechnologyType;
@@ -187,6 +188,27 @@ public class ConnectorPageProducer {
 		sink.bold_();
 		sink.paragraph_();
 
+		// Displaying connector variables list
+		final Set<String> connectorVariables = connectorJsonNodeReader.getVariablesNames();
+		final Map<String, ConnectorDefaultVariable> connectorDefaultVariables =
+			connectorJsonNodeReader.getDefaultVariables();
+		if (!connectorVariables.isEmpty()) {
+			sink.paragraph();
+			sink.text("Variables:");
+			sink.list();
+			for (final String variable : connectorVariables) {
+				sink.listItem();
+				sink.rawText(String.format("<code>%s</code>", variable));
+				final ConnectorDefaultVariable connectorDefaultVariable = connectorDefaultVariables.get(variable);
+				if (connectorDefaultVariable != null) {
+					produceVariableSection(sink, connectorDefaultVariables.get(variable));
+				}
+				sink.listItem_();
+			}
+			sink.list_();
+			sink.paragraph_();
+		}
+
 		// Sudo Commands?
 		final List<String> sudoCommands = connectorJsonNodeReader.getSudoCommands();
 		produceSudoCommandsContent(sink, sudoCommands);
@@ -212,7 +234,7 @@ public class ConnectorPageProducer {
 		sink.section2_();
 
 		// MetricsHub Example
-		produceMetricsHubExamplesContent(sink, appliesTo, technologies, sudoCommands);
+		produceMetricsHubExamplesContent(sink, appliesTo, technologies, sudoCommands, connectorVariables);
 
 		// Detection criteria
 		sink.section2();
@@ -388,7 +410,8 @@ public class ConnectorPageProducer {
 		final Sink sink,
 		final List<String> osTypes,
 		final Set<TechnologyType> technologies,
-		final List<String> sudoCommands
+		final List<String> sudoCommands,
+		final Set<String> connectorVariables
 	) {
 		sink.section2();
 		sink.sectionTitle2();
@@ -482,6 +505,16 @@ public class ConnectorPageProducer {
 			appendYamlUsernameAndPassword(yamlBuilder);
 		}
 
+		// Connector variable
+		if (connectorVariables != null && !connectorVariables.isEmpty()) {
+			yamlBuilder.append("        variables:\n");
+			connectorVariables
+				.iterator()
+				.forEachRemaining(variable -> {
+					yamlBuilder.append(String.format("          %s: %s", variable, "<VALUE>"));
+					yamlBuilder.append(" # Replace with desired value.\n");
+				});
+		}
 		// CLI
 		sink.section3();
 		sink.sectionTitle3();
@@ -657,5 +690,25 @@ public class ConnectorPageProducer {
 			SinkHelper.insertCodeBlock(sink, "bash", sudoersContent.toString());
 			sink.paragraph_();
 		}
+	}
+
+	/**
+	 * Produces a section of text for the connector variable, including its description and default value,
+	 * and writes it to the provided sink.
+	 *
+	 * @param sink            The sink used for generating content.
+	 * @param defaultVariable The variable containing the description and default value to be formatted and output.
+	 */
+	private void produceVariableSection(final Sink sink, ConnectorDefaultVariable defaultVariable) {
+		final String variableDescription = defaultVariable.getDescription();
+		final String variableDefaultValue = defaultVariable.getDefaultValue();
+
+		final String defaultDescriptionString = variableDescription != null
+			? String.format(": %s", variableDescription)
+			: "";
+		final String defaultValueString = variableDefaultValue != null
+			? String.format("(default: <code>%s</code>)", variableDefaultValue)
+			: "";
+		sink.rawText(String.format("%s %s", defaultDescriptionString, defaultValueString));
 	}
 }
