@@ -75,6 +75,11 @@ public class ConnectorJsonNodeReader {
 		"^\\s*([^\\{]*)\\{.*(\\s*state\\s*=\\s*.*)\\}\\s*$"
 	);
 
+	/**
+	 * Defines a regular expression pattern for matching connector variables name.
+	 */
+	private static final Pattern CONNECTOR_VARIABLE_PATTERN = Pattern.compile("\\$\\{var::(.*?)\\}");
+
 	private final JsonNode connector;
 
 	/**
@@ -122,7 +127,7 @@ public class ConnectorJsonNodeReader {
 	public List<String> getSupersedes() {
 		final JsonNode detection = getDetection();
 		if (nonNull(detection)) {
-			final JsonNode supersedes = detection.get("supersedes");
+			final JsonNode supersedes = detection.get("supersedes"); // NOSONAR nonNull() is already called
 			return nodeToStringList(supersedes);
 		}
 		return Collections.emptyList();
@@ -136,7 +141,7 @@ public class ConnectorJsonNodeReader {
 	public List<String> getAppliesTo() {
 		final JsonNode detection = getDetection();
 		if (nonNull(detection)) {
-			final JsonNode appliesTo = detection.get("appliesTo");
+			final JsonNode appliesTo = detection.get("appliesTo"); // NOSONAR nonNull() is already called
 			return nodeToStringList(appliesTo);
 		}
 		return Collections.emptyList();
@@ -156,7 +161,7 @@ public class ConnectorJsonNodeReader {
 		final JsonNode criteria = getDetectionCriteria();
 
 		// If criteria information is not available or is not an array, return null
-		if (!nonNull(criteria) || !criteria.isArray()) {
+		if (!nonNull(criteria) || !criteria.isArray()) { // NOSONAR nonNull() is already called
 			return null;
 		}
 
@@ -196,7 +201,7 @@ public class ConnectorJsonNodeReader {
 			return null;
 		}
 
-		return detection.get("criteria");
+		return detection.get("criteria"); // NOSONAR nonNull() is already called
 	}
 
 	/**
@@ -308,7 +313,7 @@ public class ConnectorJsonNodeReader {
 	public Set<String> getConnectionTypes() {
 		final JsonNode detection = getDetection();
 		if (nonNull(detection)) {
-			final JsonNode connectionTypes = detection.get("connectionTypes");
+			final JsonNode connectionTypes = detection.get("connectionTypes"); // NOSONAR nonNull() is already called
 			return nodeToCaseInsensitiveSet(connectionTypes);
 		}
 		return Collections.emptySet();
@@ -339,7 +344,7 @@ public class ConnectorJsonNodeReader {
 	public boolean isAutoDetectionDisabled() {
 		final JsonNode detection = getDetection();
 		if (nonNull(detection)) {
-			final JsonNode disableAutoDetection = detection.get("disableAutoDetection");
+			final JsonNode disableAutoDetection = detection.get("disableAutoDetection"); // NOSONAR nonNull() is already called
 			if (nonNull(disableAutoDetection) && disableAutoDetection.isBoolean()) {
 				return disableAutoDetection.asBoolean();
 			}
@@ -355,7 +360,7 @@ public class ConnectorJsonNodeReader {
 	public String getOnLastResort() {
 		final JsonNode detection = getDetection();
 		if (nonNull(detection)) {
-			final JsonNode onLastResort = detection.get("onLastResort");
+			final JsonNode onLastResort = detection.get("onLastResort"); // NOSONAR nonNull() is already called
 			if (nonNull(onLastResort)) {
 				return onLastResort.asText();
 			}
@@ -371,7 +376,7 @@ public class ConnectorJsonNodeReader {
 	public List<JsonNode> getCriteria() {
 		final JsonNode detectionCriteria = getDetectionCriteria();
 
-		if (nonNull(detectionCriteria) && detectionCriteria.isArray()) {
+		if (nonNull(detectionCriteria) && detectionCriteria.isArray()) { // NOSONAR nonNull() is already called
 			return stream((ArrayNode) detectionCriteria).collect(Collectors.toList());
 		}
 
@@ -572,7 +577,7 @@ public class ConnectorJsonNodeReader {
 	public boolean hasBladeMonitorJob() {
 		final JsonNode monitors = getMonitors().orElse(null);
 		if (nonNull(monitors)) {
-			final JsonNode bladeMonitorJob = monitors.get("blade");
+			final JsonNode bladeMonitorJob = monitors.get("blade"); // NOSONAR nonNull() is already called
 			if (nonNull(bladeMonitorJob)) {
 				final JsonNode[] bladeJobs = getMonitorJobs(bladeMonitorJob);
 				for (JsonNode bladeJob : bladeJobs) {
@@ -603,7 +608,7 @@ public class ConnectorJsonNodeReader {
 	public List<String> getTags() {
 		JsonNode detection = getDetection();
 		if (nonNull(detection)) {
-			final JsonNode tagsNode = detection.get("tags");
+			final JsonNode tagsNode = detection.get("tags"); // NOSONAR nonNull() is already called
 			return nodeToStringList(tagsNode);
 		}
 		return Collections.emptyList();
@@ -617,11 +622,9 @@ public class ConnectorJsonNodeReader {
 	 */
 	public Set<String> getVariablesNames() {
 		final String stringConnector = connector.toString();
-		final String variableRegex = "\\$\\{var::(.*?)\\}";
 		final Set<String> variables = new HashSet<>();
 
-		final Pattern pattern = Pattern.compile(variableRegex);
-		final Matcher matcher = pattern.matcher(stringConnector);
+		final Matcher matcher = CONNECTOR_VARIABLE_PATTERN.matcher(stringConnector);
 
 		while (matcher.find()) {
 			variables.add(matcher.group(1));
@@ -641,19 +644,19 @@ public class ConnectorJsonNodeReader {
 
 		final Map<String, ConnectorDefaultVariable> defaultVariables = new HashMap<>();
 		if (nonNull(variablesNode)) {
-			variablesNode
+			variablesNode // NOSONAR nonNull() is already called
 				.fields()
 				.forEachRemaining(entry -> {
 					final String variableName = entry.getKey();
 					final JsonNode variableValue = entry.getValue();
 
-					final String description = variableValue.get("description").asText();
-					final String defaultValue = variableValue.get("defaultValue").asText();
+					final JsonNode description = variableValue.get("description");
+					final JsonNode defaultValue = variableValue.get("defaultValue");
 
 					// Create a ConnectorDefaultVariable object and put it into the map
 					final ConnectorDefaultVariable connectorDefaultVariable = new ConnectorDefaultVariable(
-						description,
-						defaultValue
+						nonNullTextOrDefault(description, null),
+						nonNullTextOrDefault(defaultValue, null)
 					);
 					defaultVariables.put(variableName, connectorDefaultVariable);
 				});

@@ -199,21 +199,10 @@ public class ConnectorPageProducer {
 			for (final String variable : connectorVariables) {
 				sink.listItem();
 				sink.rawText(String.format("<code>%s</code>", variable));
-				sink.list();
-				sink.listItem();
-				final ConnectorDefaultVariable defaultVariable = connectorDefaultVariables.getOrDefault(
-					variable,
-					new ConnectorDefaultVariable("", "No default value.")
-				);
-				sink.text("description: ");
-				sink.text(defaultVariable.getDescription());
-				sink.listItem_();
-
-				sink.listItem();
-				sink.text("default value: ");
-				sink.text(defaultVariable.getDefaultValue());
-				sink.listItem_();
-				sink.list_();
+				final ConnectorDefaultVariable connectorDefaultVariable = connectorDefaultVariables.get(variable);
+				if (connectorDefaultVariable != null) {
+					produceVariableSection(sink, connectorDefaultVariables.get(variable));
+				}
 				sink.listItem_();
 			}
 			sink.list_();
@@ -519,8 +508,12 @@ public class ConnectorPageProducer {
 		// Connector variable
 		if (connectorVariables != null && !connectorVariables.isEmpty()) {
 			yamlBuilder.append("        variables:\n");
-			yamlBuilder.append(String.format("          %s: %s", connectorVariables.iterator().next(), "<VALUE>"));
-			yamlBuilder.append(" # Replace with desired value.\n");
+			connectorVariables
+				.iterator()
+				.forEachRemaining(variable -> {
+					yamlBuilder.append(String.format("          %s: %s", variable, "<VALUE>"));
+					yamlBuilder.append(" # Replace with desired value.\n");
+				});
 		}
 		// CLI
 		sink.section3();
@@ -697,5 +690,25 @@ public class ConnectorPageProducer {
 			SinkHelper.insertCodeBlock(sink, "bash", sudoersContent.toString());
 			sink.paragraph_();
 		}
+	}
+
+	/**
+	 * Produces a section of text for the connector variable, including its description and default value,
+	 * and writes it to the provided sink.
+	 *
+	 * @param sink            The sink used for generating content.
+	 * @param defaultVariable The variable containing the description and default value to be formatted and output.
+	 */
+	private void produceVariableSection(final Sink sink, ConnectorDefaultVariable defaultVariable) {
+		final String variableDescription = defaultVariable.getDescription();
+		final String variableDefaultValue = defaultVariable.getDefaultValue();
+
+		final String defaultDescriptionString = variableDescription != null
+			? String.format(": %s", variableDescription)
+			: "";
+		final String defaultValueString = variableDefaultValue != null
+			? String.format("(default: <code>%s</code>)", variableDefaultValue)
+			: "";
+		sink.rawText(String.format("%s %s", defaultDescriptionString, defaultValueString));
 	}
 }
