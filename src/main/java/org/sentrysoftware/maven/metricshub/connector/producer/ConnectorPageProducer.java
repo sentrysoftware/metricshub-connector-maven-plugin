@@ -56,6 +56,7 @@ public class ConnectorPageProducer {
 	private final String connectorId;
 	private final JsonNode connector;
 	private final Log logger;
+	private String connectorDirectory;
 
 	/**
 	 * Produces a report page for the current connector and generates the corresponding sink for documentation output.
@@ -120,6 +121,15 @@ public class ConnectorPageProducer {
 		sink.paragraph_();
 
 		produceSupersedesContent(sink, supersededMap, connectorJsonNodeReader);
+
+		// The GitHub link will be generated only for community connectors
+		if (!enterpriseConnectorIds.contains(connectorId)) {
+			connectorDirectory = connectorJsonNodeReader.getRelativePath().replace("\\", "/");
+			// Add a link to the connector source.
+			sink.paragraph();
+			sink.rawText(SinkHelper.gitHubHyperlinkRef(connectorDirectory, "Source"));
+			sink.paragraph_();
+		}
 
 		// End of the second heading element
 		sink.section2_();

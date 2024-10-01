@@ -171,9 +171,25 @@ public class SinkHelper {
 	}
 
 	/**
-	 * Creates an HTML hyperlink reference with the given content
+	 * Creates an HTML hyperlink reference with the given content.
 	 */
 	public static String hyperlinkRef(final String link, final String content) {
 		return String.format("<a href=\"%s\">%s</a>", link, content);
+	}
+
+	/**
+	 * Creates an HTMP hyperlink reference with the given content and the specified classes.
+	 */
+	public static String gitHubHyperlinkRef(final String link, final String content) {
+		return String.format(
+			"" +
+			"<a href=\"https://github.com/sentrysoftware/metricshub-community-connectors/tree/main/src/main/connector/%s\" class=\"externalLink\" " +
+			"<i class=\"fa-brands fa-github\">" +
+			"</i>" +
+			" %s" +
+			"</a>",
+			link,
+			content
+		);
 	}
 }

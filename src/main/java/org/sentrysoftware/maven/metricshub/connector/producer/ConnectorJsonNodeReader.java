@@ -663,4 +663,8 @@ public class ConnectorJsonNodeReader {
 		}
 		return defaultVariables;
 	}
+
+	public String getRelativePath() {
+		return connector.get("relativePath").asText();
+	}
 }
