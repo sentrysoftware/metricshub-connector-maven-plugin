@@ -664,6 +664,12 @@ public class ConnectorJsonNodeReader {
 		return defaultVariables;
 	}
 
+	/**
+	 * Retrieves the relative path of the connector that was saved during parsing.
+	 * This path is used to generate a link to the connector's source code.
+	 *
+	 * @return The saved relative path as a string.
+	 */
 	public String getRelativePath() {
 		return connector.get("relativePath").asText();
 	}
