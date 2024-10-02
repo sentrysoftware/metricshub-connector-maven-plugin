@@ -51,7 +51,7 @@ public class ConnectorLibraryParser {
 
 		private final Path sourceDirectory;
 
-		public ConnectorFileVisitor(final Path sourceDirectory) {
+		ConnectorFileVisitor(final Path sourceDirectory) {
 			this.sourceDirectory = sourceDirectory;
 		}
 
