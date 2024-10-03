@@ -183,7 +183,7 @@ public class SinkHelper {
 	public static String gitHubHyperlinkRef(final String link, final String content) {
 		return String.format(
 			"" +
-			"<a href=\"https://github.com/sentrysoftware/metricshub-community-connectors/tree/main/src/main/connector/%s\" class=\"externalLink\" " +
+			"<a href=\"https://github.com/sentrysoftware/metricshub-community-connectors/tree/main/src/main/connector/%s\" " +
 			"<i class=\"fa-brands fa-github\">" +
 			"</i>" +
 			" %s" +
