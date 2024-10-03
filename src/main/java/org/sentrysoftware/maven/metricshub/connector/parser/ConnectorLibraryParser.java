@@ -23,6 +23,7 @@ package org.sentrysoftware.maven.metricshub.connector.parser;
 import static org.sentrysoftware.maven.metricshub.connector.Constants.YAML_OBJECT_MAPPER;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -48,6 +49,12 @@ public class ConnectorLibraryParser {
 		@Getter
 		private final Map<String, JsonNode> connectorsMap = new HashMap<>();
 
+		private final Path sourceDirectory;
+
+		ConnectorFileVisitor(final Path sourceDirectory) {
+			this.sourceDirectory = sourceDirectory;
+		}
+
 		@Override
 		public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
 			// Skip this path if it is a directory or not a YAML file
@@ -61,6 +68,8 @@ public class ConnectorLibraryParser {
 			}
 
 			final JsonNode connector = ConnectorParser.withNodeProcessor(file.getParent()).parse(file.toFile());
+
+			((ObjectNode) connector).put("relativePath", sourceDirectory.relativize(file).toString());
 
 			final Path fileNamePath = file.getFileName();
 
@@ -107,7 +116,7 @@ public class ConnectorLibraryParser {
 	 * @throws IOException if the file does not exist
 	 */
 	public Map<String, JsonNode> parse(@NonNull final Path sourceDirectory) throws IOException {
-		final ConnectorFileVisitor fileVisitor = new ConnectorFileVisitor();
+		final ConnectorFileVisitor fileVisitor = new ConnectorFileVisitor(sourceDirectory);
 
 		Files.walkFileTree(sourceDirectory, fileVisitor);
 
