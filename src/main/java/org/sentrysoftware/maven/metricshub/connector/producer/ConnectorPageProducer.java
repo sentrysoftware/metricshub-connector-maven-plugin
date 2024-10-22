@@ -539,11 +539,18 @@ public class ConnectorPageProducer {
 
 		// Connector variable
 		if (connectorVariables != null && !connectorVariables.isEmpty()) {
-			yamlBuilder.append("        variables:\n");
+			yamlBuilder.append("        additionalConnectors:\n");
+			yamlBuilder.append("          " + connectorId);
+			yamlBuilder.append(": # Unique ID. Use 'uses' if different from the original connector ID\n");
+			yamlBuilder.append("            uses: " + connectorId);
+			yamlBuilder.append(" # Optional - Original ID if not in key\n");
+			yamlBuilder.append("            force: true");
+			yamlBuilder.append(" # Optional (default: true); false for auto-detection only\n");
+			yamlBuilder.append("            variables:\n");
 			connectorVariables
 				.iterator()
 				.forEachRemaining(variable -> {
-					yamlBuilder.append(String.format("          %s: %s", variable, "<VALUE>"));
+					yamlBuilder.append(String.format("              %s: %s", variable, "<VALUE>"));
 					yamlBuilder.append(" # Replace with desired value.\n");
 				});
 		}
