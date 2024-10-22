@@ -539,12 +539,14 @@ public class ConnectorPageProducer {
 
 		// Connector variable
 		if (connectorVariables != null && !connectorVariables.isEmpty()) {
+			
 			yamlBuilder.append("        additionalConnectors:\n");
-			yamlBuilder.append("          <ADDITIONAL-CONNECTOR-ID>:\n");
+			yamlBuilder.append("          " + connectorId);
+			yamlBuilder.append(": # Unique ID. Use 'uses' if different from the original connector ID\n");
 			yamlBuilder.append("            uses: " + connectorId);
-			yamlBuilder.append(" # Id of connector to use\n");
-			yamlBuilder.append("            force: true/false");
-			yamlBuilder.append(" # true by default\n");
+			yamlBuilder.append(" # Optional - Original ID if not in key\n");
+			yamlBuilder.append("            force: true");
+			yamlBuilder.append(" # Optional (default: true); false for auto-detection only\n");
 			yamlBuilder.append("            variables:\n");
 			connectorVariables
 				.iterator()
