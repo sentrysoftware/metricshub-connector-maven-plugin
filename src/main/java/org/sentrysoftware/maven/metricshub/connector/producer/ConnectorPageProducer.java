@@ -106,10 +106,6 @@ public class ConnectorPageProducer {
 		sink.section1();
 		sink.sectionTitle1();
 		sink.text(displayName);
-		// If the connector is Enterprise
-		if (enterpriseConnectorIds.contains(connectorId)) {
-			sink.rawText(SinkHelper.bootstrapLabel("Enterprise", "metricshub-enterprise-label"));
-		}
 		sink.sectionTitle1_();
 
 		// Description
