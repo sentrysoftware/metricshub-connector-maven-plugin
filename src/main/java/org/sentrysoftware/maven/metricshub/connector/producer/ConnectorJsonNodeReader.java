@@ -29,7 +29,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -618,7 +617,9 @@ public class ConnectorJsonNodeReader {
 		JsonNode detection = getDetection();
 		if (nonNull(detection)) {
 			final JsonNode tagsNode = detection.get("tags"); // NOSONAR nonNull() is already called
-			final ArrayNode tagsArrayNode = tagsNode != null && !tagsNode.isNull() ? (ArrayNode) tagsNode : JsonNodeFactory.instance.arrayNode();
+			final ArrayNode tagsArrayNode = tagsNode != null && !tagsNode.isNull()
+				? (ArrayNode) tagsNode
+				: JsonNodeFactory.instance.arrayNode();
 
 			tagsArrayNode.add(isEnterprise ? "enterprise" : "community");
 
@@ -635,8 +636,9 @@ public class ConnectorJsonNodeReader {
 	 */
 	public List<String> getTags() {
 		JsonNode detection = getDetection();
-		return nonNull(detection) ? nodeToStringList(detection.get("tags")) // NOSONAR nonNull() is already called
-				: Collections.emptyList();
+		return nonNull(detection)
+			? nodeToStringList(detection.get("tags")) // NOSONAR nonNull() is already called
+			: Collections.emptyList();
 	}
 
 	/**
