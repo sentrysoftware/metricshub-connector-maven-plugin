@@ -27,6 +27,8 @@ import static org.sentrysoftware.maven.metricshub.connector.producer.JsonNodeHel
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -601,17 +603,41 @@ public class ConnectorJsonNodeReader {
 	}
 
 	/**
+	 * Retrieves and adds a specified tag to the detection JSON node's "tags" list.
+	 * <p>
+	 * Adds either "enterprise" or "community" to the "tags" field based on the {@code isEnterprise} parameter.
+	 * If the "tags" field is absent or null, it initializes a new array with the specified tag.
+	 * </p>
+	 *
+	 * @param isEnterprise {@code true} to add "enterprise" to the tags; {@code false} to add "community".
+	 * @return a list of tags as strings, including the added tag, or an empty list if the detection node is null.
+	 */
+	public List<String> getAndCompleteTags(final boolean isEnterprise) {
+		JsonNode detection = getDetection();
+		if (nonNull(detection)) {
+			final JsonNode tagsNode = detection.get("tags"); // NOSONAR nonNull() is already called
+			final ArrayNode tagsArrayNode = tagsNode != null && !tagsNode.isNull()
+				? (ArrayNode) tagsNode
+				: JsonNodeFactory.instance.arrayNode();
+
+			tagsArrayNode.add(isEnterprise ? "enterprise" : "community");
+
+			((ObjectNode) detection).set("tags", tagsArrayNode);
+			return nodeToStringList(tagsArrayNode);
+		}
+		return Collections.emptyList();
+	}
+
+	/**
 	 * Retrieves a list of tags from the detection JSON node.
 	 *
 	 * @return a list of tags as strings, or an empty list if no tags are found.
 	 */
 	public List<String> getTags() {
 		JsonNode detection = getDetection();
-		if (nonNull(detection)) {
-			final JsonNode tagsNode = detection.get("tags"); // NOSONAR nonNull() is already called
-			return nodeToStringList(tagsNode);
-		}
-		return Collections.emptyList();
+		return nonNull(detection)
+			? nodeToStringList(detection.get("tags")) // NOSONAR nonNull() is already called
+			: Collections.emptyList();
 	}
 
 	/**

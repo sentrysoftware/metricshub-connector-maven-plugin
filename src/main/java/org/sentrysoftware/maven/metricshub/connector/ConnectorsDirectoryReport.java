@@ -235,7 +235,7 @@ public class ConnectorsDirectoryReport extends AbstractConnectorReport {
 				final JsonNode connector = connectorEntry.getValue();
 				final ConnectorJsonNodeReader reader = new ConnectorJsonNodeReader(connector);
 				return reader
-					.getTags()
+					.getAndCompleteTags(enterpriseConnectorIds.contains(connectorEntry.getKey()))
 					.stream()
 					.filter(tag -> !tag.isBlank())
 					.map(tag -> new AbstractMap.SimpleEntry<>(tag, connectorEntry));
