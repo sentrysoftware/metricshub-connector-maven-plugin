@@ -336,16 +336,15 @@ public class CriterionSinkProduceVisitor implements ICriterionVisitor {
 		sink.rawText(String.format("SQL Query: <code>%s</code>", SinkHelper.replaceWithHtmlCode(sqlCriterion.getQuery())));
 		sink.listItem_();
 
-	    final String expectedResult = sqlCriterion.getExpectedResult();
-	    if (expectedResult != null) {
-	        sink.listItem();
-	        sink.rawText(String.format("Expected Result: <code>%s</code>", SinkHelper.replaceWithHtmlCode(expectedResult)));
-	        sink.listItem_();
-	    }
+		final String expectedResult = sqlCriterion.getExpectedResult();
+		if (expectedResult != null) {
+			sink.listItem();
+			sink.rawText(String.format("Expected Result: <code>%s</code>", SinkHelper.replaceWithHtmlCode(expectedResult)));
+			sink.listItem_();
+		}
 
-	    // End the SQL criteria list
-	    sink.list_();
-	    sink.listItem_();
+		// End the SQL criteria list
+		sink.list_();
+		sink.listItem_();
 	}
-
 }

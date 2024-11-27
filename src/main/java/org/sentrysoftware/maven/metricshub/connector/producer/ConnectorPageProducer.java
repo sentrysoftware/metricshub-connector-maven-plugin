@@ -534,13 +534,13 @@ public class ConnectorPageProducer {
 		}
 
 		if (technologies.contains(TechnologyType.SQL)) {
-		    cli.append(" --jdbc -u USER --jdbc-url URL");
-		    yamlBuilder.append("          jdbc:\n");
-		    yamlBuilder.append("            port: <PORT>\n");
-		    yamlBuilder.append("            database: <DB_NAME>\n");
-		    yamlBuilder.append("            type: <type>\n");
-		    yamlBuilder.append("            url: <URL>\n");
-		    appendYamlUsernameAndPassword(yamlBuilder);
+			cli.append(" --jdbc -u USER --jdbc-url URL");
+			yamlBuilder.append("          jdbc:\n");
+			yamlBuilder.append("            port: <PORT>\n");
+			yamlBuilder.append("            database: <DB_NAME>\n");
+			yamlBuilder.append("            type: <type>\n");
+			yamlBuilder.append("            url: <URL>\n");
+			appendYamlUsernameAndPassword(yamlBuilder);
 		}
 
 		// Connector variable

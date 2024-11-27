@@ -55,5 +55,4 @@ public class SqlCriterion extends AbstractCriterion {
 	public void accept(ICriterionVisitor visitor) {
 		visitor.visit(this);
 	}
-
 }
