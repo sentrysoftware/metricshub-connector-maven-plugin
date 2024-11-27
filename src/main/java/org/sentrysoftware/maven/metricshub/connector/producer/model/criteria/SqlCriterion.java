@@ -1,7 +1,5 @@
 package org.sentrysoftware.maven.metricshub.connector.producer.model.criteria;
 
-import static org.sentrysoftware.maven.metricshub.connector.producer.JsonNodeHelper.nonNullTextOrDefault;
-
 /*-
  * ╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲
  * MetricsHub Connector Maven Plugin
@@ -21,6 +19,8 @@ import static org.sentrysoftware.maven.metricshub.connector.producer.JsonNodeHel
  * limitations under the License.
  * ╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱
  */
+
+import static org.sentrysoftware.maven.metricshub.connector.producer.JsonNodeHelper.nonNullTextOrDefault;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.Builder;
