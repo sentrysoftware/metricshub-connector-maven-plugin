@@ -1,4 +1,6 @@
-package org.sentrysoftware.maven.metricshub.connector.producer.model.common;
+package org.sentrysoftware.maven.metricshub.connector.producer.model.criteria;
+
+import static org.sentrysoftware.maven.metricshub.connector.producer.JsonNodeHelper.nonNullTextOrDefault;
 
 /*-
  * ╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲
@@ -20,26 +22,38 @@ package org.sentrysoftware.maven.metricshub.connector.producer.model.common;
  * ╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱
  */
 
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.databind.JsonNode;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
- * Represents a default variable for a connector.
+ * Represents a criterion for filtering based on a SQL query.
+ *
+ * @see AbstractCriterion
  */
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
-@Builder
-public class ConnectorDefaultVariable {
+public class SqlCriterion extends AbstractCriterion {
 
 	/**
-	 * The default connector variable description.
+	 * Constructs SqlCriterion with the specified JSON criterion.
+	 *
+	 * @param criterion The JSON criterion for SQL check.
 	 */
-	private String description;
+	@Builder
+	public SqlCriterion(final JsonNode criterion) {
+		super(criterion);
+	}
+
 	/**
-	 * The default connector variable default value.
+	 * Gets the query from the current SQL criterion, or {@code null} if not present.
+	 *
+	 * @return The query from the criterion, or {@code null} if not present.
 	 */
-	private String defaultValue;
+	public String getQuery() {
+		return nonNullTextOrDefault(criterion.get("query"), null);
+	}
+
+	@Override
+	public void accept(ICriterionVisitor visitor) {
+		visitor.visit(this);
+	}
+
 }

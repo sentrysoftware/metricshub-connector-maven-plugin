@@ -58,7 +58,12 @@ public enum TechnologyType {
 	/**
 	 * Windows Management Instrumentation (WMI) / Windows Remote Management (WinRM)
 	 */
-	WMI("WMI/WinRM");
+	WMI("WMI/WinRM"),
+
+	/**
+     * SQL
+     */
+	SQL("SQL");
 
 	@Getter
 	private String displayName;
@@ -80,7 +85,8 @@ public enum TechnologyType {
 		"snmptable", SNMP,
 		"snmpget", SNMP,
 		"wbem", WBEM,
-		"wmi", WMI
+		"wmi", WMI,
+		"sql", SQL
 	);
 
 	// @formatter:on

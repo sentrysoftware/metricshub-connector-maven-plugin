@@ -125,6 +125,7 @@ public class SinkHelper {
 	 * Create a bootstrap badge with the following content.
 	 *
 	 * @param content text of the badge.
+	 * @param customClassname custom class name to apply to the badge.
 	 * @return the HTML code for this badge.
 	 */
 	public static String bootstrapLabel(@NonNull final String content, String customClassname) {
@@ -172,13 +173,21 @@ public class SinkHelper {
 
 	/**
 	 * Creates an HTML hyperlink reference with the given content.
+	 *
+	 * @param link the URL to which the hyperlink points.
+	 * @param content the text to display as the clickable hyperlink.
+	 * @return a string containing the HTML code for the hyperlink
 	 */
 	public static String hyperlinkRef(final String link, final String content) {
 		return String.format("<a href=\"%s\">%s</a>", link, content);
 	}
 
 	/**
-	 * Creates an HTMP hyperlink reference with the given content and the specified classes.
+	 * Creates an HTML hyperlink reference with the given content.
+	 *
+	 * @param link the path in the `connector` directory.
+	 * @param content the text to display as the hyperlink.
+	 * @return string containing the HTML code for the hyperlink.
 	 */
 	public static String gitHubHyperlinkRef(final String link, final String content) {
 		return String.format(
