@@ -324,13 +324,13 @@ public class CriterionSinkProduceVisitor implements ICriterionVisitor {
 	@Override
 	public void visit(final SqlCriterion sqlCriterion) {
 		// SQL
-	    sink.listItem();
-	    sink.text("The ");
-        sink.bold();
+		sink.listItem();
+		sink.text("The ");
+		sink.bold();
 		sink.text("SQL query");
 		sink.bold_();
-        sink.text(" below succeeds on the monitored database:");
-	    sink.list();
+		sink.text(" below succeeds on the monitored database:");
+		sink.list();
 		sink.list();
 		sink.listItem();
 		sink.rawText(String.format("SQL Query: <code>%s</code>", SinkHelper.replaceWithHtmlCode(sqlCriterion.getQuery())));

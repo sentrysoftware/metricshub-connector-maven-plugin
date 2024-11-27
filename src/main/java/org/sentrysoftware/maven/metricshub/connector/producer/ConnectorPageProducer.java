@@ -540,7 +540,7 @@ public class ConnectorPageProducer {
 		    yamlBuilder.append("            database: <DB_NAME>\n");
 		    yamlBuilder.append("            type: <type>\n");
 		    yamlBuilder.append("            url: <URL>\n");
-            appendYamlUsernameAndPassword(yamlBuilder);
+		    appendYamlUsernameAndPassword(yamlBuilder);
 		}
 
 		// Connector variable

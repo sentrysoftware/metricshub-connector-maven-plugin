@@ -61,8 +61,8 @@ public enum TechnologyType {
 	WMI("WMI/WinRM"),
 
 	/**
-     * SQL
-     */
+	 * SQL
+	 */
 	SQL("SQL");
 
 	@Getter
