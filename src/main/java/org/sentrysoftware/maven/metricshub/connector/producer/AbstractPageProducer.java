@@ -148,7 +148,7 @@ public abstract class AbstractPageProducer {
 				sink.tableCell();
 				final Set<TechnologyType> technologies = connectorJsonNodeReader.getTechnologies();
 				for (final TechnologyType technology : technologies) {
-					sink.text(technology.toString());
+					sink.text(technology.getDisplayName());
 					sink.lineBreak();
 				}
 
