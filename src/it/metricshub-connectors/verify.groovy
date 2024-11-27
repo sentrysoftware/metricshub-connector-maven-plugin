@@ -31,6 +31,7 @@ assert htmlText.indexOf("WBEMGenDiskNT") > -1 : "metricshub-connectors-directory
 assert htmlText.indexOf("WBEMGenHBA") > -1 : "metricshub-connectors-directory: WBEMGenHBA must be listed"
 assert htmlText.indexOf("WBEMGenLUN") > -1 : "metricshub-connectors-directory: WBEMGenLUN must be listed"
 assert htmlText.indexOf("WBEMGenNetwork") > -1 : "metricshub-connectors-directory: WBEMGenNetwork must be listed"
+assert htmlText.indexOf("MySQL") > -1 : "metricshub-connectors-directory: MySQL must be listed"
 
 // Check generated reference files
 String directoryPath = 'target/site/connectors'
@@ -56,7 +57,8 @@ String [] fileNamesToCheck = [
 	'wbemgenhba.html',
 	'wbemgenlun.html',
 	'wbemgennetwork.html',
-	'winstoragespaces.html'
+	'winstoragespaces.html',
+	'mysql.html'
 ]
 
 fileNamesToCheck.each { fileName ->
@@ -74,6 +76,7 @@ String [] tagsFileNamesToCheck = [
 	'vm.html',
 	'hyper-v.html',
 	'hardware.html',
+	'database.html',
 ]
 
 String [] hardwareConnectors = [
@@ -257,3 +260,15 @@ assert htmlText.indexOf("Windows Storage Spaces") > -1 : "WinStoreSpaces: Unexpe
 assert htmlText.indexOf("WMI/WinRM") > -1 : "WinStoreSpaces: Unexpected Technology and protocols"
 assert htmlText.indexOf("<code>root\\Microsoft\\Windows\\Storage</code>") > -1 : "WinStoreSpaces: Unexpected namespaces"
 assert htmlText.indexOf("metricshub HOSTNAME -t storage -c +WinStorageSpaces --wmi -u USER") > -1 : "WinStoreSpaces: Page must indicate the expected CLI example."
+
+// MySQL
+htmlText = new File(basedir, "target/site/connectors/mysql.html").text
+assert htmlText.indexOf("Any platform running MySQL") > -1 : "MySQL: Unexpected Typical platform"
+assert htmlText.indexOf("Microsoft Windows, Linux") > -1 : "MySQL: Unexpected Operating Systems"
+assert htmlText.indexOf("MySQL Database") > -1 : "MySQL: Unexpected Leverages"
+assert htmlText.indexOf("SQL/JDBC") > -1 : "MySQL: Unexpected Technology and protocols"
+assert htmlText.indexOf("metricshub HOSTNAME -t win -c +MySQL --jdbc -u USER --jdbc-url URL") > -1 : "MySQL: Page must indicate the expected CLI example."
+assert htmlText.indexOf("<code>SELECT @@version_comment REGEXP 'mysql' AS is_mysql;</code>") > -1 : "MySQL: Page must indicate the activation criterion."
+assert htmlText.indexOf("Expected Result:") > -1 : "MySQL: Page must indicate the Expected Result message."
+assert htmlText.indexOf("<code>1</code>") > -1 : "MySQL: Page must indicate the expected result value."
+assert htmlText.indexOf('<h3 id="metrics">Metrics</h3>') > - 1 : "MySQL: Page must indicate 'Metrics' as HTML H3 element"

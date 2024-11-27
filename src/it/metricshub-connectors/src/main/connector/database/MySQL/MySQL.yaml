@@ -297,8 +297,8 @@ monitors:
         attributes:
           id: $1
           db.version: $2
-          db.tables: $3
         metrics:
+          db.tables: $3
           db.aborted_connections{reason="client_disconnected"}: $4
           db.aborted_connections{reason="failed_attempt"}: $5
           db.io.{db.io.direction="received"}: $6

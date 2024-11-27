@@ -61,9 +61,9 @@ public enum TechnologyType {
 	WMI("WMI/WinRM"),
 
 	/**
-	 * SQL
+	 * SQL through JDBC
 	 */
-	SQL("SQL");
+	SQL("SQL/JDBC");
 
 	@Getter
 	private String displayName;
