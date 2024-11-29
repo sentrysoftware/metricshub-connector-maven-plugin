@@ -320,4 +320,31 @@ public class CriterionSinkProduceVisitor implements ICriterionVisitor {
 	public void visit(WmiCriterion wmiCriterion) {
 		buildWqlSink(wmiCriterion);
 	}
+
+	@Override
+	public void visit(final SqlCriterion sqlCriterion) {
+		// SQL
+		sink.listItem();
+		sink.text("The ");
+		sink.bold();
+		sink.text("SQL query");
+		sink.bold_();
+		sink.text(" below succeeds on the monitored database:");
+		sink.list();
+		sink.list();
+		sink.listItem();
+		sink.rawText(String.format("SQL Query: <code>%s</code>", SinkHelper.replaceWithHtmlCode(sqlCriterion.getQuery())));
+		sink.listItem_();
+
+		final String expectedResult = sqlCriterion.getExpectedResult();
+		if (expectedResult != null) {
+			sink.listItem();
+			sink.rawText(String.format("Expected Result: <code>%s</code>", SinkHelper.replaceWithHtmlCode(expectedResult)));
+			sink.listItem_();
+		}
+
+		// End the SQL criteria list
+		sink.list_();
+		sink.listItem_();
+	}
 }

@@ -104,4 +104,11 @@ public interface ICriterionVisitor {
 	 * @param wmiCriterion The WMI criterion to visit.
 	 */
 	void visit(WmiCriterion wmiCriterion);
+
+	/**
+	 * Visits the specified SQL criterion.
+	 *
+	 * @param sqlCriterion The SQL criterion to visit.
+	 */
+	void visit(SqlCriterion sqlCriterion);
 }

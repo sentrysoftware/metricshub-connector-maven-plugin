@@ -58,6 +58,7 @@ public class MainPageProducer extends AbstractPageProducer {
 	 * @param mainSink               The main sink used for generating content.
 	 * @param connectors             The map of connector identifiers to their corresponding JsonNodes.
 	 * @param enterpriseConnectorIds The enterprise connector identifiers.
+	 * @param connectorTags          The set of connector tags.
 	 */
 	public void produce(
 		final Sink mainSink,
