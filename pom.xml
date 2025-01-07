@@ -68,8 +68,8 @@
 	</developers>
 
 	<properties>
-		<!-- Java 11 -->
-		<maven.compiler.release>11</maven.compiler.release>
+		<!-- Java 17 -->
+		<maven.compiler.release>17</maven.compiler.release>
 
 		<!-- Reproducible Build -->
 		<!-- See https://maven.apache.org/guides/mini/guide-reproducible-builds.html -->

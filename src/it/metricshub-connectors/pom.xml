@@ -5,6 +5,7 @@
 
 	<groupId>org.sentrysoftware.maven</groupId>
 	<artifactId>metricshub-connectors</artifactId>
+	<name>MetricsHub</name>
 	<version>1.0.00-SNAPSHOT</version>
 	<packaging>pom</packaging>
 

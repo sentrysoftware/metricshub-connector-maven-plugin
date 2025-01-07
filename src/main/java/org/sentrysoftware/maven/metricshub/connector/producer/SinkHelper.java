@@ -40,6 +40,11 @@ import org.apache.maven.doxia.sink.impl.SinkEventAttributeSet;
 public class SinkHelper {
 
 	/**
+	 * The non-breaking space character
+	 */
+	public static final String NON_BREAKING_SPACE = "&nbsp;";
+
+	/**
 	 * Use a compiled representation of a regular expression to find commas followed by non-whitespace
 	 */
 	private static final Pattern COMMA_FOLLOWED_BY_NON_WHITESPACE = Pattern.compile(",(?=\\S)");
@@ -51,11 +56,22 @@ public class SinkHelper {
 	 * @return the AttributeSet that can be used in any Sink element
 	 */
 	public static SinkEventAttributes setClass(final String className) {
+		return setAttribute(SinkEventAttributes.CLASS, className);
+	}
+
+	/**
+	 * Creates an AttributeSet that sets the specified attribute to the specified value
+	 *
+	 * @param attributeName The name of the attribute to be set
+	 * @param value         The value to be set for the attribute
+	 * @return the AttributeSet that can be used in any Sink element
+	 */
+	public static SinkEventAttributes setAttribute(final String attributeName, final String value) {
 		// Create a new AttributeSet
 		final SinkEventAttributes attributes = new SinkEventAttributeSet();
 
-		// Set the class
-		attributes.addAttribute(SinkEventAttributes.CLASS, className);
+		// Set the attribute value
+		attributes.addAttribute(attributeName, value);
 
 		return attributes;
 	}
@@ -124,27 +140,51 @@ public class SinkHelper {
 	/**
 	 * Create a bootstrap badge with the following content.
 	 *
-	 * @param content text of the badge.
-	 * @param customClassname custom class name to apply to the badge.
+	 * @param content text of the label.
+	 * @param customClassname custom class name to apply to the label.
 	 * @return the HTML code for this badge.
 	 */
-	public static String bootstrapLabel(@NonNull final String content, String customClassname) {
+	public static String bootstrapLabel(@NonNull final String content, final String customClassname) {
+		return String.format(
+			" <span class=\"%slabel label-default\">%s</span>",
+			normalizeCustomClassName(customClassname),
+			content
+		);
+	}
+
+	/**
+	 * Create a bootstrap badge with the following content.
+	 *
+	 * @param content text of the label.
+	 * @param customClassname custom class name to apply to the label
+	 * @return the HTML code for this badge.
+	 */
+	public static String bootstrapBadge(@NonNull final String content, String customClassname) {
+		return String.format("<span class=\"%sbadge\">%s</span>", normalizeCustomClassName(customClassname), content);
+	}
+
+	/**
+	 * Checks if the custom class name is null and returns an empty string if it is.
+	 * Otherwise, it returns the custom class name trimmed with a trailing space.
+	 *
+	 * @param customClassname custom class name to apply to the label
+	 * @return the normalized custom class name.
+	 */
+	private static String normalizeCustomClassName(String customClassname) {
 		if (customClassname == null) {
-			customClassname = "";
-		} else {
-			customClassname = customClassname.trim() + " ";
+			return "";
 		}
-		return String.format(" <span class=\"%slabel label-default\">%s</span>", customClassname, content);
+		return customClassname.trim() + " ";
 	}
 
 	/**
 	 * Builds the HTML page file name corresponding to the specified connector identifier.
 	 *
-	 * @param connectorId The connector identifier.
+	 * @param pageId The page identifier.
 	 * @return The corresponding HTML page filename.
 	 */
-	public static String buildPageFilename(final String connectorId) {
-		return connectorId.toLowerCase() + ".html";
+	public static String buildPageFilename(final String pageId) {
+		return pageId.toLowerCase() + ".html";
 	}
 
 	/**

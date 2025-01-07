@@ -29,12 +29,12 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.plugin.logging.Log;
-import org.sentrysoftware.maven.metricshub.connector.ConnectorsDirectoryReport;
+import org.sentrysoftware.maven.metricshub.connector.Constants;
 
 /**
- * Utility class for producing main page of the connectors directory.
+ * Utility class for producing full-listing connectors page.
  */
-public class MainPageProducer extends AbstractPageProducer {
+public class FullListingPageProducer extends AbstractPageProducer {
 
 	private final String connectorSubdirectoryName;
 	private final String tagSubdirectoryName;
@@ -46,7 +46,7 @@ public class MainPageProducer extends AbstractPageProducer {
 	 * @param connectorSubdirectoryName  The connector subdirectory name.
 	 * @param tagSubdirectoryName        The tag subdirectory name.
 	 */
-	public MainPageProducer(Log logger, String connectorSubdirectoryName, String tagSubdirectoryName) {
+	public FullListingPageProducer(Log logger, String connectorSubdirectoryName, String tagSubdirectoryName) {
 		super(logger);
 		this.connectorSubdirectoryName = connectorSubdirectoryName;
 		this.tagSubdirectoryName = tagSubdirectoryName;
@@ -73,22 +73,18 @@ public class MainPageProducer extends AbstractPageProducer {
 		Objects.requireNonNull(connectors, () -> "connectors cannot be null.");
 		Objects.requireNonNull(connectorTags, () -> "connectorTags cannot be null.");
 
-		logger.debug(
-			String.format("Generating the main page %s.html", ConnectorsDirectoryReport.CONNECTORS_DIRECTORY_OUTPUT_NAME)
-		);
+		logger.debug(String.format("Generating the full-listing page %s", Constants.CONNECTORS_FULL_LISTING_FILE_NAME));
 
-		mainSink.head();
-		mainSink.title();
-		mainSink.text("Connectors Directory");
-		mainSink.title_();
-		mainSink.head_();
+		final String title = "${project.name} Connectors";
+
+		buildHead(mainSink, title);
 
 		mainSink.body();
 
 		// Title
 		mainSink.section1();
 		mainSink.sectionTitle1();
-		mainSink.text("Connectors Directory");
+		mainSink.text(title);
 		mainSink.sectionTitle1_();
 
 		// Intro

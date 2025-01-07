@@ -27,3 +27,104 @@
     text-decoration: none;
     font-size: small;
 }
+
+.custom-class .platform-tile-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    padding: 10px;
+    width: 100%;
+}
+
+.custom-class .platform-tile {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    background: rgb(237 237 237);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    padding: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-decoration: none;
+    color: inherit;
+}
+
+.custom-class .platform-tile:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+.custom-class .platform-tile .platform-title {
+    font-size: 18px;
+    margin-bottom: 15px;
+    color: #333;
+    text-align: center;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.custom-class .platform-tile .platform-connectors {
+    font-size: 14px;
+    margin-bottom: 15px;
+    color: #333;
+    text-align: center;
+    min-height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.custom-class .platform-tile .platform-icon {
+    width: 80px;
+    height: 80px;
+    background-size: cover;
+    background-position: center;
+}
+
+.custom-class .platform-tile .platform-badges {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.custom-class .platform-tile .badge {
+    font-size: 10px;
+    border-radius: 10px;
+    padding: 5px 10px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.custom-class .platform-tile div:last-child {
+    margin-top: auto;
+}
+
+@media (max-width: 1200px) and (min-width: 993px) {
+    .custom-class .platform-tile-container {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 992px) and (min-width: 769px) {
+    .custom-class .platform-tile-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .custom-class .platform-tile-container {
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    .custom-class .platform-tile {
+        padding: 40px;
+    }
+}

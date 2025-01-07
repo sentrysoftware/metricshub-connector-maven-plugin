@@ -26,50 +26,50 @@ import java.util.Map;
 import java.util.Objects;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.plugin.logging.Log;
+import org.sentrysoftware.maven.metricshub.connector.producer.model.platform.Platform;
 
 /**
- * Utility class for producing tag page related to connectors.
+ * Utility class for producing platform page related to connectors.
  */
-public class TagPageProducer extends AbstractGroupConnectorsProducer {
-
-	private final String tagName;
+public class SpecificPlatformPageProducer extends AbstractGroupConnectorsProducer {
 
 	/**
 	 * Constructor for the tag page producer.
 	 *
-	 * @param logger  The logger used for logging.
-	 * @param tagName The tag name.
+	 * @param logger   The logger used for logging.
 	 */
-	public TagPageProducer(Log logger, String tagName) {
+	public SpecificPlatformPageProducer(Log logger) {
 		super(logger);
-		this.tagName = tagName;
 	}
 
 	/**
 	 * Produces the tag page report that lists all the connectors.
+	 *
 	 * @param sink                      The sink used for generating content.
-	 * @param connectors                The map of connector identifiers to their corresponding JsonNodes.
+	 * @param platform                  The platform to be listed as part of the report.
 	 * @param connectorSubdirectoryName The connector subdirectory name.
 	 * @param enterpriseConnectorIds    The enterprise connector identifiers.
 	 */
 	public void produce(
 		final Sink sink,
-		final Map<String, JsonNode> connectors,
+		final Platform platform,
 		final String connectorSubdirectoryName,
 		final List<String> enterpriseConnectorIds
 	) {
-		Objects.requireNonNull(tagName, () -> "tagName cannot be null.");
-		Objects.requireNonNull(connectors, () -> "connectors cannot be null.");
+		Objects.requireNonNull(platform, () -> "platform cannot be null.");
 		Objects.requireNonNull(sink, () -> "sink cannot be null.");
 		Objects.requireNonNull(logger, () -> "logger cannot be null.");
 
-		logger.debug("Generating Tag Page: " + SinkHelper.buildPageFilename(tagName));
+		logger.debug("Generating Platform Page: " + SinkHelper.buildPageFilename(platform.getId()));
 
-		buildHeadAndBody(sink, connectorSubdirectoryName, enterpriseConnectorIds, tagName, connectors);
+		final String displayName = platform.getDisplayName();
+		final Map<String, JsonNode> connectors = platform.getConnectors();
+
+		buildHeadAndBody(sink, connectorSubdirectoryName, enterpriseConnectorIds, displayName, connectors);
 	}
 
 	@Override
 	protected String getIntroductionText(final String title) {
-		return String.format("Discover all the available connectors related to the <code>%s</code> tag.", title);
+		return String.format("Discover all the available connectors related to the <code>%s</code> platform.", title);
 	}
 }

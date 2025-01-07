@@ -35,6 +35,7 @@ import org.apache.maven.doxia.sink.impl.SinkEventAttributeSet;
 import org.apache.maven.plugin.logging.Log;
 import org.sentrysoftware.maven.metricshub.connector.producer.model.common.OsType;
 import org.sentrysoftware.maven.metricshub.connector.producer.model.common.TechnologyType;
+import org.sentrysoftware.maven.metricshub.connector.producer.model.platform.Platform;
 
 /**
  * Abstract class for producing pages.
@@ -79,14 +80,14 @@ public abstract class AbstractPageProducer {
 	 * @param connectors                The map of connector identifiers to their corresponding JsonNodes.
 	 * @param connectorSubdirectoryName The connector subdirectory name.
 	 * @param enterpriseConnectorIds    The enterprise connector identifiers.
-	 * @param isTagPage                 Whether the page is a tag page.
+	 * @param areWeUnderConnectors      We are located under the connectors directory.
 	 */
 	protected void buildConnectorsTable(
 		final Sink sink,
 		final Map<String, JsonNode> connectors,
 		final String connectorSubdirectoryName,
 		final List<String> enterpriseConnectorIds,
-		final boolean isTagPage
+		final boolean areWeUnderConnectors
 	) {
 		// Create the table
 		sink.table();
@@ -116,7 +117,7 @@ public abstract class AbstractPageProducer {
 
 				// Builds the HTML page path name corresponding to the specified connector page filename
 				final String connectorPagePath = String.format(
-					isTagPage ? "../../%s/%s" : "%s/%s",
+					areWeUnderConnectors ? "../../%s/%s" : "%s/%s",
 					connectorSubdirectoryName,
 					pageFilename
 				);
@@ -138,7 +139,7 @@ public abstract class AbstractPageProducer {
 				sink.tableCell_();
 
 				sink.tableCell();
-				sink.text(SinkHelper.replaceCommaWithSpace(connectorJsonNodeReader.getPlatformsOrDefault("N/A")));
+				sink.text(Platform.formatPlatforms(connectorJsonNodeReader.getPlatforms()));
 				sink.tableCell_();
 
 				sink.tableCell();
@@ -163,5 +164,19 @@ public abstract class AbstractPageProducer {
 			});
 
 		sink.table_();
+	}
+
+	/**
+	 * Builds the head of the page.
+	 *
+	 * @param sink        The sink used for generating content
+	 * @param displayName The display name to be set in the title.
+	 */
+	protected void buildHead(final Sink sink, final String displayName) {
+		sink.head();
+		sink.title();
+		sink.text(displayName);
+		sink.title_();
+		sink.head_();
 	}
 }

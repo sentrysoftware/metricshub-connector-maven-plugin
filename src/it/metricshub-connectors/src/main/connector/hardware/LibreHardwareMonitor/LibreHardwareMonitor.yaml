@@ -3,7 +3,7 @@ extends:
 - ../Hardware/Hardware
 connector:
   displayName: Libre Hardware Monitor
-  platforms: Any Windows system
+  platforms: Microsoft Windows
   reliesOn: Libre Hardware Monitor
   information: "This connector provides the hardware monitoring of Processors, Temperatures, Fans, Voltages, GPU, Memory Modules, Physical Disk of a computer."
   detection:

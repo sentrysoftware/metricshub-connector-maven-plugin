@@ -4,7 +4,7 @@ extends:
 - ../MIB2-header/MIB2-header
 connector:
   displayName: Generic Ethernet Switch
-  platforms: MIB-2 Supported Switch
+  platforms: Ethernet Switch
   reliesOn: MIB-2 SNMP
   version: 1.0
   information: This connector provides an enclosure for Ethernet switches that do not provide one of their own.

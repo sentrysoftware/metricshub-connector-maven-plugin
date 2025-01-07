@@ -1,7 +1,8 @@
 /**
  * The part of library responsible for producing documentation output.<br>
  *
- * See {@link org.sentrysoftware.maven.metricshub.connector.producer.MainPageProducer}.<br>
+ * See {@link org.sentrysoftware.maven.metricshub.connector.producer.PlatformsPageProducer}.<br>
+ * See {@link org.sentrysoftware.maven.metricshub.connector.producer.FullListingPageProducer}.<br>
  * See {@link org.sentrysoftware.maven.metricshub.connector.producer.ConnectorPageProducer}.
  */
 package org.sentrysoftware.maven.metricshub.connector.producer;

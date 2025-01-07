@@ -52,6 +52,12 @@ public abstract class AbstractConnectorReport extends AbstractMavenReport {
 	@Parameter(defaultValue = "${project.basedir}/src/main/connector", property = "sourceDirectory", required = true)
 	protected File sourceDirectory;
 
+	/**
+	 * The directory where the platform icons are located.
+	 */
+	@Parameter(defaultValue = "images/platforms", property = "platformIconsDirectory", required = true)
+	protected String platformIconsDirectory;
+
 	protected Log logger;
 
 	protected Map<String, JsonNode> connectors;

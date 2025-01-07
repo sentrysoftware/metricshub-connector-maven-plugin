@@ -20,168 +20,112 @@ package org.sentrysoftware.maven.metricshub.connector.producer.model.platform;
  * ╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱
  */
 
+import com.fasterxml.jackson.databind.JsonNode;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 import lombok.Getter;
+import org.sentrysoftware.maven.metricshub.connector.producer.SinkHelper;
+import org.sentrysoftware.maven.metricshub.connector.producer.model.common.TechnologyType;
 
 /**
- * Platform to MetricsHub Connector implementation
- * It is made of { os ; platform ; technology }.
+ * MetricsHub Connector Platform implementation.
  */
-public class Platform implements Comparable<Platform> {
+public class Platform {
+
+	/**
+	 * Comparator to sort the technology types by display name.
+	 */
+	private static final Comparator<? super TechnologyType> COMPARATOR = (p1, p2) ->
+		p1.getDisplayName().compareTo(p2.getDisplayName());
+
+	/**
+	 * The unique identifier of the platform
+	 */
+	@Getter
+	private String id;
 
 	/**
 	 * The supported platform name (as specified by the connector `platforms` property)
 	 */
 	@Getter
-	private final String name;
+	private String displayName;
 
 	/**
-	 * The operating system for this platform (Linux, Microsoft Windows, etc.)
+	 * The icon path of the platform
 	 */
 	@Getter
-	private final String os;
+	private String iconPath;
 
 	/**
-	 * The type of connection we're using to support this platform (SNMP, WBEM, SSH, etc.)
+	 * The technology types supported by the platform
 	 */
-	@Getter
-	private final String technology;
+	private Set<TechnologyType> technologies = new TreeSet<>(COMPARATOR);
 
 	/**
-	 * Connector ID to display name mapping
+	 * Connectors associated with this platform
 	 */
-	private final Map<String, String> connectors = new LinkedHashMap<>();
+	private Map<String, JsonNode> connectors = new LinkedHashMap<>();
 
 	/**
-	 * All the prerequisites for this platform
-	 */
-	private final Set<String> prerequisites = new LinkedHashSet<>();
-
-	private final int hashCode;
-
-	/**
-	 * Constructs a new instance of the platform
+	 * Constructor for the Platform class.
 	 *
-	 * @param name       The supported platform name (as specified by the connector `platforms` property)
-	 * @param os         The operating system for this platform (Linux, Microsoft Windows, etc.)
-	 * @param technology The type of connection we're using to support this platform (SNMP, WBEM, SSH, etc.)
+	 * @param id           The unique identifier of the platform.
+	 * @param displayName  The name of the platform.
+	 * @param iconPath     The icon path of the platform.
 	 */
-	public Platform(String name, String os, String technology) {
-		this.name = name;
-		this.os = os;
-		this.technology = technology;
-
-		// The hash code needs to be computed only once to avoid calling String.toLowerCase many times.
-		this.hashCode = lowerCaseHashCode(name, os, technology);
+	public Platform(final String id, final String displayName, final String iconPath) {
+		this.id = id;
+		this.displayName = displayName;
+		this.iconPath = iconPath;
 	}
 
 	/**
-	 * Calculates the hashCode code of the concatenated lowercased strings.
-	 *
-	 * @param elements The elements to be concatenated and hashed.
-	 * @return The hashCode code of the concatenated lowercased strings.
+	 * Adds a connector to the platform.
+	 * @param connectorId The connector unique identifier.
+	 * @param connector   The connector as a {@link JsonNode}.
 	 */
-	private int lowerCaseHashCode(final String... elements) {
-		int result = 1;
-
-		for (String element : elements) {
-			result = 31 * result + (element != null ? element.toLowerCase().hashCode() : 0);
-		}
-
-		return result;
+	public void addConnector(final String connectorId, final JsonNode connector) {
+		connectors.put(connectorId, connector);
 	}
 
 	/**
-	 * We're sorting Platforms by putting entries that starts with "Any " at the end of the list
-	 *
-	 * @param other the {@link Platform} to be compared.
-	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 * Adds technology types to the platform.
+	 * @param technologies The technology types to add.
 	 */
-	@Override
-	public int compareTo(Platform other) {
-		if (other == null) {
-			return 1;
-		}
-
-		int comparison = this.os.compareToIgnoreCase(other.os);
-		if (comparison == 0) {
-			// Special case for platforms that start with "Any "
-			if (this.name.toLowerCase().startsWith("any ")) {
-				if (other.name.toLowerCase().startsWith("any ")) {
-					comparison = this.name.compareToIgnoreCase(other.name);
-				} else {
-					comparison = 1;
-				}
-			} else if (other.name.toLowerCase().startsWith("any ")) {
-				comparison = -1;
-			} else {
-				comparison = this.name.compareToIgnoreCase(other.name);
-			}
-		}
-
-		return comparison;
+	public void addTechnologies(final Set<TechnologyType> technologies) {
+		this.technologies.addAll(technologies);
 	}
 
 	/**
-	 * Adds information about a connector, including its identifier, display name, and a prerequisite.
+	 * Formats the platforms of a connector.
 	 *
-	 * @param connectorId  The identifier of the connector.
-	 * @param displayName  The display name of the connector.
-	 * @param reliesOn     Considered as the technical prerequisites for this connector.
+	 * @param platforms The platforms to format.
+	 * @return A string representation of the platforms.
 	 */
-	public void addConnectorInformation(final String connectorId, final String displayName, final String reliesOn) {
-		connectors.put(connectorId, displayName);
-		prerequisites.add(reliesOn);
-	}
-
-	@Override
-	public int hashCode() {
-		return hashCode;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-		Platform other = (Platform) obj;
-		// @formatter:off
-		return
-			this.name.equalsIgnoreCase(other.name) &&
-			this.os.equalsIgnoreCase(other.os) &&
-			this.technology.equalsIgnoreCase(other.technology);
-		// @formatter:on
+	public static String formatPlatforms(final Set<String> platforms) {
+		return platforms.stream().map(SinkHelper::replaceCommaWithSpace).collect(Collectors.joining(", "));
 	}
 
 	/**
-	 * Gets the connectors associated with the platform.
+	 * Gets the technology types supported by the platform.
 	 *
-	 * @return A {@code Map} containing connector names as keys and their associated display names as values.
+	 * @return The technology types supported by the platform.
 	 */
-	public Map<String, String> getConnectors() {
-		return connectors
-			.entrySet()
-			.stream()
-			.collect(Collectors.toMap(Entry::getKey, Entry::getValue, (a, b) -> b, LinkedHashMap::new));
+	public Set<TechnologyType> getTechnologies() {
+		return Collections.unmodifiableSet(technologies);
 	}
 
 	/**
-	 * Gets the prerequisites associated with the platform.
+	 * Gets the connectors associated with this platform.
 	 *
-	 * @return A {@code Set} containing prerequisites.
+	 * @return The connectors associated with this platform.
 	 */
-	public Set<String> getPrerequisites() {
-		return prerequisites.stream().collect(Collectors.toCollection(LinkedHashSet::new));
+	public Map<String, JsonNode> getConnectors() {
+		return Collections.unmodifiableMap(connectors);
 	}
 }
