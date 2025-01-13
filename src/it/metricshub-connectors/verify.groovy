@@ -309,7 +309,7 @@ platforms.each { platform ->
     assert directoryHtmlText.indexOf("href=\"${platform.link}\"") > -1 : "Platform '${platform.name}' must link to '${platform.link}'"
 
     // Check platform icon
-    assert directoryHtmlText.indexOf("src=\"images/platforms/${platform.icon}.png\"") > -1 : "Platform '${platform.name}' must have the correct icon '${platform.icon}.png'"
+    assert directoryHtmlText.indexOf("src=\"./images/platforms/${platform.icon}.png\"") > -1 : "Platform '${platform.name}' must have the correct icon '${platform.icon}.png'"
 }
 
 // Additional checks classes

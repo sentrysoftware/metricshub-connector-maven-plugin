@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.apache.maven.doxia.sink.Sink;
@@ -75,15 +76,17 @@ import org.sentrysoftware.maven.metricshub.connector.producer.model.platform.Pla
 )
 public class ConnectorsDirectoryReport extends AbstractConnectorReport {
 
+	private static final String PLATFORM_ICON_PATH_FORMAT = "%s/%s.png";
+
 	/**
 	 * Format string for sink creation error messages.
 	 */
 	private static final String SINK_CREATION_ERROR_FORMAT = "Could not create sink for %s in %s";
 
 	/**
-	 * Format string to create a subdirectory.
+	 * Format string to create a child path.
 	 */
-	private static final String SUBDIRECTORY_FORMAT = "%s/%s";
+	private static final String CHILD_PATH_FORMAT = "%s/%s";
 
 	@Override
 	protected void doReport() throws MavenReportException {
@@ -109,7 +112,7 @@ public class ConnectorsDirectoryReport extends AbstractConnectorReport {
 		// Subdirectory within connector subdirectory where we store the pages for each platform.
 
 		final File platformSubdirectory = new File(
-			String.format(SUBDIRECTORY_FORMAT, outputDirectory, connectorDirectoryName),
+			String.format(CHILD_PATH_FORMAT, outputDirectory, connectorDirectoryName),
 			Constants.PLATFORM_SUBDIRECTORY_NAME
 		);
 		if (!platformSubdirectory.exists() && !platformSubdirectory.mkdirs()) {
@@ -129,7 +132,7 @@ public class ConnectorsDirectoryReport extends AbstractConnectorReport {
 
 		// Subdirectory within connector subdirectory where we store the pages for each tag.
 		final File tagSubdirectory = new File(
-			String.format(SUBDIRECTORY_FORMAT, outputDirectory, connectorDirectoryName),
+			String.format(CHILD_PATH_FORMAT, outputDirectory, connectorDirectoryName),
 			Constants.TAG_SUBDIRECTORY_NAME
 		);
 		if (!tagSubdirectory.exists() && !tagSubdirectory.mkdirs()) {
@@ -301,6 +304,9 @@ public class ConnectorsDirectoryReport extends AbstractConnectorReport {
 	 * @return a list of platforms sorted by display name.
 	 */
 	private List<Platform> determinePlatforms() {
+		// We may have a default icon for all platforms or missing icons for some platforms
+		final Optional<String> maybeDefaultIconOutputPath = retrieveDefaultPlatformIconOutputPath();
+
 		final Map<String, Platform> platforms = new HashMap<>();
 		for (Map.Entry<String, JsonNode> connectorEntry : connectors.entrySet()) {
 			final JsonNode connector = connectorEntry.getValue();
@@ -312,7 +318,8 @@ public class ConnectorsDirectoryReport extends AbstractConnectorReport {
 				// Merge or create
 				final Platform platform = platforms.computeIfAbsent(
 					platformId,
-					id -> new Platform(id, platformName, "%s/%s.png".formatted(platformIconsDirectory, id))
+					id ->
+						new Platform(id, platformName, retrievePlatformIconOutputPath(platformName, id, maybeDefaultIconOutputPath))
 				);
 
 				// Add the connector
@@ -324,6 +331,53 @@ public class ConnectorsDirectoryReport extends AbstractConnectorReport {
 		}
 
 		return platforms.values().stream().sorted(Comparator.comparing(Platform::getDisplayName)).toList();
+	}
+
+	/**
+	 * Retrieves the default icon output path if the default platform icon file exists.
+	 *
+	 * @return The optional default icon output path
+	 */
+	private Optional<String> retrieveDefaultPlatformIconOutputPath() {
+		if (
+			defaultPlatformIconFilename != null && new File(platformIconsInputDirectory, defaultPlatformIconFilename).exists()
+		) {
+			return Optional.of(CHILD_PATH_FORMAT.formatted(platformIconsOutputDirectory, defaultPlatformIconFilename));
+		}
+		return Optional.empty();
+	}
+
+	/**
+	 * Retrieves the icon path for the specified platform.
+	 *
+	 * @param platformName               The name of the platform.
+	 * @param platformId                 The ID of the platform.
+	 * @param maybeDefaultIconOutputPath The optional default icon output path.
+	 * @return The path to the icon for the specified platform.
+	 * @throws IllegalStateException If the icon for the specified platform is not found.
+	 */
+	private String retrievePlatformIconOutputPath(
+		final String platformName,
+		String platformId,
+		final Optional<String> maybeDefaultIconOutputPath
+	) {
+		// The corresponding icon file in the project
+		final File iconInputFile = new File(PLATFORM_ICON_PATH_FORMAT.formatted(platformIconsInputDirectory, platformId));
+
+		// Check if the icon file exists in the project
+		if (iconInputFile.exists()) {
+			return PLATFORM_ICON_PATH_FORMAT.formatted(platformIconsOutputDirectory, platformId);
+		}
+
+		logger.info("Icon %s not found for platform: %s.".formatted(iconInputFile.getAbsolutePath(), platformName));
+
+		logger.info("Attempting to use the default icon for the platform: %s.".formatted(platformName));
+
+		return maybeDefaultIconOutputPath.orElseThrow(() ->
+			new IllegalStateException(
+				"Icon %s not found for platform: %s.".formatted(iconInputFile.getAbsolutePath(), platformName)
+			)
+		);
 	}
 
 	/**
@@ -375,7 +429,7 @@ public class ConnectorsDirectoryReport extends AbstractConnectorReport {
 	private void producePlatformsPage(final List<Platform> platforms) throws MavenReportException {
 		new PlatformsPageProducer(
 			logger,
-			SUBDIRECTORY_FORMAT.formatted(Constants.CONNECTOR_SUBDIRECTORY_NAME, Constants.PLATFORM_SUBDIRECTORY_NAME)
+			CHILD_PATH_FORMAT.formatted(Constants.CONNECTOR_SUBDIRECTORY_NAME, Constants.PLATFORM_SUBDIRECTORY_NAME)
 		)
 			.produce(getMainSink(), platforms);
 	}

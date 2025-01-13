@@ -53,10 +53,26 @@ public abstract class AbstractConnectorReport extends AbstractMavenReport {
 	protected File sourceDirectory;
 
 	/**
-	 * The directory where the platform icons are located.
+	 * The directory where the icons will be copied to in the generated site.
 	 */
-	@Parameter(defaultValue = "images/platforms", property = "platformIconsDirectory", required = true)
-	protected String platformIconsDirectory;
+	@Parameter(defaultValue = "./images/platforms", property = "platformIconsOutputDirectory", required = true)
+	protected String platformIconsOutputDirectory;
+
+	/**
+	 * The directory where the platform icons are located in the project.
+	 */
+	@Parameter(
+		defaultValue = "${project.basedir}/src/site/resources/images/platforms",
+		property = "platformIconsInputDirectory",
+		required = true
+	)
+	protected String platformIconsInputDirectory;
+
+	/**
+	 * The file name of the default icon to be used when a platform icon is not found.
+	 */
+	@Parameter(property = "defaultPlatformIconFilename", required = false)
+	protected String defaultPlatformIconFilename;
 
 	protected Log logger;
 
