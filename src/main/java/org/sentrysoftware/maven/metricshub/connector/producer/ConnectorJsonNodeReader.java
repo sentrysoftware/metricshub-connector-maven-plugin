@@ -20,11 +20,6 @@ package org.sentrysoftware.maven.metricshub.connector.producer;
  * ╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱
  */
 
-import static org.sentrysoftware.maven.metricshub.connector.producer.JsonNodeHelper.nodeToStringList;
-import static org.sentrysoftware.maven.metricshub.connector.producer.JsonNodeHelper.nonNull;
-import static org.sentrysoftware.maven.metricshub.connector.producer.JsonNodeHelper.nonNullTextOrDefault;
-import static org.sentrysoftware.maven.metricshub.connector.producer.JsonNodeHelper.stream;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
@@ -36,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -106,19 +102,18 @@ public class ConnectorJsonNodeReader {
 	public String getInformationOrDefault(final String defaultValue) {
 		final JsonNode information = getConnectorSection().map(node -> node.get("information")).orElse(null);
 
-		return nonNullTextOrDefault(information, defaultValue);
+		return JsonNodeHelper.nonNullTextOrDefault(information, defaultValue);
 	}
 
 	/**
 	 * Retrieves the platforms property of the connector, if available.
 	 *
-	 * @param defaultValue The default value to return if the platforms property is null or represents a JSON null.
-	 * @return The platforms property as a String, or the specified default value if not present.
+	 * @return The platforms property as a Set, or the specified default value if not present.
 	 */
-	public String getPlatformsOrDefault(final String defaultValue) {
+	public Set<String> getPlatforms() {
 		final JsonNode platforms = getConnectorSection().map(node -> node.get("platforms")).orElse(null);
 
-		return nonNullTextOrDefault(platforms, defaultValue);
+		return JsonNodeHelper.nodeToStringCollection(platforms, TreeSet<String>::new);
 	}
 
 	/**
@@ -128,9 +123,9 @@ public class ConnectorJsonNodeReader {
 	 */
 	public List<String> getSupersedes() {
 		final JsonNode detection = getDetection();
-		if (nonNull(detection)) {
-			final JsonNode supersedes = detection.get("supersedes"); // NOSONAR nonNull() is already called
-			return nodeToStringList(supersedes);
+		if (JsonNodeHelper.nonNull(detection)) {
+			final JsonNode supersedes = detection.get("supersedes"); // NOSONAR JsonNodeHelper.nonNull() is already called
+			return JsonNodeHelper.nodeToStringList(supersedes);
 		}
 		return Collections.emptyList();
 	}
@@ -142,9 +137,9 @@ public class ConnectorJsonNodeReader {
 	 */
 	public List<String> getAppliesTo() {
 		final JsonNode detection = getDetection();
-		if (nonNull(detection)) {
-			final JsonNode appliesTo = detection.get("appliesTo"); // NOSONAR nonNull() is already called
-			return nodeToStringList(appliesTo);
+		if (JsonNodeHelper.nonNull(detection)) {
+			final JsonNode appliesTo = detection.get("appliesTo"); // NOSONAR JsonNodeHelper.nonNull() is already called
+			return JsonNodeHelper.nodeToStringList(appliesTo);
 		}
 		return Collections.emptyList();
 	}
@@ -163,15 +158,16 @@ public class ConnectorJsonNodeReader {
 		final JsonNode criteria = getDetectionCriteria();
 
 		// If criteria information is not available or is not an array, return null
-		if (!nonNull(criteria) || !criteria.isArray()) { // NOSONAR nonNull() is already called
+		if (!JsonNodeHelper.nonNull(criteria) || !criteria.isArray()) { // NOSONAR JsonNodeHelper.nonNull() is already called
 			return null;
 		}
 
 		// Filter criteria of type "productRequirements" and extract the engine version
-		return stream((ArrayNode) criteria)
+		return JsonNodeHelper
+			.stream((ArrayNode) criteria)
 			.filter(node -> {
 				final JsonNode typeNode = getType(node);
-				return nonNull(typeNode) && "productrequirements".equalsIgnoreCase(typeNode.asText());
+				return JsonNodeHelper.nonNull(typeNode) && "productrequirements".equalsIgnoreCase(typeNode.asText());
 			})
 			.map(node -> node.get("engineVersion"))
 			.filter(JsonNodeHelper::nonNull)
@@ -199,11 +195,11 @@ public class ConnectorJsonNodeReader {
 		final JsonNode detection = getDetection();
 
 		// If detection information is not available, return null
-		if (!nonNull(detection)) {
+		if (!JsonNodeHelper.nonNull(detection)) {
 			return null;
 		}
 
-		return detection.get("criteria"); // NOSONAR nonNull() is already called
+		return detection.get("criteria"); // NOSONAR JsonNodeHelper.nonNull() is already called
 	}
 
 	/**
@@ -224,7 +220,7 @@ public class ConnectorJsonNodeReader {
 	public String getReliesOnOrDefault(final String defaultValue) {
 		final JsonNode reliesOn = getConnectorSection().map(node -> node.get("reliesOn")).orElse(null);
 
-		return nonNullTextOrDefault(reliesOn, defaultValue);
+		return JsonNodeHelper.nonNullTextOrDefault(reliesOn, defaultValue);
 	}
 
 	/**
@@ -276,12 +272,12 @@ public class ConnectorJsonNodeReader {
 			.filter(JsonNodeHelper::nonNull)
 			.forEach(job -> {
 				final JsonNode sources = job.get("sources");
-				if (!nonNull(sources)) {
+				if (!JsonNodeHelper.nonNull(sources)) {
 					return;
 				}
 				sources.forEach(source -> {
 					final JsonNode typeNode = getType(source);
-					if (nonNull(typeNode)) {
+					if (JsonNodeHelper.nonNull(typeNode)) {
 						TechnologyType.getTechnologyType(typeNode.asText()).ifPresent(technologies::add);
 					}
 				});
@@ -299,7 +295,7 @@ public class ConnectorJsonNodeReader {
 	 */
 	public List<String> getSudoCommands() {
 		final JsonNode sudoCommands = connector.get("sudoCommands");
-		return nodeToStringList(sudoCommands);
+		return JsonNodeHelper.nodeToStringList(sudoCommands);
 	}
 
 	/**
@@ -314,8 +310,8 @@ public class ConnectorJsonNodeReader {
 	 */
 	public Set<String> getConnectionTypes() {
 		final JsonNode detection = getDetection();
-		if (nonNull(detection)) {
-			final JsonNode connectionTypes = detection.get("connectionTypes"); // NOSONAR nonNull() is already called
+		if (JsonNodeHelper.nonNull(detection)) {
+			final JsonNode connectionTypes = detection.get("connectionTypes"); // NOSONAR JsonNodeHelper.nonNull() is already called
 			return nodeToCaseInsensitiveSet(connectionTypes);
 		}
 		return Collections.emptySet();
@@ -329,7 +325,7 @@ public class ConnectorJsonNodeReader {
 	 *         or not of the expected types.
 	 */
 	private Set<String> nodeToCaseInsensitiveSet(final JsonNode node) {
-		return nodeToStringList(node).stream().map(String::toLowerCase).collect(Collectors.toSet());
+		return JsonNodeHelper.nodeToStringList(node).stream().map(String::toLowerCase).collect(Collectors.toSet());
 	}
 
 	/**
@@ -345,9 +341,9 @@ public class ConnectorJsonNodeReader {
 	 */
 	public boolean isAutoDetectionDisabled() {
 		final JsonNode detection = getDetection();
-		if (nonNull(detection)) {
-			final JsonNode disableAutoDetection = detection.get("disableAutoDetection"); // NOSONAR nonNull() is already called
-			if (nonNull(disableAutoDetection) && disableAutoDetection.isBoolean()) {
+		if (JsonNodeHelper.nonNull(detection)) {
+			final JsonNode disableAutoDetection = detection.get("disableAutoDetection"); // NOSONAR JsonNodeHelper.nonNull() is already called
+			if (JsonNodeHelper.nonNull(disableAutoDetection) && disableAutoDetection.isBoolean()) {
 				return disableAutoDetection.asBoolean();
 			}
 		}
@@ -361,9 +357,9 @@ public class ConnectorJsonNodeReader {
 	 */
 	public String getOnLastResort() {
 		final JsonNode detection = getDetection();
-		if (nonNull(detection)) {
-			final JsonNode onLastResort = detection.get("onLastResort"); // NOSONAR nonNull() is already called
-			if (nonNull(onLastResort)) {
+		if (JsonNodeHelper.nonNull(detection)) {
+			final JsonNode onLastResort = detection.get("onLastResort"); // NOSONAR JsonNodeHelper.nonNull() is already called
+			if (JsonNodeHelper.nonNull(onLastResort)) {
 				return onLastResort.asText();
 			}
 		}
@@ -378,8 +374,8 @@ public class ConnectorJsonNodeReader {
 	public List<JsonNode> getCriteria() {
 		final JsonNode detectionCriteria = getDetectionCriteria();
 
-		if (nonNull(detectionCriteria) && detectionCriteria.isArray()) { // NOSONAR nonNull() is already called
-			return stream((ArrayNode) detectionCriteria).collect(Collectors.toList());
+		if (JsonNodeHelper.nonNull(detectionCriteria) && detectionCriteria.isArray()) { // NOSONAR JsonNodeHelper.nonNull() is already called
+			return JsonNodeHelper.stream((ArrayNode) detectionCriteria).collect(Collectors.toList());
 		}
 
 		return Collections.emptyList();
@@ -439,12 +435,12 @@ public class ConnectorJsonNodeReader {
 			.filter(JsonNodeHelper::nonNull)
 			.forEach(job -> {
 				final JsonNode mapping = getMapping(job);
-				if (!nonNull(mapping)) {
+				if (!JsonNodeHelper.nonNull(mapping)) {
 					return;
 				}
 
 				final JsonNode attributes = mapping.get("attributes");
-				if (!nonNull(attributes)) {
+				if (!JsonNodeHelper.nonNull(attributes)) {
 					return;
 				}
 
@@ -481,12 +477,12 @@ public class ConnectorJsonNodeReader {
 			.filter(JsonNodeHelper::nonNull)
 			.forEach(job -> {
 				final JsonNode mapping = getMapping(job);
-				if (!nonNull(mapping)) {
+				if (!JsonNodeHelper.nonNull(mapping)) {
 					return;
 				}
 
 				final JsonNode metric = mapping.get("metrics");
-				if (!nonNull(metric)) {
+				if (!JsonNodeHelper.nonNull(metric)) {
 					return;
 				}
 
@@ -520,7 +516,7 @@ public class ConnectorJsonNodeReader {
 
 		final JsonNode metricDefinitions = connector.get("metrics");
 		// No metric definitions?
-		if (!nonNull(metricDefinitions)) {
+		if (!JsonNodeHelper.nonNull(metricDefinitions)) {
 			return name;
 		}
 
@@ -529,19 +525,19 @@ public class ConnectorJsonNodeReader {
 		final JsonNode metricDefinition = metricDefinitions.get(metricNameWithoutAttributes);
 
 		// No metric definition?
-		if (!nonNull(metricDefinition)) {
+		if (!JsonNodeHelper.nonNull(metricDefinition)) {
 			return name;
 		}
 
 		final JsonNode type = getType(metricDefinition);
 
 		// Check the type object. Must be non null and object defining state set
-		if (!nonNull(metricDefinition) || !type.isObject()) {
+		if (!JsonNodeHelper.nonNull(metricDefinition) || !type.isObject()) {
 			return name;
 		}
 
 		final JsonNode stateSet = type.get("stateSet");
-		final List<String> stateSetList = nodeToStringList(stateSet);
+		final List<String> stateSetList = JsonNodeHelper.nodeToStringList(stateSet);
 		if (!stateSet.isEmpty()) {
 			// Include the state values in the metric name
 			Collections.sort(stateSetList);
@@ -578,12 +574,12 @@ public class ConnectorJsonNodeReader {
 	 */
 	public boolean hasBladeMonitorJob() {
 		final JsonNode monitors = getMonitors().orElse(null);
-		if (nonNull(monitors)) {
-			final JsonNode bladeMonitorJob = monitors.get("blade"); // NOSONAR nonNull() is already called
-			if (nonNull(bladeMonitorJob)) {
+		if (JsonNodeHelper.nonNull(monitors)) {
+			final JsonNode bladeMonitorJob = monitors.get("blade"); // NOSONAR JsonNodeHelper.nonNull() is already called
+			if (JsonNodeHelper.nonNull(bladeMonitorJob)) {
 				final JsonNode[] bladeJobs = getMonitorJobs(bladeMonitorJob);
 				for (JsonNode bladeJob : bladeJobs) {
-					if (nonNull(bladeJob) && nonNull(getMapping(bladeJob))) {
+					if (JsonNodeHelper.nonNull(bladeJob) && JsonNodeHelper.nonNull(getMapping(bladeJob))) {
 						return true;
 					}
 				}
@@ -614,8 +610,8 @@ public class ConnectorJsonNodeReader {
 	 */
 	public List<String> getAndCompleteTags(final boolean isEnterprise) {
 		JsonNode detection = getDetection();
-		if (nonNull(detection)) {
-			final JsonNode tagsNode = detection.get("tags"); // NOSONAR nonNull() is already called
+		if (JsonNodeHelper.nonNull(detection)) {
+			final JsonNode tagsNode = detection.get("tags"); // NOSONAR JsonNodeHelper.nonNull() is already called
 			final ArrayNode tagsArrayNode = tagsNode != null && !tagsNode.isNull()
 				? (ArrayNode) tagsNode
 				: JsonNodeFactory.instance.arrayNode();
@@ -623,7 +619,7 @@ public class ConnectorJsonNodeReader {
 			tagsArrayNode.add(isEnterprise ? "enterprise" : "community");
 
 			((ObjectNode) detection).set("tags", tagsArrayNode);
-			return nodeToStringList(tagsArrayNode);
+			return JsonNodeHelper.nodeToStringList(tagsArrayNode);
 		}
 		return Collections.emptyList();
 	}
@@ -635,8 +631,8 @@ public class ConnectorJsonNodeReader {
 	 */
 	public List<String> getTags() {
 		JsonNode detection = getDetection();
-		return nonNull(detection)
-			? nodeToStringList(detection.get("tags")) // NOSONAR nonNull() is already called
+		return JsonNodeHelper.nonNull(detection)
+			? JsonNodeHelper.nodeToStringList(detection.get("tags")) // NOSONAR JsonNodeHelper.nonNull() is already called
 			: Collections.emptyList();
 	}
 
@@ -669,8 +665,8 @@ public class ConnectorJsonNodeReader {
 		final JsonNode variablesNode = getConnectorSection().map(node -> node.get("variables")).orElse(null);
 
 		final Map<String, ConnectorDefaultVariable> defaultVariables = new HashMap<>();
-		if (nonNull(variablesNode)) {
-			variablesNode // NOSONAR nonNull() is already called
+		if (JsonNodeHelper.nonNull(variablesNode)) {
+			variablesNode // NOSONAR JsonNodeHelper.nonNull() is already called
 				.fields()
 				.forEachRemaining(entry -> {
 					final String variableName = entry.getKey();
@@ -681,8 +677,8 @@ public class ConnectorJsonNodeReader {
 
 					// Create a ConnectorDefaultVariable object and put it into the map
 					final ConnectorDefaultVariable connectorDefaultVariable = new ConnectorDefaultVariable(
-						nonNullTextOrDefault(description, null),
-						nonNullTextOrDefault(defaultValue, null)
+						JsonNodeHelper.nonNullTextOrDefault(description, null),
+						JsonNodeHelper.nonNullTextOrDefault(defaultValue, null)
 					);
 					defaultVariables.put(variableName, connectorDefaultVariable);
 				});

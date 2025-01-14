@@ -48,6 +48,26 @@ public class Constants {
 	public static final String TAG_SUBDIRECTORY_NAME = "tags";
 
 	/**
+	 * Name of the subdirectory that will contain the pages for each platform
+	 */
+	public static final String PLATFORM_SUBDIRECTORY_NAME = "platforms";
+
+	/**
+	 * Connectors directory output name
+	 */
+	public static final String CONNECTORS_DIRECTORY_OUTPUT_NAME = "metricshub-connectors-directory";
+
+	/**
+	 * Connectors directory output HTML file name
+	 */
+	public static final String CONNECTORS_DIRECTORY_OUTPUT_FILE_NAME = CONNECTORS_DIRECTORY_OUTPUT_NAME + ".html";
+
+	/**
+	 * Connectors full list file name
+	 */
+	public static final String CONNECTORS_FULL_LISTING_FILE_NAME = "metricshub-connectors-full-listing.html";
+
+	/**
 	 * CSS class for a medium-sized Bootstrap column with a width of 3.
 	 */
 	public static final String BOOTSTRAP_MEDIUM_3_CLASS = "col-md-3";

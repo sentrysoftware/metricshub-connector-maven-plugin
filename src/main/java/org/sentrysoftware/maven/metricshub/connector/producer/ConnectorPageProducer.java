@@ -20,9 +20,6 @@ package org.sentrysoftware.maven.metricshub.connector.producer;
  * ╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱
  */
 
-import static org.sentrysoftware.maven.metricshub.connector.ConnectorsDirectoryReport.CONNECTORS_DIRECTORY_OUTPUT_NAME;
-import static org.sentrysoftware.maven.metricshub.connector.Constants.TAG_SUBDIRECTORY_NAME;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import java.text.ChoiceFormat;
 import java.util.ArrayList;
@@ -38,6 +35,8 @@ import java.util.stream.Collectors;
 import lombok.Builder;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.plugin.logging.Log;
+import org.sentrysoftware.maven.metricshub.connector.ConnectorsDirectoryReport;
+import org.sentrysoftware.maven.metricshub.connector.Constants;
 import org.sentrysoftware.maven.metricshub.connector.producer.model.common.ConnectorDefaultVariable;
 import org.sentrysoftware.maven.metricshub.connector.producer.model.common.OpenTelemetryHardwareType;
 import org.sentrysoftware.maven.metricshub.connector.producer.model.common.OsType;
@@ -94,13 +93,12 @@ public class ConnectorPageProducer {
 
 		sink.body();
 
-		// Back to the main page
-		sink.paragraph(SinkHelper.setClass("small"));
-		sink.rawText(SinkHelper.glyphIcon("arrow-left") + "&nbsp;");
-		sink.link(String.format("../%s.html", CONNECTORS_DIRECTORY_OUTPUT_NAME));
-		sink.text("Back to the list of connectors");
-		sink.link_();
-		sink.paragraph_();
+		// Links to the main page and full listing
+		backLinks(
+			sink,
+			String.format("../%s", Constants.CONNECTORS_DIRECTORY_OUTPUT_FILE_NAME),
+			String.format("../%s", Constants.CONNECTORS_FULL_LISTING_FILE_NAME)
+		);
 
 		// Big title
 		sink.section1();
@@ -131,7 +129,7 @@ public class ConnectorPageProducer {
 				sink.rawText(
 					SinkHelper.bootstrapLabel(
 						SinkHelper.hyperlinkRef(
-							String.format("%s/%s.html", TAG_SUBDIRECTORY_NAME, tag.toLowerCase().replace(" ", "-")),
+							String.format("%s/%s.html", Constants.TAG_SUBDIRECTORY_NAME, tag.toLowerCase().replace(" ", "-")),
 							tag
 						),
 						"metricshub-tag"
@@ -158,14 +156,29 @@ public class ConnectorPageProducer {
 		sink.text("Target");
 		sink.sectionTitle2_();
 
-		final String platforms = connectorJsonNodeReader.getPlatformsOrDefault("N/A");
+		// Typical platforms
+		final Set<String> platforms = connectorJsonNodeReader.getPlatforms();
+		final int platformsSize = platforms.size();
+
 		sink.paragraph();
 		sink.text("Typical ");
-		sink.text(new ChoiceFormat("-1#platform|0<platforms").format(platforms.indexOf(',')));
+		sink.text(new ChoiceFormat("1#platform|1<platforms").format(platformsSize));
 		sink.text(": ");
+
 		sink.bold();
-		sink.text(SinkHelper.replaceCommaWithSpace(platforms));
+		int index = 0;
+		for (String platform : platforms) {
+			sink.link(
+				"%s/%s.html".formatted(Constants.PLATFORM_SUBDIRECTORY_NAME, ConnectorsDirectoryReport.kebabCase(platform))
+			);
+			sink.text(platform);
+			sink.link_();
+			if (++index < platformsSize) {
+				sink.text(", ");
+			}
+		}
 		sink.bold_();
+
 		sink.paragraph_();
 
 		// OS of this connector
@@ -325,6 +338,34 @@ public class ConnectorPageProducer {
 
 		// Close the writer
 		sink.close();
+	}
+
+	/**
+	 * Produces back links to the main page and full listing.
+	 *
+	 * @param sink                    The sink used for generating content
+	 * @param connectorsDirectoryLink The link to the connectors directory
+	 * @param fullListingLink         The link to the full listing of connectors
+	 */
+	public static void backLinks(final Sink sink, final String connectorsDirectoryLink, final String fullListingLink) {
+		// Links to the main page and full listing
+		sink.paragraph(SinkHelper.setClass("small"));
+
+		sink.rawText(SinkHelper.glyphIcon("arrow-left") + SinkHelper.NON_BREAKING_SPACE);
+
+		sink.link(connectorsDirectoryLink);
+		sink.text("Connectors directory");
+		sink.link_();
+
+		sink.rawText(
+			SinkHelper.NON_BREAKING_SPACE.repeat(2) + SinkHelper.glyphIcon("arrow-left") + SinkHelper.NON_BREAKING_SPACE
+		);
+
+		sink.link(fullListingLink);
+		sink.text("Full listing of connectors");
+		sink.link_();
+
+		sink.paragraph_();
 	}
 
 	/**

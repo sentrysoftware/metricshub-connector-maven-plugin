@@ -5,104 +5,107 @@ assert new File(basedir, "target/site/index.html").isFile()
 // Site checks for the Otel version
 //
 
-// Main page: metricshub-connectors-directory.html
-File htmlFile = new File(basedir, "target/site/metricshub-connectors-directory.html")
-assert htmlFile.exists() : "Main metricshub-connectors-directory.html page must be created"
+// Main page: metricshub-connectors-full-listing.html
+File htmlFile = new File(basedir, "target/site/metricshub-connectors-full-listing.html")
+assert htmlFile.exists() : "Main metricshub-connectors-full-listing.html page must be created"
 String htmlText = htmlFile.text
-assert htmlText.indexOf("MIB2Switch") > -1 : "metricshub-connectors-directory: MIB2Switch must be listed"
-assert htmlText.indexOf("GenericSwitchEnclosure") > -1 : "metricshub-connectors-directory: GenericSwitchEnclosure must be listed"
-assert htmlText.indexOf("GenericUPS") > -1 : "metricshub-connectors-directory: GenericUPS must be listed"
-assert htmlText.indexOf("HyperV") > -1 : "metricshub-connectors-directory: HyperV must be listed"
-assert htmlText.indexOf("IpmiTool") > -1 : "metricshub-connectors-directory: IpmiTool must be listed"
-assert htmlText.indexOf("Virsh") > -1 : "metricshub-connectors-directory: Virsh must be listed"
-assert htmlText.indexOf("LibreHardwareMonitor") > -1 : "metricshub-connectors-directory: LibreHardwareMonitor must be listed"
-assert htmlText.indexOf("LinuxMultipath") > -1 : "metricshub-connectors-directory: LinuxMultipath must be listed"
-assert htmlText.indexOf("LinuxIfConfigNetwork") > -1 : "metricshub-connectors-directory: LinuxIfConfigNetwork must be listed"
-assert htmlText.indexOf("LinuxIPNetwork") > -1 : "metricshub-connectors-directory: LinuxIPNetwork must be listed"
-assert htmlText.indexOf("lmsensors") > -1 : "metricshub-connectors-directory: lmsensors must be listed"
-assert htmlText.indexOf("MIB2") > -1 : "metricshub-connectors-directory: MIB2 must be listed"
-assert htmlText.indexOf("MIB2Linux") > -1 : "metricshub-connectors-directory: MIB2Linux must be listed"
-assert htmlText.indexOf("MIB2NT") > -1 : "metricshub-connectors-directory: MIB2NT must be listed"
-assert htmlText.indexOf("NvidiaSmi") > -1 : "metricshub-connectors-directory: NvidiaSmi must be listed"
-assert htmlText.indexOf("DiskPart") > -1 : "metricshub-connectors-directory: DiskPart must be listed"
-assert htmlText.indexOf("WinStorageSpaces") > -1 : "metricshub-connectors-directory: WinStorageSpaces must be listed"
-assert htmlText.indexOf("GenBatteryNT") > -1 : "metricshub-connectors-directory: GenBatteryNT must be listed"
-assert htmlText.indexOf("WBEMGenDiskNT") > -1 : "metricshub-connectors-directory: WBEMGenDiskNT must be listed"
-assert htmlText.indexOf("WBEMGenHBA") > -1 : "metricshub-connectors-directory: WBEMGenHBA must be listed"
-assert htmlText.indexOf("WBEMGenLUN") > -1 : "metricshub-connectors-directory: WBEMGenLUN must be listed"
-assert htmlText.indexOf("WBEMGenNetwork") > -1 : "metricshub-connectors-directory: WBEMGenNetwork must be listed"
-assert htmlText.indexOf("MySQL") > -1 : "metricshub-connectors-directory: MySQL must be listed"
+assert htmlText.indexOf("MIB2Switch") > -1 : "metricshub-connectors-full-listing: MIB2Switch must be listed"
+assert htmlText.indexOf("GenericSwitchEnclosure") > -1 : "metricshub-connectors-full-listing: GenericSwitchEnclosure must be listed"
+assert htmlText.indexOf("GenericUPS") > -1 : "metricshub-connectors-full-listing: GenericUPS must be listed"
+assert htmlText.indexOf("HyperV") > -1 : "metricshub-connectors-full-listing: HyperV must be listed"
+assert htmlText.indexOf("IpmiTool") > -1 : "metricshub-connectors-full-listing: IpmiTool must be listed"
+assert htmlText.indexOf("Virsh") > -1 : "metricshub-connectors-full-listing: Virsh must be listed"
+assert htmlText.indexOf("LibreHardwareMonitor") > -1 : "metricshub-connectors-full-listing: LibreHardwareMonitor must be listed"
+assert htmlText.indexOf("LinuxMultipath") > -1 : "metricshub-connectors-full-listing: LinuxMultipath must be listed"
+assert htmlText.indexOf("LinuxIfConfigNetwork") > -1 : "metricshub-connectors-full-listing: LinuxIfConfigNetwork must be listed"
+assert htmlText.indexOf("LinuxIPNetwork") > -1 : "metricshub-connectors-full-listing: LinuxIPNetwork must be listed"
+assert htmlText.indexOf("lmsensors") > -1 : "metricshub-connectors-full-listing: lmsensors must be listed"
+assert htmlText.indexOf("MIB2") > -1 : "metricshub-connectors-full-listing: MIB2 must be listed"
+assert htmlText.indexOf("MIB2Linux") > -1 : "metricshub-connectors-full-listing: MIB2Linux must be listed"
+assert htmlText.indexOf("MIB2NT") > -1 : "metricshub-connectors-full-listing: MIB2NT must be listed"
+assert htmlText.indexOf("NvidiaSmi") > -1 : "metricshub-connectors-full-listing: NvidiaSmi must be listed"
+assert htmlText.indexOf("DiskPart") > -1 : "metricshub-connectors-full-listing: DiskPart must be listed"
+assert htmlText.indexOf("WinStorageSpaces") > -1 : "metricshub-connectors-full-listing: WinStorageSpaces must be listed"
+assert htmlText.indexOf("GenBatteryNT") > -1 : "metricshub-connectors-full-listing: GenBatteryNT must be listed"
+assert htmlText.indexOf("WBEMGenDiskNT") > -1 : "metricshub-connectors-full-listing: WBEMGenDiskNT must be listed"
+assert htmlText.indexOf("WBEMGenHBA") > -1 : "metricshub-connectors-full-listing: WBEMGenHBA must be listed"
+assert htmlText.indexOf("WBEMGenLUN") > -1 : "metricshub-connectors-full-listing: WBEMGenLUN must be listed"
+assert htmlText.indexOf("WBEMGenNetwork") > -1 : "metricshub-connectors-full-listing: WBEMGenNetwork must be listed"
+assert htmlText.indexOf("MySQL") > -1 : "metricshub-connectors-full-listing: MySQL must be listed"
 
 // Check generated reference files
 String directoryPath = 'target/site/connectors'
 String [] fileNamesToCheck = [
-	'diskpart.html',
-	'genbatterynt.html',
-	'genericswitchenclosure.html',
-	'genericups.html',
-	'hyperv.html',
-	'ipmitool.html',
-	'librehardwaremonitor.html',
-	'linuxifconfignetwork.html',
-	'linuxipnetwork.html',
-	'linuxmultipath.html',
-	'lmsensors.html',
-	'mib2.html',
-	'mib2linux.html',
-	'mib2nt.html',
-	'mib2switch.html',
-	'nvidiasmi.html',
-	'virsh.html',
-	'wbemgendisknt.html',
-	'wbemgenhba.html',
-	'wbemgenlun.html',
-	'wbemgennetwork.html',
-	'winstoragespaces.html',
-	'mysql.html'
+    'diskpart.html',
+    'genbatterynt.html',
+    'genericswitchenclosure.html',
+    'genericups.html',
+    'hyperv.html',
+    'ipmitool.html',
+    'librehardwaremonitor.html',
+    'linuxifconfignetwork.html',
+    'linuxipnetwork.html',
+    'linuxmultipath.html',
+    'lmsensors.html',
+    'mib2.html',
+    'mib2linux.html',
+    'mib2nt.html',
+    'mib2switch.html',
+    'nvidiasmi.html',
+    'virsh.html',
+    'wbemgendisknt.html',
+    'wbemgenhba.html',
+    'wbemgenlun.html',
+    'wbemgennetwork.html',
+    'winstoragespaces.html',
+    'mysql.html'
 ]
 
 fileNamesToCheck.each { fileName ->
-	File file = new File(basedir,  "$directoryPath/$fileName")
+    File file = new File(basedir,  "$directoryPath/$fileName")
 
-	assert file.exists() : "File $fileName does not exist in the $directoryPath directory"
-	assert htmlText.indexOf("href=\"connectors/$fileName\"") > -1 : "metricshub-connectors-directory: href=connectors/$fileName must be listed"
+    assert file.exists() : "File $fileName does not exist in the $directoryPath directory"
+    assert htmlText.indexOf("href=\"connectors/$fileName\"") > -1 : "metricshub-connectors-full-listing: href=connectors/$fileName must be listed"
 }
 
 // Check generated reference files
 String tagsDirectoryPath = 'target/site/connectors/tags'
 String [] tagsFileNamesToCheck = [
-	'hardware.html',
-	'nvidia.html',
-	'vm.html',
-	'hyper-v.html',
-	'hardware.html',
-	'database.html',
+    'hardware.html',
+    'nvidia.html',
+    'vm.html',
+    'hyper-v.html',
+    'hardware.html',
+    'database.html',
 ]
 
 String [] hardwareConnectors = [
-	'HyperV',
-	'IpmiTool',
-	'LibreHardwareMonitor',
-	'NvidiaSmi',
+    'HyperV',
+    'IpmiTool',
+    'LibreHardwareMonitor',
+    'NvidiaSmi',
 ]
 
 tagsFileNamesToCheck.each { fileName ->
-	File file = new File(basedir,  "$tagsDirectoryPath/$fileName")
+    File file = new File(basedir,  "$tagsDirectoryPath/$fileName")
 
-	assert file.exists() : "File $fileName does not exist in the $tagsDirectoryPath directory"
-	assert htmlText.indexOf("href=\"connectors/tags/$fileName\"") > -1 : "metricshub connectors tag: href=connectors/tags/$fileName must be listed"
+    assert file.exists() : "File $fileName does not exist in the $tagsDirectoryPath directory"
+    assert htmlText.indexOf("href=\"connectors/tags/$fileName\"") > -1 : "metricshub connectors tag: href=connectors/tags/$fileName must be listed"
 
-	// Check the hardware connectors
-	if (fileName == 'hardware.html') {
-		hardwareConnectors.each { connectorId -> 
-			assert htmlText.indexOf("$connectorId") > -1 : "metricshub connectors tag: $connectorId must be listed"
-		}
-	}
+    // Check the hardware connectors
+    if (fileName == 'hardware.html') {
+        hardwareConnectors.each { connectorId -> 
+            assert htmlText.indexOf("$connectorId") > -1 : "metricshub connectors tag: $connectorId must be listed"
+        }
+    }
 
 }
 
 // IpmiTool
 htmlText = new File(basedir, "target/site/connectors/ipmitool.html").text
+assert htmlText.indexOf("Typical platform:") > - 1 : "IPMITool: 'Typical platform:' must be present"
+assert htmlText.indexOf("IPMI") > - 1 : "IPMITool: typical platform text must be present"
+assert htmlText.indexOf("<a href=\"platforms/ipmi.html\">IPMI</a>") > - 1 : "IPMITool: platforms/ipmi.html link text must be present"
 assert htmlText.indexOf("ipmi:") > -1 && htmlText.indexOf("wmi:") > -1 && htmlText.indexOf("ssh:") > -1 : "IpmiTool: Examples must list ipmi, wmi and ssh"
 assert htmlText =~ /metricshub.*-t management.*-c \+IpmiTool.*--ipmi/ : "IpmiTool: CLI must specify -t management -c +IpmiTool --ipmi"
 
@@ -202,7 +205,7 @@ assert htmlText.indexOf('<h3 id="description">Description</h3>') > - 1 : "MIB2: 
 assert htmlText.indexOf("This connector discovers the enclosure and Ethernet ports of a system equipped with an MIB-2 standard SNMP Agent.") > - 1 : "MIB2: Page must indicate a description"
 assert htmlText.indexOf('<h3 id="target">Target</h3>') > - 1 : "MIB2: Page must indicate 'Target' as HTML H3 element"
 assert htmlText.indexOf("Typical platform:") > - 1 : "MIB2: 'Typical platform:' must be present"
-assert htmlText.indexOf("Any system with SNMP") > - 1 : "MIB2: typical platform text must be present"
+assert htmlText.indexOf("SNMP") > - 1 : "MIB2: typical platform text must be present"
 assert htmlText.indexOf("Operating systems:") > - 1 : "MIB2 'Operating systems:' must be present"
 assert htmlText.indexOf("Network Device") > -1 : "MIB2: operating system 'Network Device' must be present"
 assert htmlText.indexOf("Out-Of-Band") > -1 : "MIB2: operating system 'Out-Of-Band' must be present"
@@ -246,7 +249,7 @@ assert htmlText.indexOf('physical_address_type') > -1 : "MIB2: the 'physical_add
 
 // Nvidia-Smi
 htmlText = new File(basedir, "target/site/connectors/nvidiasmi.html").text
-assert htmlText.indexOf("Any system with Nvidia GPUs") > -1 : "NvidiaSmi: Unexpected Typical platform"
+assert htmlText.indexOf("Nvidia") > -1 : "NvidiaSmi: Unexpected Typical platform"
 assert htmlText.indexOf("Microsoft Windows, Linux") > -1 : "NvidiaSmi: Unexpected Operating Systems"
 assert htmlText.indexOf("NVIDIA drivers with NVIDIA-SMI support") > -1 : "NvidiaSmi: Unexpected Leverages"
 assert htmlText.indexOf("Command Lines") > -1 : "NvidiaSmi: Unexpected Technology and protocols"
@@ -254,7 +257,7 @@ assert htmlText.indexOf("<code>nvidia-smi</code>") > -1 : "NvidiaSmi: Unexpected
 
 // WinStoreSpaces
 htmlText = new File(basedir, "target/site/connectors/winstoragespaces.html").text
-assert htmlText.indexOf("Any system") > -1 : "WinStoreSpaces: Unexpected Typical platform"
+assert htmlText.indexOf("Microsoft Windows") > -1 : "WinStoreSpaces: Unexpected Typical platform"
 assert htmlText.indexOf("Storage System, Microsoft Windows") > -1 : "WinStoreSpaces: Unexpected Operating Systems"
 assert htmlText.indexOf("Windows Storage Spaces") > -1 : "WinStoreSpaces: Unexpected Leverages"
 assert htmlText.indexOf("WMI/WinRM") > -1 : "WinStoreSpaces: Unexpected Technology and protocols"
@@ -263,7 +266,7 @@ assert htmlText.indexOf("metricshub HOSTNAME -t storage -c +WinStorageSpaces --w
 
 // MySQL
 htmlText = new File(basedir, "target/site/connectors/mysql.html").text
-assert htmlText.indexOf("Any platform running MySQL") > -1 : "MySQL: Unexpected Typical platform"
+assert htmlText.indexOf("MySQL") > -1 : "MySQL: Unexpected Typical platform"
 assert htmlText.indexOf("Microsoft Windows, Linux") > -1 : "MySQL: Unexpected Operating Systems"
 assert htmlText.indexOf("MySQL Database") > -1 : "MySQL: Unexpected Leverages"
 assert htmlText.indexOf("SQL/JDBC") > -1 : "MySQL: Unexpected Technology and protocols"
@@ -272,3 +275,69 @@ assert htmlText.indexOf("<code>SELECT @@version_comment REGEXP 'mysql' AS is_mys
 assert htmlText.indexOf("Expected Result:") > -1 : "MySQL: Page must indicate the Expected Result message."
 assert htmlText.indexOf("<code>1</code>") > -1 : "MySQL: Page must indicate the expected result value."
 assert htmlText.indexOf('<h3 id="metrics">Metrics</h3>') > - 1 : "MySQL: Page must indicate 'Metrics' as HTML H3 element"
+
+// Verify that the metricshub-connectors-directory.html file has been created
+File directoryHtmlFile = new File(basedir, "target/site/metricshub-connectors-directory.html")
+assert directoryHtmlFile.exists() : "Main metricshub-connectors-directory.html page must be created"
+
+// Read the file content
+String directoryHtmlText = directoryHtmlFile.text
+
+// Define platforms to check
+def platforms = [
+    [name: "IPMI", link: "connectors/platforms/ipmi.html", icon: "ipmi"],
+    [name: "Ethernet Switch", link: "connectors/platforms/ethernet-switch.html", icon: "ethernet-switch"],
+    [name: "Hyper-V", link: "connectors/platforms/hyper-v.html", icon: "hyper-v"],
+    [name: "Hypervisors", link: "connectors/platforms/hypervisors.html", icon: "hypervisors"],
+    [name: "KVM", link: "connectors/platforms/kvm.html", icon: "kvm"],
+    [name: "Linux", link: "connectors/platforms/linux.html", icon: "linux"],
+    [name: "Microsoft Windows", link: "connectors/platforms/microsoft-windows.html", icon: "microsoft-windows"],
+    [name: "MySQL", link: "connectors/platforms/my-sql.html", icon: "my-sql"],
+    [name: "Nvidia", link: "connectors/platforms/nvidia.html", icon: "nvidia"],
+    [name: "QEMU", link: "connectors/platforms/qemu.html", icon: "qemu"],
+    [name: "System with SNMP", link: "connectors/platforms/system-with-snmp.html", icon: "system-with-snmp"],
+    [name: "UPS", link: "connectors/platforms/ups.html", icon: "ups"],
+    [name: "Xen", link: "connectors/platforms/xen.html", icon: "xen"]
+]
+
+// Check each platform
+platforms.each { platform ->
+    // Check platform title
+    assert directoryHtmlText.indexOf(platform.name) > -1 : "Platform '${platform.name}' must be listed in metricshub-connectors-directory.html"
+    
+    // Check platform link
+    assert directoryHtmlText.indexOf("href=\"${platform.link}\"") > -1 : "Platform '${platform.name}' must link to '${platform.link}'"
+
+    // Check platform icon
+    assert directoryHtmlText.indexOf("src=\"./images/platforms/${platform.icon}.png\"") > -1 : "Platform '${platform.name}' must have the correct icon '${platform.icon}.png'"
+}
+
+// Additional checks classes
+assert directoryHtmlText.indexOf("class=\"connectors-badge badge\"") > -1 : "connectors-badge class must be present in metricshub-connectors-directory.html"
+assert directoryHtmlText.indexOf("class=\"technology-badge badge\"") > -1 : "technology-badge class must be present in metricshub-connectors-directory.html"
+assert directoryHtmlText.indexOf("class=\"platform-tile-container\"") > -1 : "platform-tile-container class must be present in metricshub-connectors-directory.html"
+assert directoryHtmlText.indexOf("class=\"platform-tile\"") > -1 : "platform-tile class must be present in metricshub-connectors-directory.html"
+assert directoryHtmlText.indexOf("class=\"platform-title\"") > -1 : "platform-title class must be present in metricshub-connectors-directory.html"
+assert directoryHtmlText.indexOf("class=\"platform-icon\"") > -1 : "platform-icon must be present in metricshub-connectors-directory.html"
+assert directoryHtmlText.indexOf("alt=\"inline\"") > -1 : "alt=\"inline\" attribute must be present in metricshub-connectors-directory.html"
+
+// Define regex patterns to check
+def regexps = [
+    /class="connectors-badge badge"/,
+    /class="platform-tile"/,
+    /class="platform-title"/,
+    /class="platform-icon"/,
+    /alt="inline"/
+]
+
+// Get the number of platforms
+def expectedCount = platforms.size()
+
+// Check occurrences of each regex pattern
+regexps.each { pattern ->
+    def count = (directoryHtmlText =~ pattern).count // Count matches for the pattern
+    assert count == expectedCount : "Expected $expectedCount occurrences of $pattern, but found $count"
+}
+
+def countContainer = (directoryHtmlText =~ /class="platform-tile-container"/).count
+assert countContainer == 1 : "Expected 1 platform-tile-container class, but found $countContainer"

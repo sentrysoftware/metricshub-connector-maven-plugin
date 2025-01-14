@@ -22,13 +22,15 @@ package org.sentrysoftware.maven.metricshub.connector.producer;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Spliterator;
 import java.util.Spliterators;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -79,38 +81,55 @@ public class JsonNodeHelper {
 	}
 
 	/**
-	 * Converts a {@link JsonNode} to a list of strings.
-	 * <p>
-	 * This method takes a {@link JsonNode} as input and converts it into a list of strings. If the input node is an array,
-	 * the method uses {@link #convertSimpleArrayNodeToList(ArrayNode)} to perform the conversion. If the node is a single
-	 * value node, it is converted into a singleton list containing its text representation. If the input node is null or
-	 * not of the expected types, an empty list is returned.
-	 * </p>
+	 * Converts a {@link JsonNode} to a {@link List} of strings.
+	 * This method invokes {@link #nodeToStringCollection(JsonNode, Supplier)} with
+	 * an {@link ArrayList} as the collection type.
+	 *
 	 * @param node The {@link JsonNode} to convert to a list of strings.
-	 * @return A {@link List} of strings representing the contents of the input node, or an empty list if the node is null
-	 *         or not of the expected types.
+	 * @return A {@link List} of strings representing the contents of the input node, or an empty list if the node is null.
 	 */
 	public static List<String> nodeToStringList(final JsonNode node) {
-		if (nonNull(node)) {
-			if (node.isArray()) {
-				return convertSimpleArrayNodeToList((ArrayNode) node);
-			} else if (node.isValueNode()) {
-				return Collections.singletonList(node.asText());
-			}
-		}
-
-		return Collections.emptyList();
+		return nodeToStringCollection(node, ArrayList::new);
 	}
 
 	/**
-	 * Converts a Jackson {@link ArrayNode} to a {@link List} of strings.
+	 * Converts a {@link JsonNode} to a {@link Collection} of strings.<br>
+	 * For a string node, the string is split using a comma as a separator, trailing
+	 * and leading spaces are removed from each element.<br>
 	 *
-	 * @param arrayNode The {@code ArrayNode} to be converted to a list of strings.
+	 * @param <C>               The type of the collection.
+	 * @param node              The {@link JsonNode} to convert to a collection of strings.
+	 * @param collectionFactory The factory for the collection to be returned.
+	 * @return A {@link Collection} of strings representing the contents of the input node, or an empty Collection if the node is null.
+	 */
+	public static <C extends Collection<String>> C nodeToStringCollection(
+		final JsonNode node,
+		final Supplier<C> collectionFactory
+	) {
+		if (nonNull(node)) {
+			if (node.isArray()) {
+				return convertSimpleArrayNodeToCollection((ArrayNode) node, collectionFactory);
+			}
+			return Stream.of(node.asText().split(",")).map(String::trim).collect(Collectors.toCollection(collectionFactory));
+		}
+
+		return Stream.<String>empty().collect(Collectors.toCollection(collectionFactory));
+	}
+
+	/**
+	 * Converts a Jackson {@link ArrayNode} to a {@link Collection} of strings.
+	 *
+	 * @param <C> The type of the collection.
+	 * @param arrayNode The {@code ArrayNode} to be converted to a collection of strings.
+	 * @param collectionFactory The factory for the collection to be returned.
 	 * @return A {@code List<String>} containing the text representations of the elements in the {@code ArrayNode}.
 	 * @throws NullPointerException if {@code arrayNode} is {@code null}.
 	 */
-	public static List<String> convertSimpleArrayNodeToList(final ArrayNode arrayNode) {
-		return stream(arrayNode).map(JsonNode::asText).collect(Collectors.toList());
+	public static <C extends Collection<String>> C convertSimpleArrayNodeToCollection(
+		final ArrayNode arrayNode,
+		final Supplier<C> collectionFactory
+	) {
+		return stream(arrayNode).map(JsonNode::asText).collect(Collectors.toCollection(collectionFactory));
 	}
 
 	/**
