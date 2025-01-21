@@ -104,7 +104,15 @@ public class PlatformsPageProducer {
 			mainSink.link(platformSubdirectory + "/" + platformId + ".html", SinkHelper.setClass("platform-tile"));
 
 			mainSink.division(SinkHelper.setClass("platform-title"));
+
+			mainSink.division(SinkHelper.setClass("platform-title-text"));
 			mainSink.text(displayName);
+			mainSink.division_();
+
+			mainSink.division(SinkHelper.setClass("connectors-badge"));
+			mainSink.rawText(SinkHelper.bootstrapBadge(String.valueOf(numberOfConnectors), null));
+			mainSink.division_();
+
 			mainSink.division_();
 
 			mainSink.figure(SinkHelper.setClass("platform-icon"));
@@ -112,13 +120,12 @@ public class PlatformsPageProducer {
 			mainSink.figureGraphics(iconPath, SinkHelper.setAttribute(SinkEventAttributes.ALT, "inline"));
 			mainSink.figure_();
 
-			mainSink.division(SinkHelper.setClass("platform-badges"));
-			mainSink.rawText(SinkHelper.bootstrapBadge(String.valueOf(numberOfConnectors), "connectors-badge"));
+			mainSink.division(SinkHelper.setClass("platform-labels"));
 			platform
 				.getTechnologies()
 				.stream()
 				.map(TechnologyType::getDisplayName)
-				.forEach(technology -> mainSink.rawText(SinkHelper.bootstrapBadge(technology, "technology-badge")));
+				.forEach(technology -> mainSink.rawText(SinkHelper.bootstrapLabel(technology, "technology-label")));
 			mainSink.division_();
 
 			mainSink.link_();

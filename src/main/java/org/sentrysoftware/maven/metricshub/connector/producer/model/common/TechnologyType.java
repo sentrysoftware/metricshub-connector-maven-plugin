@@ -41,9 +41,9 @@ public enum TechnologyType {
 	IPMI("IPMI"),
 
 	/**
-	 * Command Lines
+	 * Commands
 	 */
-	COMMAND_LINES("Command Lines"),
+	COMMANDS("Commands"),
 
 	/**
 	 * Simple Network Management Protocol (SNMP)
@@ -80,8 +80,8 @@ public enum TechnologyType {
 	private static final Map<String, TechnologyType> TECHNOLOGY_TYPE_MAP = Map.of(
 		"http", HTTP,
 		"ipmi", IPMI,
-		"oscommand", COMMAND_LINES,
-		"commandline", COMMAND_LINES,
+		"oscommand", COMMANDS,
+		"commandline", COMMANDS,
 		"snmptable", SNMP,
 		"snmpget", SNMP,
 		"wbem", WBEM,
