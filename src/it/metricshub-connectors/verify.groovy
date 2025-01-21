@@ -252,7 +252,7 @@ htmlText = new File(basedir, "target/site/connectors/nvidiasmi.html").text
 assert htmlText.indexOf("Nvidia") > -1 : "NvidiaSmi: Unexpected Typical platform"
 assert htmlText.indexOf("Microsoft Windows, Linux") > -1 : "NvidiaSmi: Unexpected Operating Systems"
 assert htmlText.indexOf("NVIDIA drivers with NVIDIA-SMI support") > -1 : "NvidiaSmi: Unexpected Leverages"
-assert htmlText.indexOf("Command Lines") > -1 : "NvidiaSmi: Unexpected Technology and protocols"
+assert htmlText.indexOf("Commands") > -1 : "NvidiaSmi: Unexpected Technology and protocols"
 assert htmlText.indexOf("<code>nvidia-smi</code>") > -1 : "NvidiaSmi: Unexpected criterion command line"
 
 // WinStoreSpaces
@@ -313,19 +313,22 @@ platforms.each { platform ->
 }
 
 // Additional checks classes
-assert directoryHtmlText.indexOf("class=\"connectors-badge badge\"") > -1 : "connectors-badge class must be present in metricshub-connectors-directory.html"
-assert directoryHtmlText.indexOf("class=\"technology-badge badge\"") > -1 : "technology-badge class must be present in metricshub-connectors-directory.html"
+assert directoryHtmlText.indexOf("class=\"connectors-badge\"") > -1 : "connectors-badge class must be present in metricshub-connectors-directory.html"
+assert directoryHtmlText.indexOf("class=\"technology-label label label-default\"") > -1 : "technology-label class must be present in metricshub-connectors-directory.html"
 assert directoryHtmlText.indexOf("class=\"platform-tile-container\"") > -1 : "platform-tile-container class must be present in metricshub-connectors-directory.html"
 assert directoryHtmlText.indexOf("class=\"platform-tile\"") > -1 : "platform-tile class must be present in metricshub-connectors-directory.html"
 assert directoryHtmlText.indexOf("class=\"platform-title\"") > -1 : "platform-title class must be present in metricshub-connectors-directory.html"
+assert directoryHtmlText.indexOf("class=\"platform-title-text\"") > -1 : "platform-title-text class must be present in metricshub-connectors-directory.html"
 assert directoryHtmlText.indexOf("class=\"platform-icon\"") > -1 : "platform-icon must be present in metricshub-connectors-directory.html"
 assert directoryHtmlText.indexOf("alt=\"inline\"") > -1 : "alt=\"inline\" attribute must be present in metricshub-connectors-directory.html"
 
 // Define regex patterns to check
 def regexps = [
-    /class="connectors-badge badge"/,
+    /class="connectors-badge"/,
+    /class="badge"/,
     /class="platform-tile"/,
     /class="platform-title"/,
+    /class="platform-title-text"/,
     /class="platform-icon"/,
     /alt="inline"/
 ]
