@@ -9,7 +9,7 @@
 
 	<groupId>org.sentrysoftware.maven</groupId>
 	<artifactId>metricshub-connector-maven-plugin</artifactId>
-	<version>1.0.08-SNAPSHOT</version>
+	<version>1.0.09-SNAPSHOT</version>
 
 	<packaging>maven-plugin</packaging>
 
@@ -73,7 +73,7 @@
 
 		<!-- Reproducible Build -->
 		<!-- See https://maven.apache.org/guides/mini/guide-reproducible-builds.html -->
-		<project.build.outputTimestamp>2024-12-05T11:34:39Z</project.build.outputTimestamp>
+		<project.build.outputTimestamp>2025-01-22T15:57:03Z</project.build.outputTimestamp>
 	</properties>
 
 	<dependencyManagement>
