@@ -9,7 +9,7 @@
 
 	<groupId>org.sentrysoftware.maven</groupId>
 	<artifactId>metricshub-connector-maven-plugin</artifactId>
-	<version>1.0.08</version>
+	<version>1.0.09-SNAPSHOT</version>
 
 	<packaging>maven-plugin</packaging>
 
@@ -47,7 +47,7 @@
 	<scm>
 		<connection>scm:git:https://github.com/sentrysoftware/metricshub-connector-maven-plugin.git</connection>
 		<url>https://github.com/sentrysoftware/metricshub-connector-maven-plugin</url>
-		<tag>v1.0.08</tag>
+		<tag>HEAD</tag>
 	</scm>
 
 	<developers>
@@ -73,7 +73,7 @@
 
 		<!-- Reproducible Build -->
 		<!-- See https://maven.apache.org/guides/mini/guide-reproducible-builds.html -->
-		<project.build.outputTimestamp>2025-01-22T15:55:54Z</project.build.outputTimestamp>
+		<project.build.outputTimestamp>2025-01-22T15:57:03Z</project.build.outputTimestamp>
 	</properties>
 
 	<dependencyManagement>
